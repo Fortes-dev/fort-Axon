@@ -25,7 +25,7 @@ class Spaceship(pygame.sprite.Sprite):
         imagenUp = pygame.transform.rotozoom(imagen3, 3, 1.55)
         imagenDown = pygame.transform.rotozoom(imagen3, -3, 1.55)
 
-
+        # Inicializamos array de sprites y añadimos todos
         self.sprites = []
         self.sprites.append(imagenRecto)
         self.sprites.append(imagenUp)
@@ -48,11 +48,14 @@ class Spaceship(pygame.sprite.Sprite):
         self.speed = constants.SPACESHIP_SPEED
 
         # Cadencia de disparo
-        self.fire_rate = constants.FIRE_RATE
+        self.fire_rate = constants.SPACESHIP_FIRE_RATE
         self.fire_rate_acc = 0.0
 
         # Check si puede disparar o no
         self.can_fire = True
+
+        # Vidas
+        self.life = 1
 
     # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
@@ -81,6 +84,9 @@ class Spaceship(pygame.sprite.Sprite):
             self.can_fire = True
         else:
             self.fire_rate_acc += time_delta
+
+        if self.life == 0:
+            pygame.quit()
 
 
     # Movemos la nave
@@ -117,5 +123,5 @@ class Spaceship(pygame.sprite.Sprite):
         if key_pressed[pygame.K_SPACE]:
             if self.can_fire:
                 self.can_fire = False
-                bullet = Bullet(self.pos_x + 80, self.pos_y + 50)
+                bullet = Bullet(self.pos_x + 80, self.pos_y + 50, 0)
                 bullet_sprite_list.add(bullet)

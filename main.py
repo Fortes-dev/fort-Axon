@@ -1,5 +1,8 @@
+from random import randint
+
 import pygame
 
+from models.Enemy import Enemy
 from models.Spaceship import Spaceship
 from utils import constants
 
@@ -31,8 +34,14 @@ def main():
     spaceship_sprite_list = pygame.sprite.Group()
     spaceship_sprite_list.add(spaceship)
 
-    # lista de bullet_sprite_list
-    bullet_sprite_list = pygame.sprite.Group()
+    # lista de spaceship_bullet_sprite_list
+    spaceship_bullet_sprite_list = pygame.sprite.Group()
+
+    # lista de enemy_sprite_list
+    enemy_sprite_list = pygame.sprite.Group()
+
+    # lista de enemy_bullet_sprite_list
+    enemy_bullet_sprite_list = pygame.sprite.Group()
 
     # Reloj interno del juego
     clock = pygame.time.Clock()
@@ -42,15 +51,20 @@ def main():
     bgX = 0
     bgX2 = BACKGROUND.get_width()
 
-    # MS Actual de este loop
-    global current_time_loop
-    current_time_loop = pygame.time.get_ticks()
+    SPAWNENEMY = pygame.USEREVENT
+    pygame.time.set_timer(SPAWNENEMY, 1500)
 
     # Bucle (comienza el juego)
     while run:
 
-
         delta_time = clock.tick(constants.FPS)/1000.0
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == SPAWNENEMY:
+                enemy = Enemy(constants.WIN_WIDTH + 40, randint(40, constants.WIN_HEIGHT - 80))
+                enemy_sprite_list.add(enemy)
 
         WINDOW.blit(BACKGROUND, (bgX, 0))  # Dibuja el primer background
         WINDOW.blit(BACKGROUND, (bgX2, 0))  # Dibuja el segundo background
@@ -65,24 +79,50 @@ def main():
         if bgX2 < BACKGROUND.get_width() * -1:
             bgX2 = BACKGROUND.get_width()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-
         key_pressed = pygame.key.get_pressed()
         spaceship.move_spaceship(key_pressed)
-        spaceship.shoot_bullet(key_pressed, bullet_sprite_list)
+        spaceship.shoot_bullet(key_pressed, spaceship_bullet_sprite_list)
 
 
-        for bullet in bullet_sprite_list:
+        # Si el enemigo se sale de la pantalla lo eliminamos
+        for enemy in enemy_sprite_list:
+            if enemy.rect.x < -10:
+                enemy_sprite_list.remove(enemy)
+            else:
+                enemy.shoot_bullet(enemy_bullet_sprite_list)
+
+        for bullet in enemy_bullet_sprite_list:
+            if bullet.rect.x < -10:
+                enemy_bullet_sprite_list.remove(bullet)
+
+        # Si la bala se sale de la pantalla la eliminamos
+        for bullet in spaceship_bullet_sprite_list:
             if bullet.rect.x > constants.WIN_WIDTH:
-                bullet_sprite_list.remove(bullet)
+                spaceship_bullet_sprite_list.remove(bullet)
 
-        # Dibujamos y actualizamos las listas de sprites
-        bullet_sprite_list.draw(WINDOW)
-        bullet_sprite_list.update()
+        enemy_hit_by_bullet = pygame.sprite.groupcollide(spaceship_bullet_sprite_list, enemy_sprite_list, True, True)
+        player_hit_by_bullet = pygame.sprite.groupcollide(enemy_bullet_sprite_list, spaceship_sprite_list, True, False)
+
+        # if player is hit
+        for hit in enemy_hit_by_bullet:
+            print("Enemigo neutralizado")
+
+        for hit in player_hit_by_bullet:
+            spaceship.life = 0
+
+
+        # Dibujamos y actualizamos las listas de sprites de Spaceship
         spaceship_sprite_list.update(delta_time)
         spaceship_sprite_list.draw(WINDOW)
+        spaceship_bullet_sprite_list.update(0)
+        spaceship_bullet_sprite_list.draw(WINDOW)
+
+        # Dibujamos y actualizamos la lista de sprites de Enemy
+        enemy_sprite_list.update(delta_time)
+        enemy_sprite_list.draw(WINDOW)
+        enemy_bullet_sprite_list.update(1)
+        enemy_bullet_sprite_list.draw(WINDOW)
+
 
         # Actualizamos la ventana
         pygame.display.update()
