@@ -15,9 +15,6 @@ BACKGROUND = pygame.image.load(constants.BACKGROUND)
 BACKGROUND = pygame.transform.scale(BACKGROUND, (1920, 1080))
 
 
-
-
-
 def main():
 
     # Inicializamos pygame
@@ -34,7 +31,7 @@ def main():
     # Inicializamos score
     score = 0
 
-    fuente = pygame.font.SysFont("monospace", 16)
+    fuente = pygame.font.SysFont("monospace", 28, True)
 
 
     # lista de spaceship_sprite_list
@@ -61,6 +58,9 @@ def main():
     SPAWNENEMY = pygame.USEREVENT
     pygame.time.set_timer(SPAWNENEMY, 1500)
 
+    ANIMATE_ENEMY = pygame.NUMEVENTS
+    pygame.time.set_timer(ANIMATE_ENEMY, 150)
+
     # Bucle (comienza el juego)
     while run:
 
@@ -72,11 +72,16 @@ def main():
             if event.type == SPAWNENEMY:
                 enemy = Enemy(constants.WIN_WIDTH, randint(40, constants.WIN_HEIGHT - 80))
                 enemy_sprite_list.add(enemy)
+            if event.type == ANIMATE_ENEMY:
+                for enemy in enemy_sprite_list:
+                    if enemy.current_sprite < 2:
+                        enemy.current_sprite += 1
+                    else:
+                        enemy.current_sprite = 0
+
 
         WINDOW.blit(BACKGROUND, (bgX, 0))  # Dibuja el primer background
         WINDOW.blit(BACKGROUND, (bgX2, 0))  # Dibuja el segundo background
-
-
 
         # Movemos ambos backgrounds a la izquierda
         bgX -= 2
@@ -92,11 +97,11 @@ def main():
         spaceship.move_spaceship(key_pressed)
         spaceship.shoot_bullet(key_pressed, spaceship_bullet_sprite_list)
 
-
         # Si el enemigo se sale de la pantalla lo eliminamos
         for enemy in enemy_sprite_list:
             if enemy.rect.x < -10:
                 enemy_sprite_list.remove(enemy)
+
             else:
                 enemy.shoot_bullet(enemy_bullet_sprite_list)
 
@@ -123,7 +128,6 @@ def main():
         for hit in player_hit_by_bullet:
             spaceship.life = 0
 
-
         # Dibujamos y actualizamos las listas de sprites de Spaceship
         spaceship_sprite_list.update(delta_time)
         spaceship_sprite_list.draw(WINDOW)
@@ -135,7 +139,6 @@ def main():
         enemy_sprite_list.draw(WINDOW)
         enemy_bullet_sprite_list.update(1)
         enemy_bullet_sprite_list.draw(WINDOW)
-
 
         # Actualizamos la ventana
         pygame.display.update()

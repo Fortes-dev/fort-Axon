@@ -22,8 +22,8 @@ class Spaceship(pygame.sprite.Sprite):
 
         imagenBack = pygame.transform.rotozoom(imagen1, 0, 1.5)
         imagenRecto = pygame.transform.rotozoom(imagen2, 0, 1.5)
-        imagenUp = pygame.transform.rotozoom(imagen3, 3, 1.55)
-        imagenDown = pygame.transform.rotozoom(imagen3, -3, 1.55)
+        imagenUp = pygame.transform.rotozoom(imagen3, 3, 1.5)
+        imagenDown = pygame.transform.rotozoom(imagen3, -3, 1.5)
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []
@@ -38,9 +38,9 @@ class Spaceship(pygame.sprite.Sprite):
         # Seteamos la imagen actual del sprite
         self.image = self.sprites[self.current_sprite]
 
-
         # Inicializamos el rectángulo (hitbox)
         self.rect = self.image.get_rect()
+
         self.rect.x = x
         self.rect.y = y
 
@@ -59,6 +59,7 @@ class Spaceship(pygame.sprite.Sprite):
 
     # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
+        print(self.rect)
 
         self.current_sprite = 0
 
@@ -76,6 +77,7 @@ class Spaceship(pygame.sprite.Sprite):
         # Actualizamos la posicion de la nave
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
+
 
         ## !!!FIX, utilizo el tiempo de ejecucion del juego, debería utilizar el tiempo del disparo anterior y añadirle los 0.2 secs
         # Cadencia de disparo
@@ -123,5 +125,5 @@ class Spaceship(pygame.sprite.Sprite):
         if key_pressed[pygame.K_SPACE]:
             if self.can_fire:
                 self.can_fire = False
-                bullet = Bullet(self.pos_x + 80, self.pos_y + 50, 0)
+                bullet = Bullet(self.pos_x + 50, self.pos_y + 20, 0)
                 bullet_sprite_list.add(bullet)

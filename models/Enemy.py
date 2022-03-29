@@ -56,10 +56,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.sprites[self.current_sprite]
 
         # Cambiamos el sprite para simular animacion
-        if self.current_sprite < 2:
-            self.current_sprite += 1
-        else:
-            self.current_sprite = 0
+
 
         # Actualizamos la posicion del enemigo
         self.rect.x -= constants.ENEMY_SPEED
@@ -82,5 +79,5 @@ class Enemy(pygame.sprite.Sprite):
     def shoot_bullet(self, enemy_bullet_sprite_list):
         if self.can_fire:
             self.can_fire = False
-            bullet = Bullet(self.rect.x - 10, self.rect.y + 40, 1)
+            bullet = Bullet(self.rect.x - 10, self.rect.y + 30, 1)
             enemy_bullet_sprite_list.add(bullet)
