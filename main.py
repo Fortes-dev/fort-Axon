@@ -16,6 +16,8 @@ BACKGROUND = pygame.transform.scale(BACKGROUND, (1920, 1080))
 
 
 
+
+
 def main():
 
     # Inicializamos pygame
@@ -28,6 +30,11 @@ def main():
     spaceship = Spaceship(30, constants.WIN_HEIGHT / 2)
     spaceship.rect.x = 30
     spaceship.rect.y = constants.WIN_HEIGHT / 2
+
+    # Inicializamos score
+    score = 0
+
+    fuente = pygame.font.SysFont("monospace", 16)
 
 
     # lista de spaceship_sprite_list
@@ -69,6 +76,8 @@ def main():
         WINDOW.blit(BACKGROUND, (bgX, 0))  # Dibuja el primer background
         WINDOW.blit(BACKGROUND, (bgX2, 0))  # Dibuja el segundo background
 
+
+
         # Movemos ambos backgrounds a la izquierda
         bgX -= 2
         bgX2 -= 2
@@ -105,7 +114,11 @@ def main():
 
         # if player is hit
         for hit in enemy_hit_by_bullet:
-            print("Enemigo neutralizado")
+            score += 1
+
+        # Dibujamos el score
+        scoretext = fuente.render("Score {0}".format(score), 1, (255, 255, 255))
+        WINDOW.blit(scoretext, (5, 10))
 
         for hit in player_hit_by_bullet:
             spaceship.life = 0
