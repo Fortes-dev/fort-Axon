@@ -22,11 +22,12 @@ SPACESHIP_FIRE_RATE = 0.3
 BULLET1 = 'assets/bullet1.png'
 BULLET2 = 'assets/bullet2.png'
 BULLET1_SPEED = 25
+BULLET2_SPEED = 15
 
 # Enemy
 ENEMY1 = 'assets/Enemy1.png'
 ENEMY2 = 'assets/Enemy2.png'
 ENEMY3 = 'assets/Enemy3.png'
-ENEMY_SPEED = 4
-ENEMY_FIRE_RATE = 1
+ENEMY_SPEED = 8
+ENEMY_FIRE_RATE = 1.2
 ENEMY_SPAWN_RATE = 0.8

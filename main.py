@@ -70,7 +70,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == SPAWNENEMY:
-                enemy = Enemy(constants.WIN_WIDTH + 40, randint(40, constants.WIN_HEIGHT - 80))
+                enemy = Enemy(constants.WIN_WIDTH, randint(40, constants.WIN_HEIGHT - 80))
                 enemy_sprite_list.add(enemy)
 
         WINDOW.blit(BACKGROUND, (bgX, 0))  # Dibuja el primer background

@@ -46,6 +46,9 @@ class Enemy(pygame.sprite.Sprite):
         # Check si puede disparar o no
         self.can_fire = True
 
+        self.max_movement_up = self.rect.y - 200
+        self.max_movement_down = self.rect.y + 200
+
 
     def update(self, time_delta):
 
@@ -60,6 +63,11 @@ class Enemy(pygame.sprite.Sprite):
 
         # Actualizamos la posicion del enemigo
         self.rect.x -= constants.ENEMY_SPEED
+
+        '''if self.rect.y >= self.max_movement_up+1 and self.rect.y > 60:
+            self.rect.y -= constants.ENEMY_SPEED
+        elif self.rect.y <= self.max_movement_down-1 and self.rect.y < 60:
+            self.rect.y += constants.ENEMY_SPEED'''
 
         ## !!!FIX, utilizo el tiempo de ejecucion del juego, debería utilizar el tiempo del disparo anterior y añadirle los 0.2 secs
         # Cadencia de disparo

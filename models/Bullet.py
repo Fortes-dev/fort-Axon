@@ -19,10 +19,16 @@ class Bullet(pygame.sprite.Sprite):
                 imagen1 = pygame.image.load(constants.BULLET1)
                 imagen1 = pygame.transform.rotozoom(imagen1, 0, 2)
                 self.sprites.append(imagen1)
+
+                # Velocidad de la bala
+                self.speed = constants.BULLET1_SPEED
             case (1):
                 imagen2 = pygame.image.load(constants.BULLET2)
                 imagen2 = pygame.transform.rotozoom(imagen2, -180, 2)
                 self.sprites.append(imagen2)
+
+                # Velocidad de la bala
+                self.speed = constants.BULLET2_SPEED
 
 
         self.current_sprite = 0
@@ -32,9 +38,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
-        # Velocidad de desplacamiento de la nave
-        self.speed = constants.BULLET1_SPEED
 
 
     # Actualizamos la posicion del disparo
