@@ -3,6 +3,7 @@ from random import randint
 import pygame
 
 from models.Enemy import Enemy
+from models.Explosion import Explosion
 from models.Spaceship import Spaceship
 from utils import constants
 
@@ -47,6 +48,9 @@ def main():
     # lista de enemy_bullet_sprite_list
     enemy_bullet_sprite_list = pygame.sprite.Group()
 
+    # lista de explosiones
+    explosion_sprite_list = pygame.sprite.Group()
+
     # Reloj interno del juego
     clock = pygame.time.Clock()
     run = True
@@ -56,16 +60,20 @@ def main():
     bgX2 = BACKGROUND.get_width()
 
     SPAWNENEMY = pygame.USEREVENT
-    pygame.time.set_timer(SPAWNENEMY, 1500)
+    pygame.time.set_timer(SPAWNENEMY, constants.ENEMY_SPAWN_RATE)
 
-    ANIMATE_ENEMY = pygame.NUMEVENTS
-    pygame.time.set_timer(ANIMATE_ENEMY, 150)
+    ANIMATE_ENEMY = pygame.USEREVENT + 1
+    pygame.time.set_timer(ANIMATE_ENEMY, constants.ENEMY_ANIMATION_RATE)
+
+    ENEMY_EXPLOSION = pygame.USEREVENT + 2
+    pygame.time.set_timer(ENEMY_EXPLOSION, constants.EXPLOSION_ANIMATION_RATE)
 
     # Bucle (comienza el juego)
     while run:
 
         delta_time = clock.tick(constants.FPS)/1000.0
 
+        # Eventos del juego
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -78,6 +86,10 @@ def main():
                         enemy.current_sprite += 1
                     else:
                         enemy.current_sprite = 0
+            if event.type == ENEMY_EXPLOSION:
+                for explosion in explosion_sprite_list:
+                        explosion.current_sprite += 1
+
 
 
         WINDOW.blit(BACKGROUND, (bgX, 0))  # Dibuja el primer background
@@ -101,10 +113,10 @@ def main():
         for enemy in enemy_sprite_list:
             if enemy.rect.x < -10:
                 enemy_sprite_list.remove(enemy)
-
             else:
                 enemy.shoot_bullet(enemy_bullet_sprite_list)
 
+        # Si la bala se sale de la pantalla la eliminamos
         for bullet in enemy_bullet_sprite_list:
             if bullet.rect.x < -10:
                 enemy_bullet_sprite_list.remove(bullet)
@@ -119,14 +131,22 @@ def main():
 
         # if player is hit
         for hit in enemy_hit_by_bullet:
+            x = hit.rect.x - 135
+            y = hit.rect.y - 135
+            explosion = Explosion(x, y)
+            explosion_sprite_list.add(explosion)
             score += 1
 
         # Dibujamos el score
         scoretext = fuente.render("Score {0}".format(score), 1, (255, 255, 255))
         WINDOW.blit(scoretext, (5, 10))
 
+        # Dibujamos la vida
+        vidatext = fuente.render("Vidas {0}".format(spaceship.life), 1, (255, 255, 255))
+        WINDOW.blit(vidatext, (150, 10))
+
         for hit in player_hit_by_bullet:
-            spaceship.life = 0
+            spaceship.life -= 1
 
         # Dibujamos y actualizamos las listas de sprites de Spaceship
         spaceship_sprite_list.update(delta_time)
@@ -139,6 +159,9 @@ def main():
         enemy_sprite_list.draw(WINDOW)
         enemy_bullet_sprite_list.update(1)
         enemy_bullet_sprite_list.draw(WINDOW)
+
+        explosion_sprite_list.update()
+        explosion_sprite_list.draw(WINDOW)
 
         # Actualizamos la ventana
         pygame.display.update()

@@ -55,11 +55,10 @@ class Spaceship(pygame.sprite.Sprite):
         self.can_fire = True
 
         # Vidas
-        self.life = 1
+        self.life = 5
 
     # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
-        print(self.rect)
 
         self.current_sprite = 0
 

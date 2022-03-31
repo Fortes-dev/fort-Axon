@@ -28,4 +28,13 @@ ENEMY2 = 'assets/Enemy2.png'
 ENEMY3 = 'assets/Enemy3.png'
 ENEMY_SPEED = 6
 ENEMY_FIRE_RATE = 1.2
-ENEMY_SPAWN_RATE = 0.8
+ENEMY_SPAWN_RATE = 1500
+ENEMY_ANIMATION_RATE = 125
+
+# Explosion
+EXPLOSION1 = 'assets/explosion 1 1.png'
+EXPLOSION2 = 'assets/explosion 1 2.png'
+EXPLOSION3 = 'assets/explosion 1 3.png'
+EXPLOSION4 = 'assets/explosion 1 4.png'
+EXPLOSION5 = 'assets/explosion 1 5.png'
+EXPLOSION_ANIMATION_RATE = 110
