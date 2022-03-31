@@ -1,4 +1,5 @@
 import pygame
+import math
 
 from models.Bullet import Bullet
 from utils import constants
@@ -46,9 +47,9 @@ class Enemy(pygame.sprite.Sprite):
         # Check si puede disparar o no
         self.can_fire = True
 
-        self.max_movement_up = self.rect.y - 200
-        self.max_movement_down = self.rect.y + 200
-
+        self.pace_count = 0
+        self.turn_after = 80
+        self.direction = -1
 
     def update(self, time_delta):
 
@@ -57,14 +58,22 @@ class Enemy(pygame.sprite.Sprite):
 
         # Cambiamos el sprite para simular animacion
 
-
+        self.pace_count += 1
         # Actualizamos la posicion del enemigo
         self.rect.x -= constants.ENEMY_SPEED
+        self.rect.y += (self.direction * constants.ENEMY_SPEED) * (math.sqrt(2) / 2)
 
-        '''if self.rect.y >= self.max_movement_up+1 and self.rect.y > 60:
-            self.rect.y -= constants.ENEMY_SPEED
-        elif self.rect.y <= self.max_movement_down-1 and self.rect.y < 60:
-            self.rect.y += constants.ENEMY_SPEED'''
+        if (self.pace_count >= self.turn_after):
+            self.direction *= -1
+            self.pace_count = 0
+
+        # We also should change direction if we hit the screen edge
+        if (self.rect.y <= 80):
+            self.direction = 1  # turn
+            self.pace_count = 0
+        elif (self.rect.y >= constants.WIN_HEIGHT - self.rect.width):
+            self.direction = -1
+            self.pace_count = 0
 
         ## !!!FIX, utilizo el tiempo de ejecucion del juego, debería utilizar el tiempo del disparo anterior y añadirle los 0.2 secs
         # Cadencia de disparo
@@ -81,3 +90,22 @@ class Enemy(pygame.sprite.Sprite):
             self.can_fire = False
             bullet = Bullet(self.rect.x - 10, self.rect.y + 30, 1)
             enemy_bullet_sprite_list.add(bullet)
+
+    def direction_to(self, actor):
+        dx = actor.rect.x - self.rect.x
+        dy = self.rect.y - actor.rect.y
+
+        angle = math.degrees(math.atan2(dy, dx))
+        if angle > 0:
+            return angle
+
+        return 360 + angle
+
+    def move_towards(self, actor, dist):
+        angle = math.radians(self.direction_to(actor))
+        dy = dist * math.sin(angle)
+        self.rect.y -= dy
+
+    def point_towards(self, actor):
+        print(self.direction_to(actor))
+        self.angle = self.direction_to(actor)

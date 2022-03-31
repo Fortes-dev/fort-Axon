@@ -1,7 +1,8 @@
 
 ## Game init constants
 GAME_ICON = 'assets/ship.png'
-GAME_TITLE = 'fort-Axon'
+GAME_TITLE = 'Fort-AXON'
+GAME_COVER = 'assets/fort-AXON.png'
 WIN_WIDTH = 1920
 WIN_HEIGHT = 1080
 FPS = 60
@@ -13,6 +14,8 @@ TIME_LOOP = 0
 SPACESHIP1 = 'assets/Spaceship.png'
 SPACESHIP2 = 'assets/Spaceship1.png'
 SPACESHIP3 = 'assets/Spaceship2.png'
+SPACESHIP4 = 'assets/Spaceship3.png'
+SPACESHIP5 = 'assets/Spaceship4.png'
 SPACESHIP_SPEED = 8
 SPACESHIP_FIRE_RATE = 0.3
 
@@ -26,9 +29,9 @@ BULLET2_SPEED = 10
 ENEMY1 = 'assets/Enemy1.png'
 ENEMY2 = 'assets/Enemy2.png'
 ENEMY3 = 'assets/Enemy3.png'
-ENEMY_SPEED = 6
+ENEMY_SPEED = 4
 ENEMY_FIRE_RATE = 1.2
-ENEMY_SPAWN_RATE = 1500
+ENEMY_SPAWN_RATE = 1650
 ENEMY_ANIMATION_RATE = 125
 
 # Explosion

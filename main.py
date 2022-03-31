@@ -13,16 +13,13 @@ pygame.display.set_caption(constants.GAME_TITLE)
 pygame.display.set_icon(pygame.image.load(constants.GAME_ICON))
 WINDOW = pygame.display.set_mode((constants.WIN_WIDTH, constants.WIN_HEIGHT))
 BACKGROUND = pygame.image.load(constants.BACKGROUND)
-BACKGROUND = pygame.transform.scale(BACKGROUND, (1920, 1080))
+BACKGROUND = pygame.transform.scale(BACKGROUND, (constants.WIN_WIDTH, constants.WIN_HEIGHT))
 
 
 def main():
 
     # Inicializamos pygame
     pygame.init()
-
-    pygame.display.set_caption(constants.GAME_TITLE)
-    pygame.display.set_icon(pygame.image.load(constants.GAME_ICON))
 
     # Inicializamos Spaceship
     spaceship = Spaceship(30, constants.WIN_HEIGHT / 2)
@@ -78,7 +75,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == SPAWNENEMY:
-                enemy = Enemy(constants.WIN_WIDTH, randint(40, constants.WIN_HEIGHT - 80))
+                enemy = Enemy(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT))
                 enemy_sprite_list.add(enemy)
             if event.type == ANIMATE_ENEMY:
                 for enemy in enemy_sprite_list:

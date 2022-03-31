@@ -19,11 +19,19 @@ class Spaceship(pygame.sprite.Sprite):
         imagen1 = pygame.image.load(constants.SPACESHIP1)
         imagen2 = pygame.image.load(constants.SPACESHIP2)
         imagen3 = pygame.image.load(constants.SPACESHIP3)
+        imagen4 = pygame.image.load(constants.SPACESHIP4)
+        imagen5 = pygame.image.load(constants.SPACESHIP5)
 
         imagenBack = pygame.transform.rotozoom(imagen1, 0, 1.5)
         imagenRecto = pygame.transform.rotozoom(imagen2, 0, 1.5)
         imagenUp = pygame.transform.rotozoom(imagen3, 3, 1.5)
         imagenDown = pygame.transform.rotozoom(imagen3, -3, 1.5)
+        imagenHit1Recto = pygame.transform.rotozoom(imagen4, 0, 1.5)
+        imagenHit1Up = pygame.transform.rotozoom(imagen4, 3, 1.5)
+        imagenHit1Down = pygame.transform.rotozoom(imagen4, -3, 1.5)
+        imagenHit2Recto = pygame.transform.rotozoom(imagen5, 0, 1.5)
+        imagenHit2Up = pygame.transform.rotozoom(imagen5, 3, 1.5)
+        imagenHit2Down = pygame.transform.rotozoom(imagen5, -3, 1.5)
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []
@@ -31,6 +39,12 @@ class Spaceship(pygame.sprite.Sprite):
         self.sprites.append(imagenUp)
         self.sprites.append(imagenDown)
         self.sprites.append(imagenBack)
+        self.sprites.append(imagenHit1Recto)
+        self.sprites.append(imagenHit1Up)
+        self.sprites.append(imagenHit1Down)
+        self.sprites.append(imagenHit2Recto)
+        self.sprites.append(imagenHit2Up)
+        self.sprites.append(imagenHit2Down)
 
 
         self.current_sprite = 0
@@ -57,11 +71,13 @@ class Spaceship(pygame.sprite.Sprite):
         # Vidas
         self.life = 5
 
+        # Checkea si recibió un disparo
+        self.got_hit = False
+
     # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
-
+        
         self.current_sprite = 0
-
         # Cambiamos el sprite dependiendo de la direccion
         if self.rect.y > self.pos_y:
             self.current_sprite = 1
@@ -69,6 +85,7 @@ class Spaceship(pygame.sprite.Sprite):
             self.current_sprite = 2
         elif self.rect.x > self.pos_x:
             self.current_sprite = 3
+
 
         # Seteamos el sprite actual de la nave para simular animacion
         self.image = self.sprites[self.current_sprite]
@@ -88,6 +105,8 @@ class Spaceship(pygame.sprite.Sprite):
 
         if self.life == 0:
             pygame.quit()
+
+
 
 
     # Movemos la nave
