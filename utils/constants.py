@@ -17,7 +17,7 @@ SPACESHIP3 = 'assets/Spaceship2.png'
 SPACESHIP4 = 'assets/Spaceship3.png'
 SPACESHIP5 = 'assets/Spaceship4.png'
 SPACESHIP_SPEED = 8
-SPACESHIP_FIRE_RATE = 0.3
+SPACESHIP_FIRE_RATE = 15
 
 # Bullet
 BULLET1 = 'assets/bullet1.png'

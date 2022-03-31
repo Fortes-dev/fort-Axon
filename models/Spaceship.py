@@ -73,10 +73,18 @@ class Spaceship(pygame.sprite.Sprite):
 
         # Checkea si recibió un disparo
         self.got_hit = False
+        self.time_cd = 0
 
-    # Actualizamos la nave i.e posicion y sprite
+        # Actualizamos la nave i.e posicion y sprite
+
     def update(self, time_delta):
-        
+
+        if self.can_fire is False:
+            if (self.time_cd == constants.SPACESHIP_FIRE_RATE):
+                self.can_fire = True
+                self.time_cd = 0
+            self.time_cd += 1
+
         self.current_sprite = 0
         # Cambiamos el sprite dependiendo de la direccion
         if self.rect.y > self.pos_y:
@@ -93,15 +101,6 @@ class Spaceship(pygame.sprite.Sprite):
         # Actualizamos la posicion de la nave
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
-
-
-        ## !!!FIX, utilizo el tiempo de ejecucion del juego, debería utilizar el tiempo del disparo anterior y añadirle los 0.2 secs
-        # Cadencia de disparo
-        if self.fire_rate_acc > self.fire_rate:
-            self.fire_rate_acc = 0.0
-            self.can_fire = True
-        else:
-            self.fire_rate_acc += time_delta
 
         if self.life == 0:
             pygame.quit()

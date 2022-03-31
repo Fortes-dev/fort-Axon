@@ -65,6 +65,9 @@ def main():
     ENEMY_EXPLOSION = pygame.USEREVENT + 2
     pygame.time.set_timer(ENEMY_EXPLOSION, constants.EXPLOSION_ANIMATION_RATE)
 
+
+
+
     # Bucle (comienza el juego)
     while run:
 
@@ -86,6 +89,7 @@ def main():
             if event.type == ENEMY_EXPLOSION:
                 for explosion in explosion_sprite_list:
                         explosion.current_sprite += 1
+
 
 
 
