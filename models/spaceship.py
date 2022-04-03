@@ -1,7 +1,7 @@
 import math
 import pygame
 
-from models.Bullet import Bullet
+from models.bullet import Bullet
 from utils import constants
 
 # Modelo de la nave pj
@@ -61,10 +61,6 @@ class Spaceship(pygame.sprite.Sprite):
         # Velocidad de desplacamiento de la nave
         self.speed = constants.SPACESHIP_SPEED
 
-        # Cadencia de disparo
-        self.fire_rate = constants.SPACESHIP_FIRE_RATE
-        self.fire_rate_acc = 0.0
-
         # Check si puede disparar o no
         self.can_fire = True
 
@@ -73,10 +69,11 @@ class Spaceship(pygame.sprite.Sprite):
 
         # Checkea si recibió un disparo
         self.got_hit = False
+
+        # Cooldown para disparar (cuando llega a la cadencia de disparo)
         self.time_cd = 0
 
-        # Actualizamos la nave i.e posicion y sprite
-
+    # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
 
         if self.can_fire is False:
@@ -101,11 +98,6 @@ class Spaceship(pygame.sprite.Sprite):
         # Actualizamos la posicion de la nave
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
-
-        if self.life == 0:
-            pygame.quit()
-
-
 
 
     # Movemos la nave

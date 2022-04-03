@@ -1,7 +1,9 @@
+
+
 import pygame
 import math
-
-from models.Bullet import Bullet
+import random
+from models.bullet import Bullet
 from utils import constants
 
 
@@ -48,7 +50,7 @@ class Enemy(pygame.sprite.Sprite):
         self.can_fire = True
 
         self.pace_count = 0
-        self.turn_after = 80
+        self.turn_after = 100
         self.direction = -1
 
     def update(self, time_delta):
@@ -61,13 +63,13 @@ class Enemy(pygame.sprite.Sprite):
         self.pace_count += 1
         # Actualizamos la posicion del enemigo
         self.rect.x -= constants.ENEMY_SPEED
-        self.rect.y += (self.direction * constants.ENEMY_SPEED) * (math.sqrt(2) / 2)
+        self.rect.y += (self.direction * constants.ENEMY_SPEED+1) * (math.sqrt(2) / 2)
 
         if (self.pace_count >= self.turn_after):
             self.direction *= -1
             self.pace_count = 0
 
-        # We also should change direction if we hit the screen edge
+        # Cambiamos la dirección si se hostia con el borde de la pantalla
         if (self.rect.y <= 80):
             self.direction = 1  # turn
             self.pace_count = 0

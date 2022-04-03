@@ -8,6 +8,7 @@ WIN_HEIGHT = 1080
 FPS = 60
 BACKGROUND = 'assets/stars_background.png'
 TIME_LOOP = 0
+TEXT_FONT = 'assets/8-BIT WONDER.TTF'
 
 ## Props constants
 # SpaceShip
@@ -31,8 +32,9 @@ ENEMY2 = 'assets/Enemy2.png'
 ENEMY3 = 'assets/Enemy3.png'
 ENEMY_SPEED = 4
 ENEMY_FIRE_RATE = 1.2
-ENEMY_SPAWN_RATE = 1650
+ENEMY_SPAWN_RATE = 1850
 ENEMY_ANIMATION_RATE = 125
+
 
 # Explosion
 EXPLOSION1 = 'assets/explosion 1 1.png'

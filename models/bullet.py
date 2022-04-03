@@ -47,10 +47,3 @@ class Bullet(pygame.sprite.Sprite):
                 self.rect.x += self.speed
             case (1):
                 self.rect.x -= self.speed
-
-
-
-
-
-
-
