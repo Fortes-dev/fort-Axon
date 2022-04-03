@@ -1,6 +1,6 @@
 import pygame
 
-from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu
+from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu
 from utils import constants
 from random import randint
 from models.enemy import Enemy
@@ -38,6 +38,7 @@ class Game():
         self.options = OptionsMenu(self)
         self.credits = CreditsMenu(self)
         self.pause = PauseMenu(self)
+        self.game_over = GameOverMenu(self)
         self.curr_menu = self.main_menu
 
         # Puntuacion del jugador
@@ -45,6 +46,7 @@ class Game():
 
         # Inicializamos la nave del jugador
         self.player = Spaceship(30, constants.WIN_HEIGHT / 2)
+        self.player.is_alive = True
 
         # Inicializamos las listas de sprites
         self.spaceship_sprite_list = pygame.sprite.Group()
@@ -179,7 +181,8 @@ class Game():
                 self.player.life -= 1
             if self.player.life == 0:
                 self.playing = False
-                self.curr_menu = self.credits
+                self.player.is_alive = False
+                self.curr_menu = self.game_over
 
             # Actualizamos todas las listas de sprites
             self.update_and_draw_sprite_lists(delta_time)

@@ -70,6 +70,9 @@ class Spaceship(pygame.sprite.Sprite):
         # Checkea si recibió un disparo
         self.got_hit = False
 
+        # Check si la nave sigue viva
+        self.is_alive = True
+
         # Cooldown para disparar (cuando llega a la cadencia de disparo)
         self.time_cd = 0
 
