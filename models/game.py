@@ -15,18 +15,32 @@ class Game():
         pygame.display.set_caption(constants.GAME_TITLE)
         pygame.display.set_icon(pygame.image.load(constants.GAME_ICON))
 
+        # Variables de ejecución del juego
         self.running, self.playing = True, False
+
+        # Variables booleanas de botones del menu
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+
+        # Ancho y alto de la pantalla
         self.DISPLAY_W, self.DISPLAY_H = constants.WIN_WIDTH, constants.WIN_HEIGHT
+
+        # Variable de pantalla
         self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
+
         self.font_name = constants.TEXT_FONT
+
+        #Ventana del juego
         self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H)))
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
+
+        # Variables de los menus
         self.main_menu = MainMenu(self)
         self.options = OptionsMenu(self)
         self.credits = CreditsMenu(self)
         self.pause = PauseMenu(self)
         self.curr_menu = self.main_menu
+
+        # Puntuacion del jugador
         self.score = 0
 
         # Inicializamos la nave del jugador
@@ -47,14 +61,14 @@ class Game():
         # lista de explosiones
         self.explosion_sprite_list = pygame.sprite.Group()
 
-
-        bg = pygame.image.load(constants.BACKGROUND)
-        self.background = pygame.transform.scale(bg, (constants.WIN_WIDTH, constants.WIN_HEIGHT))
-
+        # Background del juego
+        self.background = pygame.transform.scale(pygame.image.load(constants.BACKGROUND), (constants.WIN_WIDTH, constants.WIN_HEIGHT))
 
 
+    # Loop de juego
     def game_loop(self):
 
+        # Situamos al jugador en la pantalla
         self.player.rect.x = 30
         self.player.rect.y = constants.WIN_HEIGHT / 2
 
@@ -174,6 +188,7 @@ class Game():
             pygame.display.update()
             self.reset_keys()
 
+    # Eventos para el menu
     def check_events_menu(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -190,9 +205,11 @@ class Game():
                 if event.key == pygame.K_w:
                     self.UP_KEY = True
 
+    # Reseteamos los botones del menu
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
 
+    # Metodo para mostrar texto del menu
     def draw_text(self, text, size, x, y):
         font = pygame.font.Font(self.font_name, size)
         text_surface = font.render(text, True, self.WHITE)
@@ -200,8 +217,9 @@ class Game():
         text_rect.center = (x, y)
         self.display.blit(text_surface, text_rect)
 
-
+    # Actualiza y dibuja en pantalla todos los sprites
     def update_and_draw_sprite_lists(self, delta_time):
+
         # Dibujamos y actualizamos las listas de sprites de Spaceship
         self.spaceship_sprite_list.update(delta_time)
         self.spaceship_sprite_list.draw(self.window)
@@ -214,5 +232,6 @@ class Game():
         self.enemy_bullet_sprite_list.update(1)
         self.enemy_bullet_sprite_list.draw(self.window)
 
+        # Dibujamos y actualizamos explosión de naves enemigas
         self.explosion_sprite_list.update()
         self.explosion_sprite_list.draw(self.window)
