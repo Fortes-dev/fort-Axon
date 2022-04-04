@@ -1,12 +1,12 @@
 import pygame
-
+from pygame import mixer
 from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu
 from utils import constants
 from random import randint
 from models.enemy import Enemy
 from models.explosion import Explosion
 from models.spaceship import Spaceship
-
+from utils.sound_func import Sound
 
 
 class Game():
@@ -18,6 +18,11 @@ class Game():
         # Variables de ejecución del juego
         self.running, self.playing = True, False
 
+        self.mixer = mixer
+        self.mixer.init()
+        self.mixer.music.load(constants.STAGE1_MUSIC)
+        self.mixer.music.set_volume(constants.MUSIC_VOLUME)
+
         # Variables booleanas de botones del menu
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
 
@@ -27,7 +32,8 @@ class Game():
         # Variable de pantalla
         self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
 
-        self.font_name = constants.TEXT_FONT
+        self.font_name = constants.TEXT_FONT_MENU
+        self.font_name_game = constants.TEXT_FONT_GAME
 
         #Ventana del juego
         self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H)))
@@ -66,7 +72,6 @@ class Game():
         # Background del juego
         self.background = pygame.transform.scale(pygame.image.load(constants.BACKGROUND), (constants.WIN_WIDTH, constants.WIN_HEIGHT))
 
-
     # Loop de juego
     def game_loop(self):
 
@@ -74,7 +79,7 @@ class Game():
         self.player.rect.x = 30
         self.player.rect.y = constants.WIN_HEIGHT / 2
 
-        fuente = pygame.font.Font(constants.TEXT_FONT, 20)
+        fuente = pygame.font.Font(constants.TEXT_FONT_GAME, 28)
 
         # lista de spaceship_sprite_list
         self.spaceship_sprite_list.add(self.player)
@@ -97,6 +102,7 @@ class Game():
 
         while self.playing:
 
+            self.mixer.music.unpause()
             delta_time = clock.tick(constants.FPS) / 1000.0
 
             # Eventos del juego
@@ -108,6 +114,7 @@ class Game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.curr_menu = self.pause
+                        self.mixer.music.pause()
                         self.playing = False
                 if event.type == spawn_enemy:
                     enemy = Enemy(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT))
@@ -168,17 +175,21 @@ class Game():
                 explosion = Explosion(x, y)
                 self.explosion_sprite_list.add(explosion)
                 self.score += 1
-
+                explosion_sound = Sound()
+                explosion_sound.play_sound(constants.EXPLOSION_SOUND)
             # Dibujamos el score
-            scoretext = fuente.render("Score {0}".format(self.score), 1, (255, 255, 255))
-            self.window.blit(scoretext, (5, 10))
+            scoretext = fuente.render("SCORE - {0}".format(self.score), 1, self.WHITE)
+            self.window.blit(scoretext, (20, 20))
 
             # Dibujamos la vida
-            vidatext = fuente.render("Vidas {0}".format(self.player.life), 1, (255, 255, 255))
-            self.window.blit(vidatext, (150, 10))
+            vidatext = fuente.render("VIDAS - {0}".format(self.player.life), 1, self.WHITE)
+            self.window.blit(vidatext, (200, 20))
 
             for hit in player_hit_by_bullet:
                 self.player.life -= 1
+                hit_sound = Sound()
+                hit_sound.play_sound(constants.HIT_SOUND)
+
             if self.player.life == 0:
                 self.playing = False
                 self.player.is_alive = False
@@ -238,3 +249,8 @@ class Game():
         # Dibujamos y actualizamos explosión de naves enemigas
         self.explosion_sprite_list.update()
         self.explosion_sprite_list.draw(self.window)
+
+    def play_sound(self, sound_asset):
+        sound = pygame.mixer.Sound(sound_asset)
+        sound.play()
+        sound.set_volume(constants.MUSIC_VOLUME)

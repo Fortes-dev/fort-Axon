@@ -8,7 +8,18 @@ WIN_HEIGHT = 1080
 FPS = 60
 BACKGROUND = 'assets/stars_background.png'
 TIME_LOOP = 0
-TEXT_FONT = 'assets/8-BIT WONDER.TTF'
+TEXT_FONT_MENU = 'assets/8-BIT WONDER.TTF'
+TEXT_FONT_GAME = 'assets/Pixellari.ttf'
+
+# Sounds
+MENU_MUSIC = 'assets/sounds/menu.mp3'
+STAGE1_MUSIC = 'assets/sounds/stage1.mp3'
+BULLET_SOUND = 'assets/sounds/shoot.wav'
+BOSS_MUSIC = 'assets/sounds/boss.mp3'
+HIT_SOUND = 'assets/sounds/hit.wav'
+GAME_OVER_MUSIC = 'assets/sounds/game_over.mp3'
+EXPLOSION_SOUND = 'assets/sounds/explosion.wav'
+MUSIC_VOLUME = 0.2
 
 ## Props constants
 # SpaceShip

@@ -1,6 +1,8 @@
 import pygame
 
 from main import Loop
+from utils import constants
+from utils.sound_func import Sound
 
 
 class Menu():
@@ -10,6 +12,8 @@ class Menu():
         self.run_display = True
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
         self.offset = - 200
+        self.menu_music = pygame.mixer.Sound(constants.MENU_MUSIC)
+
 
 
     def draw_cursor(self):
@@ -31,8 +35,11 @@ class MainMenu(Menu):
         self.optionsx, self.optionsy = self.mid_w, self.mid_h + 180
         self.creditsx, self.creditsy = self.mid_w, self.mid_h + 280
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
+        self.menu_music.play()
+        self.menu_music.set_volume(constants.MUSIC_VOLUME)
 
     def display_menu(self):
+
         self.run_display = True
         while self.run_display:
             self.game.check_events_menu()
@@ -72,7 +79,9 @@ class MainMenu(Menu):
         self.move_cursor()
         if self.game.START_KEY:
             if self.state == 'Jugar':
+                self.menu_music.stop()
                 self.game.playing = True
+                self.game.mixer.music.play(5, 0.0, 1000)
             elif self.state == 'Opciones':
                 self.game.curr_menu = self.game.options
             elif self.state == 'Creditos':
@@ -143,6 +152,9 @@ class GameOverMenu(Menu):
 
     def display_menu(self):
         self.run_display = True
+        self.game.mixer.music.stop()
+        game_over_music = Sound()
+        game_over_music.play_sound(constants.GAME_OVER_MUSIC)
         while self.run_display:
             self.game.check_events_menu()
             if self.game.START_KEY or self.game.BACK_KEY:
@@ -183,4 +195,5 @@ class PauseMenu(Menu):
         if self.game.START_KEY:
             if self.state == 'Continuar':
                 self.game.playing = True
+
             self.run_display = False

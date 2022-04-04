@@ -139,3 +139,6 @@ class Spaceship(pygame.sprite.Sprite):
                 self.can_fire = False
                 bullet = Bullet(self.pos_x + 50, self.pos_y + 20, 0)
                 bullet_sprite_list.add(bullet)
+                shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
+                shoot_sound.play()
+                shoot_sound.set_volume(constants.MUSIC_VOLUME)

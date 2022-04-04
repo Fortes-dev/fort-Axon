@@ -58,8 +58,6 @@ class Enemy(pygame.sprite.Sprite):
         # Seteamos el sprite actual de la nave para simular animacion
         self.image = self.sprites[self.current_sprite]
 
-        # Cambiamos el sprite para simular animacion
-
         self.pace_count += 1
         # Actualizamos la posicion del enemigo
         self.rect.x -= constants.ENEMY_SPEED
