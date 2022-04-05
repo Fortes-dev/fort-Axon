@@ -6,7 +6,7 @@ from utils import constants
 class Explosion(pygame.sprite.Sprite):
 
     # Constructor
-    def __init__(self, x, y):
+    def __init__(self, x, y, zoom):
         super().__init__()
 
         # Cargamos las imagenes del Spaceship y la escalamos
@@ -16,11 +16,11 @@ class Explosion(pygame.sprite.Sprite):
         imagen4 = pygame.image.load(constants.EXPLOSION4)
         imagen5 = pygame.image.load(constants.EXPLOSION5)
 
-        i1 = pygame.transform.rotozoom(imagen1, 0, 1.5)
-        i2 = pygame.transform.rotozoom(imagen2, 0, 1.5)
-        i3 = pygame.transform.rotozoom(imagen3, 0, 1.5)
-        i4 = pygame.transform.rotozoom(imagen4, 0, 1.5)
-        i5 = pygame.transform.rotozoom(imagen5, 0, 1.5)
+        i1 = pygame.transform.rotozoom(imagen1, 0, zoom)
+        i2 = pygame.transform.rotozoom(imagen2, 0, zoom)
+        i3 = pygame.transform.rotozoom(imagen3, 0, zoom)
+        i4 = pygame.transform.rotozoom(imagen4, 0, zoom)
+        i5 = pygame.transform.rotozoom(imagen5, 0, zoom)
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []

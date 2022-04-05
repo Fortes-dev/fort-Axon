@@ -11,23 +11,37 @@ from utils import constants
 class Enemy(pygame.sprite.Sprite):
 
     # Constructor
-    def __init__(self, x, y):
+    def __init__(self, x, y, type, game):
         super().__init__()
 
-        # Cargamos las imagenes del Spaceship y la escalamos
-        imagen1 = pygame.image.load(constants.ENEMY1)
-        imagen2 = pygame.image.load(constants.ENEMY2)
-        imagen3 = pygame.image.load(constants.ENEMY3)
+        self.type = type
+        self.game = game
 
-        i1 = pygame.transform.rotozoom(imagen1, 0, 1.5)
-        i2 = pygame.transform.rotozoom(imagen2, 0, 1.5)
-        i3 = pygame.transform.rotozoom(imagen3, 0, 1.5)
+        # Cargamos las imagenes del enemy shooter y la escalamos
+        enemy_shooter_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY1), 0, 1.5)
+        enemy_shooter_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY2), 0, 1.5)
+        enemy_shooter_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY3), 0, 1.5)
+
+        # Cargamos las imágenes del enemy follower y las escalamos
+        enemy_follower_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER1), 0, 1.4)
+        enemy_follower_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER2), 0, 1.4)
+        enemy_follower_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER3), 0, 1.4)
+        enemy_follower_imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER4), 0, 1.4)
+
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []
-        self.sprites.append(i1)
-        self.sprites.append(i2)
-        self.sprites.append(i3)
+
+        if self.type == 'shooter':
+            self.sprites.append(enemy_shooter_imagen1)
+            self.sprites.append(enemy_shooter_imagen2)
+            self.sprites.append(enemy_shooter_imagen3)
+
+        elif self.type == 'follower':
+            self.sprites.append(enemy_follower_imagen1)
+            self.sprites.append(enemy_follower_imagen2)
+            self.sprites.append(enemy_follower_imagen3)
+            self.sprites.append(enemy_follower_imagen4)
 
         self.current_sprite = 0
 
@@ -58,30 +72,35 @@ class Enemy(pygame.sprite.Sprite):
         # Seteamos el sprite actual de la nave para simular animacion
         self.image = self.sprites[self.current_sprite]
 
-        self.pace_count += 1
-        # Actualizamos la posicion del enemigo
-        self.rect.x -= constants.ENEMY_SPEED
-        self.rect.y += (self.direction * constants.ENEMY_SPEED+1) * (math.sqrt(2) / 2)
+        if self.type == 'shooter':
+            self.pace_count += 1
+            # Actualizamos la posicion del enemigo
+            self.rect.x -= constants.ENEMY_SPEED
+            self.rect.y += (self.direction * constants.ENEMY_SPEED+1) * (math.sqrt(2) / 2)
 
-        if (self.pace_count >= self.turn_after):
-            self.direction *= -1
-            self.pace_count = 0
+            if (self.pace_count >= self.turn_after):
+                self.direction *= -1
+                self.pace_count = 0
 
-        # Cambiamos la dirección si se hostia con el borde de la pantalla
-        if (self.rect.y <= 80):
-            self.direction = 1  # turn
-            self.pace_count = 0
-        elif (self.rect.y >= constants.WIN_HEIGHT - self.rect.width):
-            self.direction = -1
-            self.pace_count = 0
+            # Cambiamos la dirección si se hostia con el borde de la pantalla
+            if (self.rect.y <= 80):
+                self.direction = 1  # turn
+                self.pace_count = 0
+            elif (self.rect.y >= constants.WIN_HEIGHT - self.rect.width):
+                self.direction = -1
+                self.pace_count = 0
 
-        ## !!!FIX, utilizo el tiempo de ejecucion del juego, debería utilizar el tiempo del disparo anterior y añadirle los 0.2 secs
-        # Cadencia de disparo
-        if self.fire_rate_acc > self.fire_rate:
-            self.fire_rate_acc = 0.0
-            self.can_fire = True
-        else:
-            self.fire_rate_acc += time_delta
+            ## !!!FIX, utilizo el tiempo de ejecucion del juego, debería utilizar el tiempo del disparo anterior y añadirle los 0.2 secs
+            # Cadencia de disparo
+            if self.fire_rate_acc > self.fire_rate:
+                self.fire_rate_acc = 0.0
+                self.can_fire = True
+            else:
+                self.fire_rate_acc += time_delta
+
+        elif self.type == 'follower':
+            self.rect.x -= constants.ENEMY_FOLLOWER_SPEED
+            self.move_towards(self.game.player, constants.ENEMY_FOLLOWER_SPEED + 4)
 
 
     # Disparo de la nave enemiga
@@ -102,9 +121,10 @@ class Enemy(pygame.sprite.Sprite):
         return 360 + angle
 
     def move_towards(self, actor, dist):
-        angle = math.radians(self.direction_to(actor))
-        dy = dist * math.sin(angle)
-        self.rect.y -= dy
+        if self.rect.x > actor.rect.x:
+            angle = math.radians(self.direction_to(actor))
+            dy = dist * math.sin(angle)
+            self.rect.y -= dy
 
     def point_towards(self, actor):
         print(self.direction_to(actor))

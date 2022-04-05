@@ -195,5 +195,6 @@ class PauseMenu(Menu):
         if self.game.START_KEY:
             if self.state == 'Continuar':
                 self.game.playing = True
+                self.game.mixer.music.unpause()
 
             self.run_display = False

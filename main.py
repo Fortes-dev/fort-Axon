@@ -1,4 +1,4 @@
-import game
+from models import game
 
 
 class Loop():

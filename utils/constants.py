@@ -6,10 +6,10 @@ GAME_COVER = 'assets/fort-AXON.png'
 WIN_WIDTH = 1920
 WIN_HEIGHT = 1080
 FPS = 60
-BACKGROUND = 'assets/stars_background.png'
+BACKGROUND = 'assets/background/stars_background.png'
 TIME_LOOP = 0
-TEXT_FONT_MENU = 'assets/8-BIT WONDER.TTF'
-TEXT_FONT_GAME = 'assets/Pixellari.ttf'
+TEXT_FONT_MENU = 'assets/typography/8-BIT WONDER.TTF'
+TEXT_FONT_GAME = 'assets/typography/Pixellari.ttf'
 
 # Sounds
 MENU_MUSIC = 'assets/sounds/menu.mp3'
@@ -23,34 +23,45 @@ MUSIC_VOLUME = 0.2
 
 ## Props constants
 # SpaceShip
-SPACESHIP1 = 'assets/Spaceship.png'
-SPACESHIP2 = 'assets/Spaceship1.png'
-SPACESHIP3 = 'assets/Spaceship2.png'
-SPACESHIP4 = 'assets/Spaceship3.png'
-SPACESHIP5 = 'assets/Spaceship4.png'
+SPACESHIP1 = 'assets/spaceships/Spaceship.png'
+SPACESHIP2 = 'assets/spaceships/Spaceship1.png'
+SPACESHIP3 = 'assets/spaceships/Spaceship2.png'
+SPACESHIP4 = 'assets/spaceships/Spaceship3.png'
+SPACESHIP5 = 'assets/spaceships/Spaceship4.png'
 SPACESHIP_SPEED = 8
 SPACESHIP_FIRE_RATE = 15
 
-# Bullet
-BULLET1 = 'assets/bullet1.png'
-BULLET2 = 'assets/bullet2.png'
+## Bullets
+BULLET1 = 'assets/bullets/bullet1.png'
+BULLET2 = 'assets/bullets/bullet2.png'
 BULLET1_SPEED = 20
 BULLET2_SPEED = 10
 
-# Enemy
-ENEMY1 = 'assets/Enemy1.png'
-ENEMY2 = 'assets/Enemy2.png'
-ENEMY3 = 'assets/Enemy3.png'
+## Enemies
+# Shooter
+ENEMY1 = 'assets/enemies/Enemy1.png'
+ENEMY2 = 'assets/enemies/Enemy2.png'
+ENEMY3 = 'assets/enemies/Enemy3.png'
 ENEMY_SPEED = 4
 ENEMY_FIRE_RATE = 1.2
-ENEMY_SPAWN_RATE = 1850
+ENEMY_SPAWN_RATE = 1750
 ENEMY_ANIMATION_RATE = 125
+
+ENEMY_FOLLOWER1 = 'assets/enemies/EnemyFollower1.png'
+ENEMY_FOLLOWER2 = 'assets/enemies/EnemyFollower2.png'
+ENEMY_FOLLOWER3 = 'assets/enemies/EnemyFollower3.png'
+ENEMY_FOLLOWER4 = 'assets/enemies/EnemyFollower4.png'
+ENEMY_FOLLOWER_SPEED = 4
+ENEMY_FOLLOWER_SPAWN_RATE = 2300
+ENEMY_FOLLOWER_ANIMATION_RATE = 100
 
 
 # Explosion
-EXPLOSION1 = 'assets/explosion 1 1.png'
-EXPLOSION2 = 'assets/explosion 1 2.png'
-EXPLOSION3 = 'assets/explosion 1 3.png'
-EXPLOSION4 = 'assets/explosion 1 4.png'
-EXPLOSION5 = 'assets/explosion 1 5.png'
-EXPLOSION_ANIMATION_RATE = 110
+EXPLOSION1 = 'assets/explosion/explosion 1 1.png'
+EXPLOSION2 = 'assets/explosion/explosion 1 2.png'
+EXPLOSION3 = 'assets/explosion/explosion 1 3.png'
+EXPLOSION4 = 'assets/explosion/explosion 1 4.png'
+EXPLOSION5 = 'assets/explosion/explosion 1 5.png'
+EXPLOSION_SHOOTER_ZOOM = 1.5
+EXPLOSION_FOLLOWER_ZOOM = 1.1
+EXPLOSION_ANIMATION_RATE = 125
