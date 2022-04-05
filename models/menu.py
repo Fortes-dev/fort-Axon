@@ -81,6 +81,7 @@ class MainMenu(Menu):
             if self.state == 'Jugar':
                 self.menu_music.stop()
                 self.game.playing = True
+                self.game.game_time.reset_timer()
                 self.game.mixer.music.play(5, 0.0, 1000)
             elif self.state == 'Opciones':
                 self.game.curr_menu = self.game.options
@@ -155,16 +156,18 @@ class GameOverMenu(Menu):
         self.game.mixer.music.stop()
         game_over_music = Sound()
         game_over_music.play_sound(constants.GAME_OVER_MUSIC)
+        self.game.game_time.reset_timer()
+        self.game.display.fill(self.game.BLACK)
+        self.game.draw_text('GAME OVER', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 60)
+        self.game.draw_text('Presiona ENTER o ESPACIO para volver al menu', 24, self.game.DISPLAY_W / 2,
+                            self.game.DISPLAY_H / 2 + 120)
+        self.blit_screen()
+        pygame.time.wait(2500)
+
         while self.run_display:
             self.game.check_events_menu()
             if self.game.START_KEY or self.game.BACK_KEY:
                 Loop().main()
-
-
-            self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('GAME OVER', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 60)
-            self.game.draw_text('Presiona ENTER o ESPACIO para volver al menu', 24, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 120)
-            self.blit_screen()
 
     def check_input(self):
         if self.game.START_KEY:
@@ -196,5 +199,6 @@ class PauseMenu(Menu):
             if self.state == 'Continuar':
                 self.game.playing = True
                 self.game.mixer.music.unpause()
+                self.game.game_time.unpause_time()
 
             self.run_display = False

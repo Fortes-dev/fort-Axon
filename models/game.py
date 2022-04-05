@@ -1,4 +1,5 @@
 import pygame
+import time
 from pygame import mixer
 from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu
 from utils import constants
@@ -7,18 +8,21 @@ from models.enemy import Enemy
 from models.explosion import Explosion
 from models.spaceship import Spaceship
 from utils.sound_func import Sound
+from utils.stopwatch import Stopwatch
 
 
 class Game():
     def __init__(self):
+
         pygame.init()
+
         pygame.display.set_caption(constants.GAME_TITLE)
         pygame.display.set_icon(pygame.image.load(constants.GAME_ICON))
 
         # Variables de ejecución del juego
         self.running, self.playing = True, False
 
-        self.game_time = 0
+        self.game_time = Stopwatch()
 
         self.mixer = mixer
         self.mixer.init()
@@ -80,6 +84,8 @@ class Game():
         # Background del juego
         self.background = pygame.transform.scale(pygame.image.load(constants.BACKGROUND), (constants.WIN_WIDTH, constants.WIN_HEIGHT))
 
+
+
     # Loop de juego
     def game_loop(self):
 
@@ -106,6 +112,7 @@ class Game():
         pygame.time.set_timer(animate_enemy_shooter, constants.ENEMY_ANIMATION_RATE)
 
         spawn_enemy_follower = pygame.USEREVENT + 2
+        pygame.time.set_timer(spawn_enemy_follower, 0)
 
         animate_enemy_follower = pygame.USEREVENT + 3
         pygame.time.set_timer(animate_enemy_follower, constants.ENEMY_FOLLOWER_ANIMATION_RATE)
@@ -129,6 +136,7 @@ class Game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.curr_menu = self.pause
+                        self.game_time.pause_time()
                         self.mixer.music.pause()
                         self.playing = False
 
@@ -249,11 +257,11 @@ class Game():
             self.window.blit(scoretext, (20, 20))
 
             # Dibujamos la vida
-            self.game_time = pygame.time.get_ticks() / 1000
-            if self.game_time > 30.0 and self.game_time < 30.2:
+
+            if self.game_time.current_time() == 4:
                 pygame.time.set_timer(spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
 
-            vidatext = fuente.render("VIDAS - {0}        TIEMPO - {1}".format(self.player.life, int(self.game_time)),
+            vidatext = fuente.render("VIDAS - {0}        TIEMPO - {1}".format(self.player.life, self.game_time.current_time()),
                                      1, self.WHITE)
             self.window.blit(vidatext, (200, 20))
 

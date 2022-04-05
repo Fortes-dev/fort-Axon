@@ -3,8 +3,8 @@
 GAME_ICON = 'assets/ship.png'
 GAME_TITLE = 'Fort-AXON'
 GAME_COVER = 'assets/fort-AXON.png'
-WIN_WIDTH = 1920
-WIN_HEIGHT = 1080
+WIN_WIDTH = 1600
+WIN_HEIGHT = 900
 FPS = 60
 BACKGROUND = 'assets/background/stars_background.png'
 TIME_LOOP = 0
@@ -51,7 +51,7 @@ ENEMY_FOLLOWER1 = 'assets/enemies/EnemyFollower1.png'
 ENEMY_FOLLOWER2 = 'assets/enemies/EnemyFollower2.png'
 ENEMY_FOLLOWER3 = 'assets/enemies/EnemyFollower3.png'
 ENEMY_FOLLOWER4 = 'assets/enemies/EnemyFollower4.png'
-ENEMY_FOLLOWER_SPEED = 4
+ENEMY_FOLLOWER_SPEED = 5
 ENEMY_FOLLOWER_SPAWN_RATE = 2300
 ENEMY_FOLLOWER_ANIMATION_RATE = 100
 
