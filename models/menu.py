@@ -1,6 +1,7 @@
 import pygame
 
 from main import Loop
+from models.spaceship import Spaceship
 from utils import constants
 from utils.sound_func import Sound
 
@@ -45,12 +46,14 @@ class MainMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('FORT AXON', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('FORT AXON', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
             self.game.draw_text("Jugar", 40, self.startx, self.starty)
             self.game.draw_text("Opciones", 40, self.optionsx, self.optionsy)
             self.game.draw_text("Creditos", 40, self.creditsx, self.creditsy)
             self.draw_cursor()
             self.blit_screen()
+
+
 
 
     def move_cursor(self):
@@ -93,8 +96,8 @@ class OptionsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = 'Volumen'
-        self.volx, self.voly = self.mid_w, self.mid_h + 20
-        self.controlsx, self.controlsy = self.mid_w, self.mid_h + 100
+        self.volx, self.voly = self.mid_w, self.mid_h + 80
+        self.controlsx, self.controlsy = self.mid_w, self.mid_h + 180
         self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
 
     def display_menu(self):
@@ -103,7 +106,7 @@ class OptionsMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill((0, 0, 0))
-            self.game.draw_text('Opciones', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+            self.game.draw_text('Opciones', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
             self.game.draw_text("Volumen", 40, self.volx, self.voly)
             self.game.draw_text("Controles", 40, self.controlsx, self.controlsy)
             self.draw_cursor()
@@ -127,6 +130,8 @@ class OptionsMenu(Menu):
 class CreditsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
+        self.namex, self.namey = self.mid_w, self.mid_h + 80
+        self.descx, self.descy = self.mid_w, self.mid_h + 180
 
     def display_menu(self):
         self.run_display = True
@@ -137,9 +142,9 @@ class CreditsMenu(Menu):
                 self.run_display = False
 
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Creditos', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
-            self.game.draw_text('Carlos Fortes Medina', 40, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 70)
-            self.game.draw_text('Proyecto fin de Grado', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 120)
+            self.game.draw_text('Creditos', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('Carlos Fortes Medina', 40, self.namex, self.namey)
+            self.game.draw_text('Proyecto fin de Grado', 40, self.descx, self.descy)
             self.blit_screen()
 
     def check_input(self):

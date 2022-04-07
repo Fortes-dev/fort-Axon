@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 import time
 from pygame import mixer
@@ -59,10 +61,6 @@ class Game():
         # Puntuacion del jugador
         self.score = 0
 
-        # Inicializamos la nave del jugador
-        self.player = Spaceship(30, constants.WIN_HEIGHT / 2)
-        self.player.is_alive = True
-
         # Inicializamos las listas de sprites
         self.spaceship_sprite_list = pygame.sprite.Group()
 
@@ -86,17 +84,24 @@ class Game():
 
 
 
+
+
     # Loop de juego
     def game_loop(self):
 
-        # Situamos al jugador en la pantalla
-        self.player.rect.x = 30
-        self.player.rect.y = constants.WIN_HEIGHT / 2
+        if self.game_time.current_time() == 0:
+            self.player = Spaceship(30, constants.WIN_HEIGHT / 2)
+            # Inicializamos la nave del jugador
+            self.player.is_alive = True
+
+            # Situamos al jugador en la pantalla
+            self.player.rect.x = 30
+            self.player.rect.y = constants.WIN_HEIGHT / 2
+
+            # lista de spaceship_sprite_list
+            self.spaceship_sprite_list.add(self.player)
 
         fuente = pygame.font.Font(constants.TEXT_FONT_GAME, 28)
-
-        # lista de spaceship_sprite_list
-        self.spaceship_sprite_list.add(self.player)
 
         # Reloj interno del juego
         clock = pygame.time.Clock()
@@ -115,7 +120,7 @@ class Game():
         pygame.time.set_timer(spawn_enemy_follower, 0)
 
         animate_enemy_follower = pygame.USEREVENT + 3
-        pygame.time.set_timer(animate_enemy_follower, constants.ENEMY_FOLLOWER_ANIMATION_RATE)
+
 
         enemy_explosion = pygame.USEREVENT + 4
         pygame.time.set_timer(enemy_explosion, constants.EXPLOSION_ANIMATION_RATE)
@@ -132,6 +137,7 @@ class Game():
                     self.running = False
                     self.playing = False
                     pygame.quit()
+                    sys.exit()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -165,6 +171,7 @@ class Game():
                 if event.type == enemy_explosion:
                     for explosion in self.explosion_sprite_list:
                         explosion.current_sprite += 1
+
 
             self.window.blit(self.background, (bgX, 0))  # Dibuja el primer background
             self.window.blit(self.background, (bgX2, 0))  # Dibuja el segundo background
@@ -234,22 +241,28 @@ class Game():
                 self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
 
             for hit in player_hit_by_bullet:
-                self.player.life -= 1
-                self.hit_sound.play_sound(constants.HIT_SOUND)
+                if self.player.hit_countdown == 0:
+                    self.player.hit_countdown = 20
+                    self.player.life -= 1
+                    self.hit_sound.play_sound(constants.HIT_SOUND)
 
             for hit in player_hit_by_enemy_follower:
-                self.player.life -= 1
-                x = hit.rect.x - 110
-                y = hit.rect.y - 110
-                explosion = Explosion(x, y, constants.EXPLOSION_FOLLOWER_ZOOM)
-                self.explosion_sprite_list.add(explosion)
-                self.hit_sound.play_sound(constants.HIT_SOUND)
-                self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
+                if self.player.hit_countdown==0:
+                    self.player.hit_countdown=20
+                    self.player.life -= 1
+                    x = hit.rect.x - 110
+                    y = hit.rect.y - 110
+                    explosion = Explosion(x, y, constants.EXPLOSION_FOLLOWER_ZOOM)
+                    self.explosion_sprite_list.add(explosion)
+                    self.hit_sound.play_sound(constants.HIT_SOUND)
+                    self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
+
 
             if self.player.life == 0:
                 self.playing = False
                 self.player.is_alive = False
                 self.curr_menu = self.game_over
+                pygame.time.set_timer(spawn_enemy_follower, 0, False)
 
 
             # Dibujamos el score
@@ -258,7 +271,7 @@ class Game():
 
             # Dibujamos la vida
 
-            if self.game_time.current_time() == 4:
+            if self.game_time.current_time() > 19 and self.game_time.current_time() < 19.5:
                 pygame.time.set_timer(spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
 
             vidatext = fuente.render("VIDAS - {0}        TIEMPO - {1}".format(self.player.life, self.game_time.current_time()),

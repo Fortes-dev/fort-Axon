@@ -18,15 +18,15 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
 
         # Cargamos las imagenes del enemy shooter y la escalamos
-        enemy_shooter_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY1), 0, 1.5)
-        enemy_shooter_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY2), 0, 1.5)
-        enemy_shooter_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY3), 0, 1.5)
+        enemy_shooter_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY1), 0, constants.ENEMY_SHOOTER_SIZE)
+        enemy_shooter_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY2), 0, constants.ENEMY_SHOOTER_SIZE)
+        enemy_shooter_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY3), 0, constants.ENEMY_SHOOTER_SIZE)
 
         # Cargamos las imágenes del enemy follower y las escalamos
-        enemy_follower_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER1), 0, 1.4)
-        enemy_follower_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER2), 0, 1.4)
-        enemy_follower_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER3), 0, 1.4)
-        enemy_follower_imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER4), 0, 1.4)
+        enemy_follower_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER1), 0, constants.ENEMY_FOLLOWER_SIZE)
+        enemy_follower_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER2), 0, constants.ENEMY_FOLLOWER_SIZE)
+        enemy_follower_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER3), 0, constants.ENEMY_FOLLOWER_SIZE)
+        enemy_follower_imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER4), 0, constants.ENEMY_FOLLOWER_SIZE)
 
 
         # Inicializamos array de sprites y añadimos todos
@@ -52,9 +52,6 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
-        # Velocidad de desplacamiento de la nave
-        self.speed = constants.ENEMY_SPEED
 
         # Cadencia de disparo
         self.fire_rate = constants.ENEMY_FIRE_RATE

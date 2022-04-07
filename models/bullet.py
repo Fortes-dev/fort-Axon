@@ -17,14 +17,14 @@ class Bullet(pygame.sprite.Sprite):
         match type:
             case (0):
                 imagen1 = pygame.image.load(constants.BULLET1)
-                imagen1 = pygame.transform.rotozoom(imagen1, 0, 1.7)
+                imagen1 = pygame.transform.rotozoom(imagen1, 0, constants.BULLET_SIZE)
                 self.sprites.append(imagen1)
 
                 # Velocidad de la bala
                 self.speed = constants.BULLET1_SPEED
             case (1):
                 imagen2 = pygame.image.load(constants.BULLET2)
-                imagen2 = pygame.transform.rotozoom(imagen2, -180, 1.7)
+                imagen2 = pygame.transform.rotozoom(imagen2, -180, constants.BULLET_SIZE)
                 self.sprites.append(imagen2)
 
                 # Velocidad de la bala

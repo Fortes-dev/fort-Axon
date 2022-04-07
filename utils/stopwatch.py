@@ -22,6 +22,5 @@ class Stopwatch():
         self.paused_time = self.time_rightnow
 
     def unpause_time(self):
-
         self.last_time = time.time() - self.paused_time
         self.paused_time = 0

@@ -1,3 +1,5 @@
+import pygame
+
 from models import game
 
 
@@ -9,5 +11,9 @@ class Loop():
             g.game_loop()
 
 
+
 if __name__ == '__main__':
-    Loop().main()
+    try:
+        Loop().main()
+    except SystemExit:
+        pass
