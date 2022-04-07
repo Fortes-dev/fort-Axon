@@ -17,6 +17,7 @@ class Menu():
 
 
 
+
     def draw_cursor(self):
         self.game.draw_text('[', 40, self.cursor_rect.x, self.cursor_rect.y)
 
@@ -42,6 +43,7 @@ class MainMenu(Menu):
     def display_menu(self):
 
         self.run_display = True
+
         while self.run_display:
             self.game.check_events_menu()
             self.check_input()
@@ -58,6 +60,7 @@ class MainMenu(Menu):
 
     def move_cursor(self):
         if self.game.DOWN_KEY:
+            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
             if self.state == 'Jugar':
                 self.cursor_rect.midtop = (self.optionsx + self.offset, self.optionsy)
                 self.state = 'Opciones'
@@ -68,6 +71,7 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = 'Jugar'
         elif self.game.UP_KEY:
+            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
             if self.state == 'Jugar':
                 self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
                 self.state = 'Creditos'
@@ -81,8 +85,10 @@ class MainMenu(Menu):
     def check_input(self):
         self.move_cursor()
         if self.game.START_KEY:
+            self.game.play_sound(constants.MENU_SELECTION_SOUND)
             if self.state == 'Jugar':
                 self.menu_music.stop()
+                pygame.time.delay(100)
                 self.game.playing = True
                 self.game.game_time.reset_timer()
                 self.game.mixer.music.play(5, 0.0, 1000)
@@ -114,9 +120,11 @@ class OptionsMenu(Menu):
 
     def check_input(self):
         if self.game.BACK_KEY:
+            self.game.play_sound(constants.MENU_BACK_SOUND)
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
         elif self.game.UP_KEY or self.game.DOWN_KEY:
+            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
             if self.state == 'Volumen':
                 self.state = 'Controles'
                 self.cursor_rect.midtop = (self.controlsx + self.offset, self.controlsy)
@@ -124,6 +132,7 @@ class OptionsMenu(Menu):
                 self.state = 'Volumen'
                 self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
         elif self.game.START_KEY:
+            self.game.play_sound(constants.MENU_SELECTION_SOUND)
             # TO-DO: Create a Volume Menu and a Controls Menu
             pass
 
@@ -137,10 +146,7 @@ class CreditsMenu(Menu):
         self.run_display = True
         while self.run_display:
             self.game.check_events_menu()
-            if self.game.START_KEY or self.game.BACK_KEY:
-                self.game.curr_menu = self.game.main_menu
-                self.run_display = False
-
+            self.check_input()
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Creditos', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
             self.game.draw_text('Carlos Fortes Medina', 40, self.namex, self.namey)
@@ -148,8 +154,9 @@ class CreditsMenu(Menu):
             self.blit_screen()
 
     def check_input(self):
-        if self.game.START_KEY:
-            self.game.playing = True
+        if self.game.BACK_KEY:
+            self.game.play_sound(constants.MENU_BACK_SOUND)
+            self.game.curr_menu = self.game.main_menu
             self.run_display = False
 
 class GameOverMenu(Menu):
@@ -172,12 +179,11 @@ class GameOverMenu(Menu):
         while self.run_display:
             self.game.check_events_menu()
             if self.game.START_KEY or self.game.BACK_KEY:
+                self.game.play_sound(constants.MENU_SELECTION_SOUND)
                 Loop().main()
 
-    def check_input(self):
-        if self.game.START_KEY:
-            self.game.playing = True
-            self.run_display = False
+
+
 
 
 class PauseMenu(Menu):
@@ -189,6 +195,7 @@ class PauseMenu(Menu):
 
     def display_menu(self):
         self.run_display = True
+        self.game.play_sound(constants.PAUSE_SOUND)
         while self.run_display:
             self.game.check_events_menu()
             self.check_input()
@@ -202,6 +209,8 @@ class PauseMenu(Menu):
     def check_input(self):
         if self.game.START_KEY:
             if self.state == 'Continuar':
+                self.game.play_sound(constants.MENU_SELECTION_SOUND)
+                pygame.time.delay(100)
                 self.game.playing = True
                 self.game.mixer.music.unpause()
                 self.game.game_time.unpause_time()

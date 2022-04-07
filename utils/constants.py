@@ -19,6 +19,10 @@ BOSS_MUSIC = 'assets/sounds/boss.mp3'
 HIT_SOUND = 'assets/sounds/hit.wav'
 GAME_OVER_MUSIC = 'assets/sounds/game_over.mp3'
 EXPLOSION_SOUND = 'assets/sounds/explosion.wav'
+MENU_MOVEMENT_SOUND = 'assets/sounds/menu_movement.wav'
+MENU_SELECTION_SOUND = 'assets/sounds/menu_selection.wav'
+MENU_BACK_SOUND = 'assets/sounds/menu_back_sound.wav'
+PAUSE_SOUND = 'assets/sounds/pause.wav'
 MUSIC_VOLUME = 0.2
 
 ## Props constants
@@ -44,7 +48,7 @@ ENEMY2 = 'assets/enemies/Enemy2.png'
 ENEMY3 = 'assets/enemies/Enemy3.png'
 ENEMY_SPEED = 4
 ENEMY_FIRE_RATE = 1.2
-ENEMY_SPAWN_RATE = 1750
+ENEMY_SPAWN_RATE = 1600
 ENEMY_ANIMATION_RATE = 125
 ENEMY_SHOOTER_SIZE = 1.5
 

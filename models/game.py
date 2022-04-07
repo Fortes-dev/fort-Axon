@@ -117,10 +117,10 @@ class Game():
         pygame.time.set_timer(animate_enemy_shooter, constants.ENEMY_ANIMATION_RATE)
 
         spawn_enemy_follower = pygame.USEREVENT + 2
-        pygame.time.set_timer(spawn_enemy_follower, 0)
+
 
         animate_enemy_follower = pygame.USEREVENT + 3
-
+        pygame.time.set_timer(animate_enemy_follower, constants.ENEMY_FOLLOWER_ANIMATION_RATE)
 
         enemy_explosion = pygame.USEREVENT + 4
         pygame.time.set_timer(enemy_explosion, constants.EXPLOSION_ANIMATION_RATE)
