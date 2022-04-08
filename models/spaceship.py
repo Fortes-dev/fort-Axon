@@ -15,15 +15,13 @@ class Spaceship(pygame.sprite.Sprite):
         self.pos_x = x
         self.pos_y = y
 
-        # Cargamos las imagenes del Spaceship y la escalamos
-        imagen1 = pygame.image.load(constants.SPACESHIP1)
-        imagen2 = pygame.image.load(constants.SPACESHIP2)
-        imagen3 = pygame.image.load(constants.SPACESHIP3)
+        # FIX PARA EL TAMAÑO, funcion que coja la lista de sprites de la nave, la borre y cree una nueva
+        # con imágenes reescaladas (zoom) self.sprite.append(nuevas imagenes...)
 
-        imagenBack = pygame.transform.rotozoom(imagen1, 0, constants.SPACESHIP_SIZE)
-        imagenRecto = pygame.transform.rotozoom(imagen2, 0, constants.SPACESHIP_SIZE)
-        imagenUp = pygame.transform.rotozoom(imagen3, 3, constants.SPACESHIP_SIZE)
-        imagenDown = pygame.transform.rotozoom(imagen3, -3, constants.SPACESHIP_SIZE)
+        imagenBack = pygame.transform.rotozoom(pygame.image.load(constants.SPACESHIP1), 0, constants.SPACESHIP_SIZE)
+        imagenRecto = pygame.transform.rotozoom(pygame.image.load(constants.SPACESHIP2), 0, constants.SPACESHIP_SIZE)
+        imagenUp = pygame.transform.rotozoom(pygame.image.load(constants.SPACESHIP3), 3, constants.SPACESHIP_SIZE)
+        imagenDown = pygame.transform.rotozoom(pygame.image.load(constants.SPACESHIP3), -3, constants.SPACESHIP_SIZE)
 
 
         # Inicializamos array de sprites y añadimos todos
@@ -38,6 +36,8 @@ class Spaceship(pygame.sprite.Sprite):
 
         # Seteamos la imagen actual del sprite
         self.image = self.sprites[self.current_sprite]
+
+
 
         # Inicializamos el rectángulo (hitbox)
         self.rect = self.image.get_rect()
