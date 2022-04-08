@@ -88,7 +88,6 @@ class MainMenu(Menu):
             self.game.play_sound(constants.MENU_SELECTION_SOUND)
             if self.state == 'Jugar':
                 self.menu_music.stop()
-                pygame.time.delay(100)
                 self.game.playing = True
                 self.game.game_time.reset_timer()
                 self.game.mixer.music.play(5, 0.0, 1000)
@@ -178,7 +177,7 @@ class GameOverMenu(Menu):
 
         while self.run_display:
             self.game.check_events_menu()
-            if self.game.START_KEY or self.game.BACK_KEY:
+            if self.game.START_KEY:
                 self.game.play_sound(constants.MENU_SELECTION_SOUND)
                 Loop().main()
 

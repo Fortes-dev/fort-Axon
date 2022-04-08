@@ -82,24 +82,20 @@ class Game():
         # Background del juego
         self.background = pygame.transform.scale(pygame.image.load(constants.BACKGROUND), (constants.WIN_WIDTH, constants.WIN_HEIGHT))
 
-
-
-
+        # Inicializamos la nave del jugador
+        self.player = Spaceship(30, constants.WIN_HEIGHT / 2)
 
     # Loop de juego
     def game_loop(self):
 
-        if self.game_time.current_time() == 0:
-            self.player = Spaceship(30, constants.WIN_HEIGHT / 2)
-            # Inicializamos la nave del jugador
-            self.player.is_alive = True
+        self.player.is_alive = True
 
-            # Situamos al jugador en la pantalla
-            self.player.rect.x = 30
-            self.player.rect.y = constants.WIN_HEIGHT / 2
+        # Situamos al jugador en la pantalla
+        self.player.rect.x = 30
+        self.player.rect.y = constants.WIN_HEIGHT / 2
 
-            # lista de spaceship_sprite_list
-            self.spaceship_sprite_list.add(self.player)
+        # lista de spaceship_sprite_list
+        self.spaceship_sprite_list.add(self.player)
 
         fuente = pygame.font.Font(constants.TEXT_FONT_GAME, 28)
 
