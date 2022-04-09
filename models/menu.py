@@ -110,7 +110,7 @@ class OptionsMenu(Menu):
         while self.run_display:
             self.game.check_events_menu()
             self.check_input()
-            self.game.display.fill((0, 0, 0))
+            self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Opciones', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
             self.game.draw_text("Volumen", 40, self.volx, self.voly)
             self.game.draw_text("Controles", 40, self.controlsx, self.controlsy)
@@ -182,14 +182,12 @@ class GameOverMenu(Menu):
                 Loop().main()
 
 
-
-
-
 class PauseMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = "Continuar"
         self.continuarx, self.continuary = self.mid_w, self.mid_h + 80
+        self.quit_gamex, self.quit_gamey = self.mid_w, self.mid_h + 180
         self.cursor_rect.midtop = (self.continuarx + self.offset, self.continuary)
 
     def display_menu(self):
@@ -201,17 +199,33 @@ class PauseMenu(Menu):
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Pausa', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
             self.game.draw_text("Continuar", 40, self.continuarx, self.continuary)
+            self.game.draw_text("Salir", 40, self.quit_gamex, self.quit_gamey)
             self.draw_cursor()
             self.blit_screen()
 
 
-    def check_input(self):
-        if self.game.START_KEY:
+    def move_cursor(self):
+        if self.game.UP_KEY or self.game.DOWN_KEY:
+            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
             if self.state == 'Continuar':
-                self.game.play_sound(constants.MENU_SELECTION_SOUND)
-                pygame.time.delay(100)
+                self.state = 'QuitGame'
+                self.cursor_rect.midtop = (self.quit_gamex + self.offset, self.quit_gamey)
+            elif self.state == 'QuitGame':
+                self.state = 'Continuar'
+                self.cursor_rect.midtop = (self.continuarx + self.offset, self.continuary)
+
+    def check_input(self):
+        self.move_cursor()
+        if self.game.START_KEY:
+            self.game.play_sound(constants.MENU_SELECTION_SOUND)
+            if self.state == 'Continuar':
+                pygame.time.delay(50)
                 self.game.playing = True
                 self.game.mixer.music.unpause()
                 self.game.game_time.unpause_time()
+            elif self.state == 'QuitGame':
+                pygame.time.delay(100)
+                pygame.time.set_timer(self.game.spawn_enemy_follower, 0, False)
+                Loop().main()
 
             self.run_display = False

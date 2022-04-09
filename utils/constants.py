@@ -11,6 +11,9 @@ TIME_LOOP = 0
 TEXT_FONT_MENU = 'assets/typography/8-BIT WONDER.TTF'
 TEXT_FONT_GAME = 'assets/typography/Pixellari.ttf'
 
+# Menu
+
+
 # Sounds
 MENU_MUSIC = 'assets/sounds/menu.mp3'
 STAGE1_MUSIC = 'assets/sounds/stage1.mp3'

@@ -85,6 +85,11 @@ class Game():
         # Inicializamos la nave del jugador
         self.player = Spaceship(30, constants.WIN_HEIGHT / 2)
 
+        # Evento de spawn de enemy follower
+        self.spawn_enemy_follower = 0
+
+        '''añadir todos los eventos como variables de clase game ^'''
+
     # Loop de juego
     def game_loop(self):
 
@@ -112,7 +117,7 @@ class Game():
         animate_enemy_shooter = pygame.USEREVENT + 1
         pygame.time.set_timer(animate_enemy_shooter, constants.ENEMY_ANIMATION_RATE)
 
-        spawn_enemy_follower = pygame.USEREVENT + 2
+        self.spawn_enemy_follower = pygame.USEREVENT + 2
 
 
         animate_enemy_follower = pygame.USEREVENT + 3
@@ -153,7 +158,7 @@ class Game():
                         else:
                             enemy.current_sprite = 0
 
-                if event.type == spawn_enemy_follower:
+                if event.type == self.spawn_enemy_follower:
                     enemy = Enemy(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'follower', self)
                     self.enemy_follower_sprite_list.add(enemy)
 
@@ -258,7 +263,7 @@ class Game():
                 self.playing = False
                 self.player.is_alive = False
                 self.curr_menu = self.game_over
-                pygame.time.set_timer(spawn_enemy_follower, 0, False)
+                pygame.time.set_timer(self.spawn_enemy_follower, 0, False)
 
 
             # Dibujamos el score
@@ -268,7 +273,7 @@ class Game():
             # Dibujamos la vida
 
             if self.game_time.current_time() > 19 and self.game_time.current_time() < 19.5:
-                pygame.time.set_timer(spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
+                pygame.time.set_timer(self.spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
 
             vidatext = fuente.render("VIDAS - {0}        TIEMPO - {1}".format(self.player.life, self.game_time.current_time()),
                                      1, self.WHITE)
@@ -285,9 +290,11 @@ class Game():
     def check_events_menu(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.running, self.playing = False, False
+                self.running = False
+                self.playing = False
                 self.curr_menu.run_display = False
                 pygame.quit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
                     self.START_KEY = True
