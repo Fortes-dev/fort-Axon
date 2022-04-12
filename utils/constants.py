@@ -26,7 +26,7 @@ MENU_MOVEMENT_SOUND = 'assets/sounds/menu_movement.wav'
 MENU_SELECTION_SOUND = 'assets/sounds/menu_selection.wav'
 MENU_BACK_SOUND = 'assets/sounds/menu_back_sound.wav'
 PAUSE_SOUND = 'assets/sounds/pause.wav'
-MUSIC_VOLUME = 0.2
+MUSIC_VOLUME = 0.15
 
 ## Props constants
 # SpaceShip

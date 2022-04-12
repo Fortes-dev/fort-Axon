@@ -80,7 +80,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.pace_count = 0
 
             # Cambiamos la dirección si se hostia con el borde de la pantalla
-            if (self.rect.y <= 80):
+            if (self.rect.y <= 0):
                 self.direction = 1  # turn
                 self.pace_count = 0
             elif (self.rect.y >= constants.WIN_HEIGHT - self.rect.width):

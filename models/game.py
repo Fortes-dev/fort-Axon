@@ -3,7 +3,7 @@ import sys
 import pygame
 import time
 from pygame import mixer
-from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu
+from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu, VolumenMenu
 from utils import constants
 from random import randint
 from models.enemy import Enemy
@@ -31,6 +31,8 @@ class Game():
         self.mixer.music.load(constants.STAGE1_MUSIC)
         self.mixer.music.set_volume(constants.MUSIC_VOLUME)
 
+        self.menu_music = pygame.mixer.Sound(constants.MENU_MUSIC)
+
         self.hit_sound = Sound()
         self.explosion_sound = Sound()
 
@@ -56,6 +58,7 @@ class Game():
         self.credits = CreditsMenu(self)
         self.pause = PauseMenu(self)
         self.game_over = GameOverMenu(self)
+        self.volumen_menu = VolumenMenu(self)
         self.curr_menu = self.main_menu
 
         # Puntuacion del jugador
@@ -87,6 +90,7 @@ class Game():
 
         # Evento de spawn de enemy follower
         self.spawn_enemy_follower = 0
+
 
         '''añadir todos los eventos como variables de clase game ^'''
 
