@@ -3,7 +3,8 @@ import sys
 import pygame
 import time
 from pygame import mixer
-from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu, VolumenMenu
+from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu, VolumenMenu, VideoMenu, \
+    ControlsMenu, ControlsPlayer1Menu, ControlsPlayer2Menu
 from utils import constants
 from random import randint
 from models.enemy import Enemy
@@ -59,6 +60,10 @@ class Game():
         self.pause = PauseMenu(self)
         self.game_over = GameOverMenu(self)
         self.volumen_menu = VolumenMenu(self)
+        self.video_menu = VideoMenu(self)
+        self.controls_menu = ControlsMenu(self)
+        self.controls_player1_menu = ControlsPlayer1Menu(self)
+        self.controls_player2_menu = ControlsPlayer2Menu(self)
         self.curr_menu = self.main_menu
 
         # Puntuacion del jugador

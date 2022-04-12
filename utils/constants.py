@@ -3,8 +3,8 @@
 GAME_ICON = 'assets/ship.png'
 GAME_TITLE = 'Fort-AXON'
 GAME_COVER = 'assets/fort-AXON.png'
-WIN_WIDTH = 1600
-WIN_HEIGHT = 900
+WIN_WIDTH = 1280
+WIN_HEIGHT = 720
 FPS = 60
 BACKGROUND = 'assets/background/stars_background.png'
 TIME_LOOP = 0

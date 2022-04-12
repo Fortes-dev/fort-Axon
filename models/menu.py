@@ -135,9 +135,11 @@ class OptionsMenu(Menu):
                 self.game.curr_menu = self.game.volumen_menu
                 self.run_display = False
             elif self.state == 'Controles':
-                pass
+                self.game.curr_menu = self.game.controls_menu
+                self.run_display = False
             elif self.state == 'Video':
-                pass
+                self.game.curr_menu = self.game.video_menu
+                self.run_display = False
 
     def move_cursor(self):
         if self.game.DOWN_KEY:
@@ -240,6 +242,199 @@ class VolumenMenu(Menu):
             elif self.state == 1:
                 self.cursor_rect.midtop = (self.volumen_0_x + self.offset, self.volumen_0_y)
                 self.state = 0
+
+class VideoMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.state = '720'
+        self.video_480_x, self.video_480_y = self.mid_w, self.mid_h + 80
+        self.video_720_x, self.video_720_y = self.mid_w, self.mid_h + 180
+        self.video_1080_x, self.video_1080_y = self.mid_w, self.mid_h + 280
+
+        self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events_menu()
+            self.check_input()
+            self.game.display.fill(self.game.BLACK)
+            self.game.draw_text('Video', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text("640 x 480", 40, self.video_480_x, self.video_480_y)
+            self.game.draw_text("1280 x 720", 40, self.video_720_x, self.video_720_y)
+            self.game.draw_text("1920 x 1080", 40, self.video_1080_x, self.video_1080_y)
+            self.draw_cursor()
+            self.blit_screen()
+
+    def check_input(self):
+        self.move_cursor()
+        if self.game.BACK_KEY:
+            self.game.play_sound(constants.MENU_BACK_SOUND)
+            self.game.curr_menu = self.game.options
+            self.run_display = False
+        elif self.game.START_KEY:
+            if self.state == '480':
+                self.set_window_resolution(640, 480)
+                self.game.menu_music.stop()
+                Loop().main()
+            elif self.state == '720':
+                self.set_window_resolution(1280, 720)
+                self.game.menu_music.stop()
+                Loop().main()
+            elif self.state == '1080':
+                self.set_window_resolution(1920, 1080)
+                self.game.menu_music.stop()
+                Loop().main()
+            self.game.play_sound(constants.MENU_SELECTION_SOUND)
+
+    def set_window_resolution(self, w, h):
+        constants.WIN_WIDTH = w
+        constants.WIN_HEIGHT = h
+        self.game.DISPLAY_W = w
+        self.game.DISPLAY_H = h
+        self.game.window = pygame.display.set_mode(((w, h)))
+
+
+    def move_cursor(self):
+        if self.game.DOWN_KEY:
+            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
+            if self.state == '480':
+                self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
+                self.state = '720'
+            elif self.state == '720':
+                self.cursor_rect.midtop = (self.video_1080_x + self.offset, self.video_1080_y)
+                self.state = '1080'
+            elif self.state == '1080':
+                self.cursor_rect.midtop = (self.video_480_x + self.offset, self.video_480_y)
+                self.state = '480'
+
+        elif self.game.UP_KEY:
+            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
+            if self.state == '480':
+                self.cursor_rect.midtop = (self.video_1080_x + self.offset, self.video_1080_y)
+                self.state = '1080'
+            elif self.state == '1080':
+                self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
+                self.state = '720'
+            elif self.state == '720':
+                self.cursor_rect.midtop = (self.video_480_x + self.offset, self.video_480_y)
+                self.state = '480'
+
+
+class ControlsMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.state = 'Player1'
+        self.player1x, self.player1y = self.mid_w, self.mid_h + 80
+        self.player2x, self.player2y = self.mid_w, self.mid_h + 180
+
+        self.cursor_rect.midtop = (self.player1x + self.offset, self.player1y)
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events_menu()
+            self.check_input()
+            self.game.display.fill(self.game.BLACK)
+            self.game.draw_text('Controles', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text("Player 1", 40, self.player1x, self.player1y)
+            self.game.draw_text("Player 2", 40, self.player2x, self.player2y)
+            self.draw_cursor()
+            self.blit_screen()
+
+    def check_input(self):
+        self.move_cursor()
+        if self.game.BACK_KEY:
+            self.game.play_sound(constants.MENU_BACK_SOUND)
+            self.game.curr_menu = self.game.options
+            self.run_display = False
+        elif self.game.START_KEY:
+            if self.state == 'Player1':
+                self.game.curr_menu = self.game.controls_player1_menu
+                self.run_display = False
+            elif self.state == 'Player2':
+                self.game.curr_menu = self.game.controls_player2_menu
+                self.run_display = False
+            self.game.play_sound(constants.MENU_SELECTION_SOUND)
+
+
+    def move_cursor(self):
+        if self.game.DOWN_KEY or self.game.UP_KEY:
+            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
+            if self.state == 'Player1':
+                self.cursor_rect.midtop = (self.player2x + self.offset, self.player2y)
+                self.state = 'Player2'
+            elif self.state == 'Player2':
+                self.cursor_rect.midtop = (self.player1x + self.offset, self.player1y)
+                self.state = 'Player1'
+
+
+class ControlsPlayer1Menu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.namex, self.namey = self.mid_w - 100, self.mid_h + 40
+        self.descx, self.descy = self.mid_w + 100, self.mid_h + 40
+        self.ax, self.by = self.mid_w, self.mid_h + 120
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events_menu()
+            self.check_input()
+            self.game.display.fill(self.game.BLACK)
+            self.game.draw_text('Player 1', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('Movimiento', 40, self.mid_w , self.mid_h - 100)
+            self.game.draw_text('W  *  Arriba', 20, self.mid_w - 150, self.mid_h - 20)
+            self.game.draw_text('A  *  Izquierda', 20, self.mid_w + 150, self.mid_h - 20)
+            self.game.draw_text('S  *  Abajo', 20, self.mid_w - 150, self.mid_h + 20)
+            self.game.draw_text('D  *  Derecha', 20, self.mid_w + 150, self.mid_h + 20)
+            self.game.draw_text('Disparo', 40, self.mid_w , self.mid_h + 100)
+            self.game.draw_text('Espacio  *  Disparo normal', 20, self.mid_w, self.mid_h + 160)
+            self.game.draw_text('CTRL  *  Disparo cargado', 20, self.mid_w, self.mid_h + 200)
+            self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
+            self.game.draw_text('ESC  *  Pause y atras', 20, self.mid_w, self.mid_h + 320)
+            self.game.draw_text('Espacio y Enter  *  Seleccionar', 20, self.mid_w, self.mid_h + 360)
+            self.blit_screen()
+
+    def check_input(self):
+        if self.game.BACK_KEY:
+            self.game.play_sound(constants.MENU_BACK_SOUND)
+            self.game.curr_menu = self.game.controls_menu
+            self.run_display = False
+
+
+class ControlsPlayer2Menu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.namex, self.namey = self.mid_w, self.mid_h + 80
+        self.descx, self.descy = self.mid_w, self.mid_h + 180
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events_menu()
+            self.check_input()
+            self.game.display.fill(self.game.BLACK)
+            self.game.draw_text('Player 2', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('Movimiento', 40, self.mid_w, self.mid_h - 100)
+            self.game.draw_text('Flecha Arriba  *  rriba', 20, self.mid_w - 250, self.mid_h - 20)
+            self.game.draw_text('Flecha Izquierda  *  Izquierda', 20, self.mid_w + 250, self.mid_h - 20)
+            self.game.draw_text('Flecha Abajo  *  Abajo', 20, self.mid_w - 250, self.mid_h + 20)
+            self.game.draw_text('Flecha derecha  *  Derecha', 20, self.mid_w + 250, self.mid_h + 20)
+            self.game.draw_text('Disparo', 40, self.mid_w, self.mid_h + 100)
+            self.game.draw_text('Ctrl  *  Disparo normal', 20, self.mid_w, self.mid_h + 160)
+            self.game.draw_text('Shift  *  Disparo cargado', 20, self.mid_w, self.mid_h + 200)
+            self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
+            self.game.draw_text('ESC  *  Pause y atras', 20, self.mid_w, self.mid_h + 320)
+            self.game.draw_text('Espacio y Enter  *  Seleccionar', 20, self.mid_w, self.mid_h + 360)
+            self.blit_screen()
+
+    def check_input(self):
+        if self.game.BACK_KEY:
+            self.game.play_sound(constants.MENU_BACK_SOUND)
+            self.game.curr_menu = self.game.controls_menu
+            self.run_display = False
+
 
 
 class CreditsMenu(Menu):
