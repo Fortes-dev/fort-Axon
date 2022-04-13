@@ -11,8 +11,10 @@ TIME_LOOP = 0
 TEXT_FONT_MENU = 'assets/typography/8-BIT WONDER.TTF'
 TEXT_FONT_GAME = 'assets/typography/Pixellari.ttf'
 
-# Menu
 
+# Menu
+MENU_TITLE_FONT_SIZE = 80
+MENU_TEXT_FONT_SIZE = 40
 
 # Sounds
 MENU_MUSIC = 'assets/sounds/menu.mp3'

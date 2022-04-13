@@ -50,7 +50,7 @@ class MainMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('FORT AXON', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('FORT AXON', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("Jugar", 40, self.startx, self.starty)
             self.game.draw_text("Opciones", 40, self.optionsx, self.optionsy)
             self.game.draw_text("Creditos", 40, self.creditsx, self.creditsy)
@@ -116,7 +116,7 @@ class OptionsMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Opciones', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('Opciones', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("Volumen", 40, self.volx, self.voly)
             self.game.draw_text("Controles", 40, self.controlsx, self.controlsy)
             self.game.draw_text("Video", 40, self.videox, self.videoy)
@@ -183,7 +183,7 @@ class VolumenMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Volumen', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('Volumen', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("0", 40, self.volumen_0_x, self.volumen_0_y)
             self.game.draw_text("1", 40, self.volumen_1_x, self.volumen_1_y)
             self.game.draw_text("2", 40, self.volumen_2_x, self.volumen_2_y)
@@ -247,8 +247,8 @@ class VideoMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = '720'
-        self.video_480_x, self.video_480_y = self.mid_w, self.mid_h + 80
-        self.video_720_x, self.video_720_y = self.mid_w, self.mid_h + 180
+        self.video_720_x, self.video_720_y = self.mid_w, self.mid_h + 80
+        self.video_900_x, self.video_900_y = self.mid_w, self.mid_h + 180
         self.video_1080_x, self.video_1080_y = self.mid_w, self.mid_h + 280
 
         self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
@@ -259,9 +259,9 @@ class VideoMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Video', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
-            self.game.draw_text("640 x 480", 40, self.video_480_x, self.video_480_y)
+            self.game.draw_text('Video', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("1280 x 720", 40, self.video_720_x, self.video_720_y)
+            self.game.draw_text("1600 x 900", 40, self.video_900_x, self.video_900_y)
             self.game.draw_text("1920 x 1080", 40, self.video_1080_x, self.video_1080_y)
             self.draw_cursor()
             self.blit_screen()
@@ -273,12 +273,12 @@ class VideoMenu(Menu):
             self.game.curr_menu = self.game.options
             self.run_display = False
         elif self.game.START_KEY:
-            if self.state == '480':
-                self.set_window_resolution(640, 480)
+            if self.state == '720':
+                self.set_window_resolution(1280, 720)
                 self.game.menu_music.stop()
                 Loop().main()
-            elif self.state == '720':
-                self.set_window_resolution(1280, 720)
+            elif self.state == '900':
+                self.set_window_resolution(1600, 900)
                 self.game.menu_music.stop()
                 Loop().main()
             elif self.state == '1080':
@@ -298,27 +298,27 @@ class VideoMenu(Menu):
     def move_cursor(self):
         if self.game.DOWN_KEY:
             self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
-            if self.state == '480':
-                self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
-                self.state = '720'
-            elif self.state == '720':
+            if self.state == '720':
+                self.cursor_rect.midtop = (self.video_900_x + self.offset, self.video_900_y)
+                self.state = '900'
+            elif self.state == '900':
                 self.cursor_rect.midtop = (self.video_1080_x + self.offset, self.video_1080_y)
                 self.state = '1080'
             elif self.state == '1080':
-                self.cursor_rect.midtop = (self.video_480_x + self.offset, self.video_480_y)
-                self.state = '480'
+                self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
+                self.state = '720'
 
         elif self.game.UP_KEY:
             self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
-            if self.state == '480':
+            if self.state == '720':
                 self.cursor_rect.midtop = (self.video_1080_x + self.offset, self.video_1080_y)
                 self.state = '1080'
             elif self.state == '1080':
+                self.cursor_rect.midtop = (self.video_900_x + self.offset, self.video_900_y)
+                self.state = '900'
+            elif self.state == '900':
                 self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
                 self.state = '720'
-            elif self.state == '720':
-                self.cursor_rect.midtop = (self.video_480_x + self.offset, self.video_480_y)
-                self.state = '480'
 
 
 class ControlsMenu(Menu):
@@ -336,7 +336,7 @@ class ControlsMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Controles', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('Controles', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("Player 1", 40, self.player1x, self.player1y)
             self.game.draw_text("Player 2", 40, self.player2x, self.player2y)
             self.draw_cursor()
@@ -390,7 +390,7 @@ class ControlsPlayer1Menu(Menu):
             self.game.draw_text('D  *  Derecha', 20, self.mid_w + 150, self.mid_h + 20)
             self.game.draw_text('Disparo', 40, self.mid_w , self.mid_h + 100)
             self.game.draw_text('Espacio  *  Disparo normal', 20, self.mid_w, self.mid_h + 160)
-            self.game.draw_text('CTRL  *  Disparo cargado', 20, self.mid_w, self.mid_h + 200)
+            self.game.draw_text('Left CTRL  *  Disparo cargado', 20, self.mid_w, self.mid_h + 200)
             self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
             self.game.draw_text('ESC  *  Pause y atras', 20, self.mid_w, self.mid_h + 320)
             self.game.draw_text('Espacio y Enter  *  Seleccionar', 20, self.mid_w, self.mid_h + 360)
@@ -422,8 +422,8 @@ class ControlsPlayer2Menu(Menu):
             self.game.draw_text('Flecha Abajo  *  Abajo', 20, self.mid_w - 250, self.mid_h + 20)
             self.game.draw_text('Flecha derecha  *  Derecha', 20, self.mid_w + 250, self.mid_h + 20)
             self.game.draw_text('Disparo', 40, self.mid_w, self.mid_h + 100)
-            self.game.draw_text('Ctrl  *  Disparo normal', 20, self.mid_w, self.mid_h + 160)
-            self.game.draw_text('Shift  *  Disparo cargado', 20, self.mid_w, self.mid_h + 200)
+            self.game.draw_text('Right CTRL  *  Disparo normal', 20, self.mid_w, self.mid_h + 160)
+            self.game.draw_text('Right SHIFT  *  Disparo cargado', 20, self.mid_w, self.mid_h + 200)
             self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
             self.game.draw_text('ESC  *  Pause y atras', 20, self.mid_w, self.mid_h + 320)
             self.game.draw_text('Espacio y Enter  *  Seleccionar', 20, self.mid_w, self.mid_h + 360)
@@ -449,7 +449,7 @@ class CreditsMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Creditos', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('Creditos', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text('Carlos Fortes Medina', 40, self.namex, self.namey)
             self.game.draw_text('Proyecto fin de Grado', 40, self.descx, self.descy)
             self.blit_screen()
@@ -501,7 +501,7 @@ class PauseMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Pausa', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
+            self.game.draw_text('Pausa', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("Continuar", 40, self.continuarx, self.continuary)
             self.game.draw_text("Salir", 40, self.quit_gamex, self.quit_gamey)
             self.draw_cursor()
