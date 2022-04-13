@@ -246,12 +246,12 @@ class VolumenMenu(Menu):
 class VideoMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = '720'
+        self.state = '900'
         self.video_720_x, self.video_720_y = self.mid_w, self.mid_h + 80
         self.video_900_x, self.video_900_y = self.mid_w, self.mid_h + 180
         self.video_1080_x, self.video_1080_y = self.mid_w, self.mid_h + 280
 
-        self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
+        self.cursor_rect.midtop = (self.video_900_x + self.offset, self.video_900_y)
 
     def display_menu(self):
         self.run_display = True
@@ -274,12 +274,15 @@ class VideoMenu(Menu):
             self.run_display = False
         elif self.game.START_KEY:
             if self.state == '720':
-                constants.SPACESHIP_SIZE = 1.5
+                constants.SPACESHIP_SIZE = 1.6
                 constants.ENEMY_SHOOTER_SIZE = 1.5
                 constants.ENEMY_FOLLOWER_SIZE = 1.4
-                constants.BULLET_SIZE = 1.7
+                constants.BULLET_SIZE = 1.6
+                constants.BULLET_CHARGED_SIZE = 3
                 constants.EXPLOSION_SHOOTER_ZOOM = 1.5
                 constants.EXPLOSION_FOLLOWER_ZOOM = 1.1
+                constants.BONUS_ZOOM = 1.4
+                constants.BONUS_SPEED = 7
                 constants.SPACESHIP_SPEED = 8
                 constants.ENEMY_SPEED = 4
                 constants.ENEMY_FOLLOWER_SPEED = 5
@@ -290,13 +293,16 @@ class VideoMenu(Menu):
                 Loop().main()
 
             elif self.state == '900':
-                constants.SPACESHIP_SIZE = 1.6
+                constants.SPACESHIP_SIZE = 1.7
                 constants.ENEMY_SHOOTER_SIZE = 1.6
                 constants.ENEMY_FOLLOWER_SIZE = 1.5
-                constants.BULLET_SIZE = 1.8
+                constants.BULLET_SIZE = 1.7
+                constants.BULLET_CHARGED_SIZE = 3.2
                 constants.EXPLOSION_SHOOTER_ZOOM = 1.6
                 constants.EXPLOSION_FOLLOWER_ZOOM = 1.3
                 constants.SPACESHIP_SPEED = 9
+                constants.BONUS_ZOOM = 1.5
+                constants.BONUS_SPEED = 8
                 constants.ENEMY_SPEED = 5
                 constants.ENEMY_FOLLOWER_SPEED = 6
                 constants.BULLET1_SPEED = 21
@@ -310,9 +316,12 @@ class VideoMenu(Menu):
                 constants.ENEMY_SHOOTER_SIZE = 1.8
                 constants.ENEMY_FOLLOWER_SIZE = 1.7
                 constants.BULLET_SIZE = 2
+                constants.BULLET_CHARGED_SIZE = 3.4
                 constants.EXPLOSION_SHOOTER_ZOOM = 1.8
                 constants.EXPLOSION_FOLLOWER_ZOOM = 1.5
                 constants.SPACESHIP_SPEED = 10
+                constants.BONUS_ZOOM = 1.6
+                constants.BONUS_SPEED = 9
                 constants.ENEMY_SPEED = 6
                 constants.ENEMY_FOLLOWER_SPEED = 7
                 constants.BULLET1_SPEED = 22

@@ -37,7 +37,7 @@ class Spaceship(pygame.sprite.Sprite):
         # Seteamos la imagen actual del sprite
         self.image = self.sprites[self.current_sprite]
 
-
+        self.charged_shot_ammo = 0
 
         # Inicializamos el rectángulo (hitbox)
         self.rect = self.image.get_rect()
@@ -96,8 +96,6 @@ class Spaceship(pygame.sprite.Sprite):
             self.hit_countdown -= 1
         super(Spaceship, self).update(...)
 
-
-
         # Actualizamos la posicion de la nave
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
@@ -137,8 +135,19 @@ class Spaceship(pygame.sprite.Sprite):
         if key_pressed[pygame.K_SPACE]:
             if self.can_fire:
                 self.can_fire = False
-                bullet = Bullet(self.pos_x + 50, self.pos_y + 20, 0)
+                bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 0)
                 bullet_sprite_list.add(bullet)
                 shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
                 shoot_sound.play()
                 shoot_sound.set_volume(constants.MUSIC_VOLUME)
+
+        if key_pressed[pygame.K_LCTRL]:
+            if self.charged_shot_ammo > 0:
+                if self.can_fire:
+                    self.can_fire = False
+                    bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 2)
+                    bullet_sprite_list.add(bullet)
+                    shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
+                    shoot_sound.play()
+                    shoot_sound.set_volume(constants.MUSIC_VOLUME)
+                    self.charged_shot_ammo -= 1

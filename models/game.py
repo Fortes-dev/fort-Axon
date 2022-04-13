@@ -3,6 +3,8 @@ import sys
 import pygame
 import time
 from pygame import mixer
+
+from models.bonus import Bonus
 from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu, VolumenMenu, VideoMenu, \
     ControlsMenu, ControlsPlayer1Menu, ControlsPlayer2Menu
 from utils import constants
@@ -36,6 +38,7 @@ class Game():
 
         self.hit_sound = Sound()
         self.explosion_sound = Sound()
+
 
         # Variables booleanas de botones del menu
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
@@ -87,6 +90,9 @@ class Game():
         # lista de explosiones
         self.explosion_sprite_list = pygame.sprite.Group()
 
+        # lista de bonus
+        self.bonus_sprite_list = pygame.sprite.Group()
+
         # Background del juego
         self.background = pygame.transform.scale(pygame.image.load(constants.BACKGROUND), (constants.WIN_WIDTH, constants.WIN_HEIGHT))
 
@@ -135,6 +141,12 @@ class Game():
         enemy_explosion = pygame.USEREVENT + 4
         pygame.time.set_timer(enemy_explosion, constants.EXPLOSION_ANIMATION_RATE)
 
+        bonus_speed_spawn = pygame.USEREVENT + 5
+        pygame.time.set_timer(bonus_speed_spawn, constants.BONUS_SPEED_SPAWN_RATE)
+
+        bonus_bullet_spawn = pygame.USEREVENT + 6
+        pygame.time.set_timer(bonus_bullet_spawn, constants.BONUS_BULLET_SPAWN_RATE)
+
 
         while self.playing:
 
@@ -182,6 +194,14 @@ class Game():
                     for explosion in self.explosion_sprite_list:
                         explosion.current_sprite += 1
 
+                if event.type == bonus_speed_spawn:
+                    bonus = Bonus(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'speed')
+                    self.bonus_sprite_list.add(bonus)
+
+                if event.type == bonus_bullet_spawn:
+                    bonus = Bonus(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'bullet')
+                    self.bonus_sprite_list.add(bonus)
+
 
             self.window.blit(self.background, (bgX, 0))  # Dibuja el primer background
             self.window.blit(self.background, (bgX2, 0))  # Dibuja el segundo background
@@ -195,10 +215,6 @@ class Game():
                 bgX = self.background.get_width()
             if bgX2 < self.background.get_width() * -1:
                 bgX2 = self.background.get_width()
-
-            key_pressed = pygame.key.get_pressed()
-            self.player.move_spaceship(key_pressed)
-            self.player.shoot_bullet(key_pressed, self.spaceship_bullet_sprite_list)
 
             # Si el enemigo se sale de la pantalla lo eliminamos
             for enemy in self.enemy_shooter_sprite_list:
@@ -222,16 +238,32 @@ class Game():
                 if bullet.rect.x > constants.WIN_WIDTH:
                     self.spaceship_bullet_sprite_list.remove(bullet)
 
-            enemy_shooter_hit_by_bullet = pygame.sprite.groupcollide(self.spaceship_bullet_sprite_list, self.enemy_shooter_sprite_list, True,
+            # Si la bala se sale de la pantalla la eliminamos
+            for bonus in self.bonus_sprite_list:
+                if bonus.rect.x < -10:
+                    self.bonus_sprite_list.remove(bonus)
+
+            enemy_shooter_hit_by_bullet = pygame.sprite.groupcollide(self.spaceship_bullet_sprite_list, self.enemy_shooter_sprite_list, False,
                                                              True)
             enemy_follower_hit_by_bullet = pygame.sprite.groupcollide(self.spaceship_bullet_sprite_list,
-                                                                     self.enemy_follower_sprite_list, True,
+                                                                     self.enemy_follower_sprite_list, False,
                                                                      True)
             player_hit_by_bullet = pygame.sprite.groupcollide(self.enemy_bullet_sprite_list, self.spaceship_sprite_list, True,
                                                               False)
 
             player_hit_by_enemy_follower = pygame.sprite.groupcollide(self.enemy_follower_sprite_list, self.spaceship_sprite_list, True,
                                                               False)
+
+            player_collision_with_bonus = pygame.sprite.groupcollide(self.bonus_sprite_list, self.spaceship_sprite_list, True,
+                                                              False)
+
+            for bonus in player_collision_with_bonus:
+                self.play_sound(constants.BONUS_SOUND)
+                if bonus.type == 'speed':
+                    self.player.speed += 1
+                elif bonus.type == 'bullet':
+                    self.player.charged_shot_ammo = 20
+
 
             # cuando alcanzo al enemigo subo puntuación y animo muerte
             for hit in enemy_shooter_hit_by_bullet:
@@ -241,6 +273,9 @@ class Game():
                 self.explosion_sprite_list.add(explosion)
                 self.score += 1
                 self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
+                if hit.type == 0:
+                    hit.kill()
+
 
             for hit in enemy_follower_hit_by_bullet:
                 x = hit.rect.x - 110
@@ -249,6 +284,9 @@ class Game():
                 self.explosion_sprite_list.add(explosion)
                 self.score += 1
                 self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
+                if hit.type == 0:
+                    hit.kill()
+
 
             for hit in player_hit_by_bullet:
                 if self.player.hit_countdown == 0:
@@ -284,12 +322,21 @@ class Game():
             if self.game_time.current_time() > 19 and self.game_time.current_time() < 19.5:
                 pygame.time.set_timer(self.spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
 
+
             vidatext = fuente.render("VIDAS - {0}        TIEMPO - {1}".format(self.player.life, self.game_time.current_time()),
                                      1, self.WHITE)
             self.window.blit(vidatext, (200, 20))
 
+            disparo_cargado_text = fuente.render("DISPARO CARGADO - {0}".format(self.player.charged_shot_ammo),
+                                     1, self.WHITE)
+            self.window.blit(disparo_cargado_text, (20, constants.WIN_HEIGHT - 40))
+
             # Actualizamos todas las listas de sprites
             self.update_and_draw_sprite_lists(delta_time)
+
+            key_pressed = pygame.key.get_pressed()
+            self.player.move_spaceship(key_pressed)
+            self.player.shoot_bullet(key_pressed, self.spaceship_bullet_sprite_list)
 
             # Actualizamos la ventana
             pygame.display.update()
@@ -332,7 +379,7 @@ class Game():
         # Dibujamos y actualizamos las listas de sprites de Spaceship
         self.spaceship_sprite_list.update(delta_time)
         self.spaceship_sprite_list.draw(self.window)
-        self.spaceship_bullet_sprite_list.update(0)
+        self.spaceship_bullet_sprite_list.update()
         self.spaceship_bullet_sprite_list.draw(self.window)
 
         # Dibujamos y actualizamos la lista de sprites de Enemy
@@ -341,8 +388,13 @@ class Game():
         self.enemy_follower_sprite_list.update(delta_time)
         self.enemy_follower_sprite_list.draw(self.window)
 
-        self.enemy_bullet_sprite_list.update(1)
+        # Dibujamos y actualizamos balas de enemy_shooter
+        self.enemy_bullet_sprite_list.update()
         self.enemy_bullet_sprite_list.draw(self.window)
+
+        # Dibujamos y actualizamos los bonus
+        self.bonus_sprite_list.update()
+        self.bonus_sprite_list.draw(self.window)
 
 
         # Dibujamos y actualizamos explosión de naves enemigas
