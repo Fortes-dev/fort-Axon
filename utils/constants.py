@@ -37,14 +37,14 @@ SPACESHIP2 = 'assets/spaceships/Spaceship1.png'
 SPACESHIP3 = 'assets/spaceships/Spaceship2.png'
 SPACESHIP_SPEED = 8
 SPACESHIP_FIRE_RATE = 15
-SPACESHIP_SIZE = 1.5
+SPACESHIP_SIZE = 1.4
 
 ## Bullets
 BULLET1 = 'assets/bullets/bullet1.png'
 BULLET2 = 'assets/bullets/bullet2.png'
 BULLET1_SPEED = 20
 BULLET2_SPEED = 10
-BULLET_SIZE = 1.7
+BULLET_SIZE = 1.6
 
 ## Enemies
 # Shooter
@@ -55,7 +55,7 @@ ENEMY_SPEED = 4
 ENEMY_FIRE_RATE = 1.2
 ENEMY_SPAWN_RATE = 1600
 ENEMY_ANIMATION_RATE = 125
-ENEMY_SHOOTER_SIZE = 1.5
+ENEMY_SHOOTER_SIZE = 1.4
 
 # Follower
 ENEMY_FOLLOWER1 = 'assets/enemies/EnemyFollower1.png'
@@ -65,7 +65,7 @@ ENEMY_FOLLOWER4 = 'assets/enemies/EnemyFollower4.png'
 ENEMY_FOLLOWER_SPEED = 5
 ENEMY_FOLLOWER_SPAWN_RATE = 2000
 ENEMY_FOLLOWER_ANIMATION_RATE = 100
-ENEMY_FOLLOWER_SIZE = 1.4
+ENEMY_FOLLOWER_SIZE = 1.3
 
 
 ## Explosion
@@ -74,6 +74,6 @@ EXPLOSION2 = 'assets/explosion/explosion 1 2.png'
 EXPLOSION3 = 'assets/explosion/explosion 1 3.png'
 EXPLOSION4 = 'assets/explosion/explosion 1 4.png'
 EXPLOSION5 = 'assets/explosion/explosion 1 5.png'
-EXPLOSION_SHOOTER_ZOOM = 1.5
+EXPLOSION_SHOOTER_ZOOM = 1.4
 EXPLOSION_FOLLOWER_ZOOM = 1.1
 EXPLOSION_ANIMATION_RATE = 125

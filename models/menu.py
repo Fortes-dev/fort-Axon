@@ -274,14 +274,49 @@ class VideoMenu(Menu):
             self.run_display = False
         elif self.game.START_KEY:
             if self.state == '720':
+                constants.SPACESHIP_SIZE = 1.5
+                constants.ENEMY_SHOOTER_SIZE = 1.5
+                constants.ENEMY_FOLLOWER_SIZE = 1.4
+                constants.BULLET_SIZE = 1.7
+                constants.EXPLOSION_SHOOTER_ZOOM = 1.5
+                constants.EXPLOSION_FOLLOWER_ZOOM = 1.1
+                constants.SPACESHIP_SPEED = 8
+                constants.ENEMY_SPEED = 4
+                constants.ENEMY_FOLLOWER_SPEED = 5
+                constants.BULLET1_SPEED = 20
+                constants.BULLET2_SPEED = 10
                 self.set_window_resolution(1280, 720)
                 self.game.menu_music.stop()
                 Loop().main()
+
             elif self.state == '900':
+                constants.SPACESHIP_SIZE = 1.6
+                constants.ENEMY_SHOOTER_SIZE = 1.6
+                constants.ENEMY_FOLLOWER_SIZE = 1.5
+                constants.BULLET_SIZE = 1.8
+                constants.EXPLOSION_SHOOTER_ZOOM = 1.6
+                constants.EXPLOSION_FOLLOWER_ZOOM = 1.3
+                constants.SPACESHIP_SPEED = 9
+                constants.ENEMY_SPEED = 5
+                constants.ENEMY_FOLLOWER_SPEED = 6
+                constants.BULLET1_SPEED = 21
+                constants.BULLET2_SPEED = 11
                 self.set_window_resolution(1600, 900)
                 self.game.menu_music.stop()
                 Loop().main()
+
             elif self.state == '1080':
+                constants.SPACESHIP_SIZE = 1.8
+                constants.ENEMY_SHOOTER_SIZE = 1.8
+                constants.ENEMY_FOLLOWER_SIZE = 1.7
+                constants.BULLET_SIZE = 2
+                constants.EXPLOSION_SHOOTER_ZOOM = 1.8
+                constants.EXPLOSION_FOLLOWER_ZOOM = 1.5
+                constants.SPACESHIP_SPEED = 10
+                constants.ENEMY_SPEED = 6
+                constants.ENEMY_FOLLOWER_SPEED = 7
+                constants.BULLET1_SPEED = 22
+                constants.BULLET2_SPEED = 12
                 self.set_window_resolution(1920, 1080)
                 self.game.menu_music.stop()
                 Loop().main()
