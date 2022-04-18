@@ -4,6 +4,7 @@ import pygame
 import time
 from pygame import mixer
 
+from models.Scoreboard import Scoreboard
 from models.bonus import Bonus
 from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu, VolumenMenu, VideoMenu, \
     ControlsMenu, ControlsPlayer1Menu, ControlsPlayer2Menu
@@ -102,6 +103,8 @@ class Game():
         # Evento de spawn de enemy follower
         self.spawn_enemy_follower = 0
 
+        self.scoreboard = Scoreboard(self)
+
 
         '''añadir todos los eventos como variables de clase game ^'''
 
@@ -133,7 +136,6 @@ class Game():
         pygame.time.set_timer(animate_enemy_shooter, constants.ENEMY_ANIMATION_RATE)
 
         self.spawn_enemy_follower = pygame.USEREVENT + 2
-
 
         animate_enemy_follower = pygame.USEREVENT + 3
         pygame.time.set_timer(animate_enemy_follower, constants.ENEMY_FOLLOWER_ANIMATION_RATE)
@@ -296,7 +298,7 @@ class Game():
 
             for hit in player_hit_by_enemy_follower:
                 if self.player.hit_countdown==0:
-                    self.player.hit_countdown=20
+                    self.player.hit_countdown=30
                     self.player.life -= 1
                     x = hit.rect.x - 110
                     y = hit.rect.y - 110
@@ -322,18 +324,13 @@ class Game():
             if self.game_time.current_time() > 19 and self.game_time.current_time() < 19.5:
                 pygame.time.set_timer(self.spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
 
-
-            vidatext = fuente.render("VIDAS - {0}        TIEMPO - {1}".format(self.player.life, self.game_time.current_time()),
-                                     1, self.WHITE)
-            self.window.blit(vidatext, (200, 20))
-
-            disparo_cargado_text = fuente.render("DISPARO CARGADO - {0}".format(self.player.charged_shot_ammo),
-                                     1, self.WHITE)
-            self.window.blit(disparo_cargado_text, (20, constants.WIN_HEIGHT - 40))
+            # Actualizamos el scoreboard del player 1
+            self.scoreboard.draw_scoreboard_player_1()
 
             # Actualizamos todas las listas de sprites
             self.update_and_draw_sprite_lists(delta_time)
 
+            # Checkeamos las teclas pulsadas para movimiento de player 1
             key_pressed = pygame.key.get_pressed()
             self.player.move_spaceship(key_pressed)
             self.player.shoot_bullet(key_pressed, self.spaceship_bullet_sprite_list)

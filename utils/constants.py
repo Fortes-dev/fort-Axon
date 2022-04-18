@@ -46,8 +46,8 @@ BULLET_CHARGED_1 = 'assets/bullets/bullet_charged_1.png'
 BULLET_CHARGED_2 = 'assets/bullets/bullet_charged_2.png'
 BULLET1 = 'assets/bullets/bala1.png'
 BULLET2 = 'assets/bullets/bala2.png'
-BULLET1_SPEED = 18
-BULLET2_SPEED = 12
+BULLET1_SPEED = 21
+BULLET2_SPEED = 11
 BULLET_SIZE = 1.6
 BULLET_CHARGED_SIZE = 3.2
 
