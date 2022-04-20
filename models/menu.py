@@ -1,8 +1,8 @@
+import sys
+
 import pygame
-from pygame import mixer
 
 from main import Loop
-from models.spaceship import Spaceship
 from utils import constants
 from utils.sound_func import Sound
 
@@ -36,6 +36,7 @@ class MainMenu(Menu):
         self.startx, self.starty = self.mid_w, self.mid_h + 80
         self.optionsx, self.optionsy = self.mid_w, self.mid_h + 180
         self.creditsx, self.creditsy = self.mid_w, self.mid_h + 280
+        self.exitx, self.exity = self.mid_w, self.mid_h + 380
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
         self.game.menu_music.play()
         self.game.menu_music.set_volume(constants.MUSIC_VOLUME)
@@ -54,6 +55,7 @@ class MainMenu(Menu):
             self.game.draw_text("Jugar", 40, self.startx, self.starty)
             self.game.draw_text("Opciones", 40, self.optionsx, self.optionsy)
             self.game.draw_text("Creditos", 40, self.creditsx, self.creditsy)
+            self.game.draw_text("Salir", 40, self.exitx, self.exity)
             self.draw_cursor()
             self.blit_screen()
 
@@ -70,19 +72,25 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
                 self.state = 'Creditos'
             elif self.state == 'Creditos':
+                self.cursor_rect.midtop = (self.exitx + self.offset, self.exity)
+                self.state = 'Salir'
+            elif self.state == 'Salir':
                 self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
                 self.state = 'Jugar'
         elif self.game.UP_KEY:
             self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
             if self.state == 'Jugar':
+                self.cursor_rect.midtop = (self.exitx + self.offset, self.exity)
+                self.state = 'Salir'
+            elif self.state == 'Salir':
                 self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
                 self.state = 'Creditos'
-            elif self.state == 'Opciones':
-                self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
-                self.state = 'Jugar'
             elif self.state == 'Creditos':
                 self.cursor_rect.midtop = (self.optionsx + self.offset, self.optionsy)
                 self.state = 'Opciones'
+            elif self.state == 'Opciones':
+                self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
+                self.state = 'Jugar'
 
     def check_input(self):
         self.move_cursor()
@@ -97,6 +105,11 @@ class MainMenu(Menu):
                 self.game.curr_menu = self.game.options
             elif self.state == 'Creditos':
                 self.game.curr_menu = self.game.credits
+            elif self.state == 'Salir':
+                self.running = False
+                self.playing = False
+                pygame.quit()
+                sys.exit()
             self.run_display = False
 
 

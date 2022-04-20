@@ -1,7 +1,6 @@
 import sys
 
 import pygame
-import time
 from pygame import mixer
 
 from models.Scoreboard import Scoreboard
@@ -15,6 +14,7 @@ from models.explosion import Explosion
 from models.spaceship import Spaceship
 from utils.sound_func import Sound
 from utils.stopwatch import Stopwatch
+
 
 
 class Game():
@@ -54,7 +54,7 @@ class Game():
         self.font_name_game = constants.TEXT_FONT_GAME
 
         #Ventana del juego
-        self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H)))
+        self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
 
         # Variables de los menus
@@ -96,6 +96,9 @@ class Game():
 
         # Background del juego
         self.background = pygame.transform.scale(pygame.image.load(constants.BACKGROUND), (constants.WIN_WIDTH, constants.WIN_HEIGHT))
+        self.cueva = pygame.image.load("assets/cueva.png")
+        self.cueva_img = pygame.transform.scale(self.cueva, (self.cueva.get_width(), constants.WIN_HEIGHT))
+
 
         # Inicializamos la nave del jugador
         self.player = Spaceship(30, constants.WIN_HEIGHT / 2)
@@ -104,6 +107,8 @@ class Game():
         self.spawn_enemy_follower = 0
 
         self.scoreboard = Scoreboard(self)
+
+        self.cX = 0
 
 
         '''añadir todos los eventos como variables de clase game ^'''
@@ -119,8 +124,6 @@ class Game():
 
         # lista de spaceship_sprite_list
         self.spaceship_sprite_list.add(self.player)
-
-        fuente = pygame.font.Font(constants.TEXT_FONT_GAME, 28)
 
         # Reloj interno del juego
         clock = pygame.time.Clock()
@@ -151,6 +154,7 @@ class Game():
 
 
         while self.playing:
+
 
             delta_time = clock.tick(constants.FPS) / 1000.0
 
@@ -208,9 +212,17 @@ class Game():
             self.window.blit(self.background, (bgX, 0))  # Dibuja el primer background
             self.window.blit(self.background, (bgX2, 0))  # Dibuja el segundo background
 
+            self.window.blit(self.cueva_img, (self.cX, 0))
+
+            #self.map.render_map(-10)
+            #self.map.render_map_scroll()
+            if self.game_time.current_time() < 178:
+                self.cX -= 2
+
+
             # Movemos ambos backgrounds a la izquierda
-            bgX -= 2
-            bgX2 -= 2
+            bgX -= 1
+            bgX2 -= 1
 
             # Cambiamos la posicion del background de la izq a la derecha
             if bgX < self.background.get_width() * -1:
@@ -273,7 +285,7 @@ class Game():
                 y = hit.rect.y - 135
                 explosion = Explosion(x, y, constants.EXPLOSION_SHOOTER_ZOOM)
                 self.explosion_sprite_list.add(explosion)
-                self.score += 1
+                self.score += 50
                 self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
                 if hit.type == 0:
                     hit.kill()
@@ -284,7 +296,7 @@ class Game():
                 y = hit.rect.y - 110
                 explosion = Explosion(x, y, constants.EXPLOSION_FOLLOWER_ZOOM)
                 self.explosion_sprite_list.add(explosion)
-                self.score += 1
+                self.score += 50
                 self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
                 if hit.type == 0:
                     hit.kill()
@@ -315,17 +327,13 @@ class Game():
                 pygame.time.set_timer(self.spawn_enemy_follower, 0, False)
 
 
-            # Dibujamos el score
-            scoretext = fuente.render("SCORE - {0}".format(self.score), 1, self.WHITE)
-            self.window.blit(scoretext, (20, 20))
-
-            # Dibujamos la vida
 
             if self.game_time.current_time() > 19 and self.game_time.current_time() < 19.5:
                 pygame.time.set_timer(self.spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
 
             # Actualizamos el scoreboard del player 1
-            self.scoreboard.draw_scoreboard_player_1()
+            self.scoreboard.draw_scoreboard_player_1(self.player.life)
+            self.scoreboard.draw_scoreboard_player_2(self.player.life)
 
             # Actualizamos todas las listas de sprites
             self.update_and_draw_sprite_lists(delta_time)

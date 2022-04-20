@@ -90,3 +90,39 @@ BONUS_ZOOM = 1.4
 BONUS_SPEED = 7
 BONUS_SPEED_SPAWN_RATE = 35000
 BONUS_BULLET_SPAWN_RATE = 25000
+
+## Scoreboard
+# Player1 Health bar
+PLAYER1_HEALTHBAR_0 = 'assets/scoreboard/Player1_HealthBar_0.png'
+PLAYER1_HEALTHBAR_1 = 'assets/scoreboard/Player1_HealthBar_1.png'
+PLAYER1_HEALTHBAR_2 = 'assets/scoreboard/Player1_HealthBar_2.png'
+PLAYER1_HEALTHBAR_3 = 'assets/scoreboard/Player1_HealthBar_3.png'
+PLAYER1_HEALTHBAR_4 = 'assets/scoreboard/Player1_HealthBar_4.png'
+PLAYER1_HEALTHBAR_5 = 'assets/scoreboard/Player1_HealthBar_5.png'
+
+# Player2 Health bar
+PLAYER2_HEALTHBAR_0 = 'assets/scoreboard/Player2_HealthBar_0.png'
+PLAYER2_HEALTHBAR_1 = 'assets/scoreboard/Player2_HealthBar_1.png'
+PLAYER2_HEALTHBAR_2 = 'assets/scoreboard/Player2_HealthBar_2.png'
+PLAYER2_HEALTHBAR_3 = 'assets/scoreboard/Player2_HealthBar_3.png'
+PLAYER2_HEALTHBAR_4 = 'assets/scoreboard/Player2_HealthBar_4.png'
+PLAYER2_HEALTHBAR_5 = 'assets/scoreboard/Player2_HealthBar_5.png'
+
+# Player1 Scoreboard
+PLAYER1_SCOREBOARD = 'assets/scoreboard/Player1_Scoreboard.png'
+
+# Player2 Scoreboard
+PLAYER2_SCOREBOARD = 'assets/scoreboard/Player2_Scoreboard.png'
+
+# Player1 ChargedShotAmmo
+PLAYER1_CHARGEDSHOT_AMMO = 'assets/scoreboard/Player1_ChargedShotAmmo.png'
+
+# Player2 ChargedShotAmmo
+PLAYER2_CHARGEDSHOT_AMMO = 'assets/scoreboard/Player2_ChargedShotAmmo.png'
+
+# Timer
+TIMER = 'assets/scoreboard/Timer.png'
+
+
+
+
