@@ -97,10 +97,7 @@ class MainMenu(Menu):
         if self.game.START_KEY:
             self.game.play_sound(constants.MENU_SELECTION_SOUND)
             if self.state == 'Jugar':
-                self.game.menu_music.stop()
-                self.game.playing = True
-                self.game.game_time.reset_timer()
-                self.game.mixer.music.play(5, 0.0, 1000)
+                self.game.curr_menu = self.game.play_menu
             elif self.state == 'Opciones':
                 self.game.curr_menu = self.game.options
             elif self.state == 'Creditos':
@@ -111,6 +108,60 @@ class MainMenu(Menu):
                 pygame.quit()
                 sys.exit()
             self.run_display = False
+
+
+class PlayMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.state = '1Player'
+        self.one_player_x, self.one_player_y = self.mid_w, self.mid_h + 80
+        self.two_player_x, self.two_player_y = self.mid_w, self.mid_h + 180
+
+        self.cursor_rect.midtop = (self.one_player_x + self.offset, self.one_player_y)
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events_menu()
+            self.check_input()
+            self.game.display.fill(self.game.BLACK)
+            self.game.draw_text('Jugar', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+            self.game.draw_text("1 Player", 35, self.one_player_x, self.one_player_y)
+            self.game.draw_text("2 Players", 35, self.two_player_x, self.two_player_y)
+            self.draw_cursor()
+            self.blit_screen()
+
+    def check_input(self):
+        self.move_cursor()
+        if self.game.BACK_KEY:
+            self.game.play_sound(constants.MENU_BACK_SOUND)
+            self.game.curr_menu = self.game.main_menu
+            self.run_display = False
+        elif self.game.START_KEY:
+            if self.state == '1Player':
+                self.game.menu_music.stop()
+                self.game.playing = True
+                self.game.game_time.reset_timer()
+                self.game.mixer.music.play(5, 0.0, 1000)
+                self.run_display = False
+            elif self.state == '2Players':
+                self.game.menu_music.stop()
+                self.game.playing = True
+                self.game.game_time.reset_timer()
+                self.game.mixer.music.play(5, 0.0, 1000)
+                self.game.multiplayer = True
+                self.run_display = False
+
+
+    def move_cursor(self):
+        if self.game.DOWN_KEY or self.game.UP_KEY:
+            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
+            if self.state == '1Player':
+                self.cursor_rect.midtop = (self.two_player_x + self.offset, self.two_player_y)
+                self.state = '2Players'
+            elif self.state == '2Players':
+                self.cursor_rect.midtop = (self.one_player_x + self.offset, self.one_player_y)
+                self.state = '1Player'
 
 
 class OptionsMenu(Menu):
@@ -259,12 +310,11 @@ class VolumenMenu(Menu):
 class VideoMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = '900'
-        self.video_720_x, self.video_720_y = self.mid_w, self.mid_h + 80
-        self.video_900_x, self.video_900_y = self.mid_w, self.mid_h + 180
-        self.video_1080_x, self.video_1080_y = self.mid_w, self.mid_h + 280
+        self.state = 'fullscreen'
+        self.video_windowed_x, self.video_windowed_y = self.mid_w, self.mid_h + 80
+        self.video_fullscreen_x, self.video_fullscreen_y = self.mid_w, self.mid_h + 180
 
-        self.cursor_rect.midtop = (self.video_900_x + self.offset, self.video_900_y)
+        self.cursor_rect.midtop = (self.video_fullscreen_x + self.offset, self.video_fullscreen_y)
 
     def display_menu(self):
         self.run_display = True
@@ -273,9 +323,8 @@ class VideoMenu(Menu):
             self.check_input()
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Video', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
-            self.game.draw_text("1280 x 720", 40, self.video_720_x, self.video_720_y)
-            self.game.draw_text("1600 x 900", 40, self.video_900_x, self.video_900_y)
-            self.game.draw_text("1920 x 1080", 40, self.video_1080_x, self.video_1080_y)
+            self.game.draw_text("Windowed", 35, self.video_windowed_x, self.video_windowed_y)
+            self.game.draw_text("Fullscreen", 35, self.video_fullscreen_x, self.video_fullscreen_y)
             self.draw_cursor()
             self.blit_screen()
 
@@ -286,96 +335,27 @@ class VideoMenu(Menu):
             self.game.curr_menu = self.game.options
             self.run_display = False
         elif self.game.START_KEY:
-            if self.state == '720':
-                constants.SPACESHIP_SIZE = 1.6
-                constants.ENEMY_SHOOTER_SIZE = 1.5
-                constants.ENEMY_FOLLOWER_SIZE = 1.4
-                constants.BULLET_SIZE = 1.6
-                constants.BULLET_CHARGED_SIZE = 3
-                constants.EXPLOSION_SHOOTER_ZOOM = 1.5
-                constants.EXPLOSION_FOLLOWER_ZOOM = 1.1
-                constants.BONUS_ZOOM = 1.4
-                constants.BONUS_SPEED = 7
-                constants.SPACESHIP_SPEED = 8
-                constants.ENEMY_SPEED = 4
-                constants.ENEMY_FOLLOWER_SPEED = 5
-                constants.BULLET1_SPEED = 20
-                constants.BULLET2_SPEED = 10
-                self.set_window_resolution(1280, 720)
+            if self.state == 'windowed':
+                constants.WINDOW_MODE = 'windowed'
                 self.game.menu_music.stop()
                 Loop().main()
 
-            elif self.state == '900':
-                constants.SPACESHIP_SIZE = 1.7
-                constants.ENEMY_SHOOTER_SIZE = 1.6
-                constants.ENEMY_FOLLOWER_SIZE = 1.5
-                constants.BULLET_SIZE = 1.7
-                constants.BULLET_CHARGED_SIZE = 3.2
-                constants.EXPLOSION_SHOOTER_ZOOM = 1.6
-                constants.EXPLOSION_FOLLOWER_ZOOM = 1.3
-                constants.SPACESHIP_SPEED = 9
-                constants.BONUS_ZOOM = 1.5
-                constants.BONUS_SPEED = 8
-                constants.ENEMY_SPEED = 5
-                constants.ENEMY_FOLLOWER_SPEED = 6
-                constants.BULLET1_SPEED = 21
-                constants.BULLET2_SPEED = 11
-                self.set_window_resolution(1600, 900)
+
+            elif self.state == 'fullscreen':
+                constants.WINDOW_MODE = 'fullscreen'
                 self.game.menu_music.stop()
                 Loop().main()
-
-            elif self.state == '1080':
-                constants.SPACESHIP_SIZE = 1.8
-                constants.ENEMY_SHOOTER_SIZE = 1.8
-                constants.ENEMY_FOLLOWER_SIZE = 1.7
-                constants.BULLET_SIZE = 2
-                constants.BULLET_CHARGED_SIZE = 3.4
-                constants.EXPLOSION_SHOOTER_ZOOM = 1.8
-                constants.EXPLOSION_FOLLOWER_ZOOM = 1.5
-                constants.SPACESHIP_SPEED = 10
-                constants.BONUS_ZOOM = 1.6
-                constants.BONUS_SPEED = 9
-                constants.ENEMY_SPEED = 6
-                constants.ENEMY_FOLLOWER_SPEED = 7
-                constants.BULLET1_SPEED = 22
-                constants.BULLET2_SPEED = 12
-                self.set_window_resolution(1920, 1080)
-                self.game.menu_music.stop()
-                Loop().main()
-            self.game.play_sound(constants.MENU_SELECTION_SOUND)
-
-    def set_window_resolution(self, w, h):
-        constants.WIN_WIDTH = w
-        constants.WIN_HEIGHT = h
-        self.game.DISPLAY_W = w
-        self.game.DISPLAY_H = h
-        self.game.window = pygame.display.set_mode(((w, h)))
 
 
     def move_cursor(self):
-        if self.game.DOWN_KEY:
+        if self.game.DOWN_KEY or self.game.UP_KEY:
             self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
-            if self.state == '720':
-                self.cursor_rect.midtop = (self.video_900_x + self.offset, self.video_900_y)
-                self.state = '900'
-            elif self.state == '900':
-                self.cursor_rect.midtop = (self.video_1080_x + self.offset, self.video_1080_y)
-                self.state = '1080'
-            elif self.state == '1080':
-                self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
-                self.state = '720'
-
-        elif self.game.UP_KEY:
-            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
-            if self.state == '720':
-                self.cursor_rect.midtop = (self.video_1080_x + self.offset, self.video_1080_y)
-                self.state = '1080'
-            elif self.state == '1080':
-                self.cursor_rect.midtop = (self.video_900_x + self.offset, self.video_900_y)
-                self.state = '900'
-            elif self.state == '900':
-                self.cursor_rect.midtop = (self.video_720_x + self.offset, self.video_720_y)
-                self.state = '720'
+            if self.state == 'windowed':
+                self.cursor_rect.midtop = (self.video_fullscreen_x + self.offset, self.video_fullscreen_y)
+                self.state = 'fullscreen'
+            elif self.state == 'fullscreen':
+                self.cursor_rect.midtop = (self.video_windowed_x + self.offset, self.video_windowed_y)
+                self.state = 'windowed'
 
 
 class ControlsMenu(Menu):

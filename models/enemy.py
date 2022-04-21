@@ -64,6 +64,22 @@ class Enemy(pygame.sprite.Sprite):
         self.turn_after = 100
         self.direction = -1
 
+
+        if self.game.multiplayer == False:
+            self.follower_target = self.game.player_1
+        else:
+            if random.randint(1, 2) == 1:
+                if self.game.player_1.is_alive:
+                    self.follower_target = self.game.player_1
+                else:
+                    self.follower_target = self.game.player_2
+            else:
+                if self.game.player_2.is_alive:
+                    self.follower_target = self.game.player_2
+                else:
+                    self.follower_target = self.game.player_1
+
+
     def update(self, time_delta):
 
         # Seteamos el sprite actual de la nave para simular animacion
@@ -97,14 +113,16 @@ class Enemy(pygame.sprite.Sprite):
 
         elif self.type == 'follower':
             self.rect.x -= constants.ENEMY_FOLLOWER_SPEED
-            self.move_towards(self.game.player, constants.ENEMY_FOLLOWER_SPEED + 4)
+
+
+            self.move_towards(self.follower_target, constants.ENEMY_FOLLOWER_SPEED + 4)
 
 
     # Disparo de la nave enemiga
     def shoot_bullet(self, enemy_bullet_sprite_list):
         if self.can_fire:
             self.can_fire = False
-            bullet = Bullet(self.rect.x - 10, self.rect.y + 30, 1)
+            bullet = Bullet(self.rect.x - 10, self.rect.y + 30, 'enemy_shot')
             enemy_bullet_sprite_list.add(bullet)
 
     def direction_to(self, actor):
@@ -118,6 +136,7 @@ class Enemy(pygame.sprite.Sprite):
         return 360 + angle
 
     def move_towards(self, actor, dist):
+
         if self.rect.x > actor.rect.x:
             angle = math.radians(self.direction_to(actor))
             dy = dist * math.sin(angle)

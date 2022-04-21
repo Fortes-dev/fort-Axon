@@ -3,13 +3,14 @@
 GAME_ICON = 'assets/ship.png'
 GAME_TITLE = 'Fort-AXON'
 GAME_COVER = 'assets/fort-AXON.png'
-WIN_WIDTH = 1600
-WIN_HEIGHT = 900
+WIN_WIDTH = 1280
+WIN_HEIGHT = 720
 FPS = 60
 BACKGROUND = 'assets/background/stars_background.png'
 TIME_LOOP = 0
 TEXT_FONT_MENU = 'assets/typography/8-BIT WONDER.TTF'
 TEXT_FONT_GAME = 'assets/typography/Pixellari.ttf'
+WINDOW_MODE = 'windowed'
 
 
 # Menu
@@ -33,23 +34,29 @@ MUSIC_VOLUME = 0.15
 BONUS_SOUND = 'assets/sounds/upgrade.wav'
 
 ## Props constants
-# SpaceShip
-SPACESHIP1 = 'assets/spaceships/Spaceship.png'
-SPACESHIP2 = 'assets/spaceships/Spaceship1.png'
-SPACESHIP3 = 'assets/spaceships/Spaceship2.png'
-SPACESHIP_SPEED = 8
+# Spaceships
+PLAYER1_SPACESHIP1 = 'assets/spaceships/Spaceship.png'
+PLAYER1_SPACESHIP2 = 'assets/spaceships/Spaceship1.png'
+PLAYER1_SPACESHIP3 = 'assets/spaceships/Spaceship2.png'
+
+PLAYER2_SPACESHIP1 = 'assets/spaceships/Spaceship_player2.png'
+PLAYER2_SPACESHIP2 = 'assets/spaceships/Spaceship1_player2.png'
+PLAYER2_SPACESHIP3 = 'assets/spaceships/Spaceship2_player2.png'
+
+SPACESHIP_SPEED = 7
 SPACESHIP_FIRE_RATE = 15
-SPACESHIP_SIZE = 1.7
+SPACESHIP_SIZE = 1.5
 
 ## Bullets
 BULLET_CHARGED_1 = 'assets/bullets/bullet_charged_1.png'
 BULLET_CHARGED_2 = 'assets/bullets/bullet_charged_2.png'
 BULLET1 = 'assets/bullets/bala1.png'
 BULLET2 = 'assets/bullets/bala2.png'
-BULLET1_SPEED = 21
-BULLET2_SPEED = 11
-BULLET_SIZE = 1.6
-BULLET_CHARGED_SIZE = 3.2
+BULLET_ENEMY = 'assets/bullets/bullet_enemy.png'
+BULLET_PLAYER_SPEED = 20
+BULLET_ENEMY_SPEED = 11
+BULLET_SIZE = 1.3
+BULLET_CHARGED_SIZE = 3.1
 
 ## Enemies
 # Shooter
@@ -60,7 +67,7 @@ ENEMY_SPEED = 4
 ENEMY_FIRE_RATE = 1.2
 ENEMY_SPAWN_RATE = 1600
 ENEMY_ANIMATION_RATE = 125
-ENEMY_SHOOTER_SIZE = 1.5
+ENEMY_SHOOTER_SIZE = 1.4
 
 # Follower
 ENEMY_FOLLOWER1 = 'assets/enemies/EnemyFollower1.png'
@@ -70,7 +77,7 @@ ENEMY_FOLLOWER4 = 'assets/enemies/EnemyFollower4.png'
 ENEMY_FOLLOWER_SPEED = 5
 ENEMY_FOLLOWER_SPAWN_RATE = 2000
 ENEMY_FOLLOWER_ANIMATION_RATE = 100
-ENEMY_FOLLOWER_SIZE = 1.4
+ENEMY_FOLLOWER_SIZE = 1.3
 
 
 ## Explosion
@@ -86,7 +93,7 @@ EXPLOSION_ANIMATION_RATE = 125
 ## Bonus
 BONUS_SPEED_INCREASE = 'assets/powerups/bonus_speed.png'
 BONUS_BULLET = 'assets/powerups/bonus_bullet.png'
-BONUS_ZOOM = 1.4
+BONUS_ZOOM = 1.3
 BONUS_SPEED = 7
 BONUS_SPEED_SPAWN_RATE = 35000
 BONUS_BULLET_SPAWN_RATE = 25000

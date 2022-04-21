@@ -14,24 +14,38 @@ class Bullet(pygame.sprite.Sprite):
         self.type = type
 
         match self.type:
-            case (0):
+            case ('player1_shot'):
                 imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET1), 0, constants.BULLET_SIZE)
                 self.sprites.append(imagen1)
 
                 # Velocidad de la bala
-                self.speed = constants.BULLET1_SPEED
-            case (1):
+                self.speed = constants.BULLET_PLAYER_SPEED
+            case ('player2_shot'):
                 imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET2), 0, constants.BULLET_SIZE)
                 self.sprites.append(imagen2)
 
                 # Velocidad de la bala del enemigo
-                self.speed = constants.BULLET2_SPEED
+                self.speed = constants.BULLET_PLAYER_SPEED
 
-            case (2):
+            case ('player1_chargedshot'):
                 imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_CHARGED_1), 0, constants.BULLET_CHARGED_SIZE)
                 self.sprites.append(imagen3)
 
-                self.speed = constants.BULLET1_SPEED
+                self.speed = constants.BULLET_PLAYER_SPEED
+
+            case ('player2_chargedshot'):
+                imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_CHARGED_2), 0,
+                                                    constants.BULLET_CHARGED_SIZE)
+                self.sprites.append(imagen4)
+
+                self.speed = constants.BULLET_PLAYER_SPEED
+
+            case ('enemy_shot'):
+                imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_ENEMY), 0, constants.BULLET_SIZE)
+                self.sprites.append(imagen2)
+
+                # Velocidad de la bala del enemigo
+                self.speed = constants.BULLET_ENEMY_SPEED
 
 
         self.current_sprite = 0
@@ -45,10 +59,7 @@ class Bullet(pygame.sprite.Sprite):
 
     # Actualizamos la posicion del disparo
     def update(self):
-        match self.type:
-            case (0):
+            if self.type == 'player1_shot' or self.type ==  'player2_shot' or self.type == 'player1_chargedshot' or self.type == 'player2_chargedshot':
                 self.rect.x += self.speed
-            case (1):
+            elif self.type == 'enemy_shot':
                 self.rect.x -= self.speed
-            case (2):
-                self.rect.x += self.speed

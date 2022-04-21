@@ -1,6 +1,7 @@
 import pygame
 
 from models import game
+from utils import constants
 
 
 class Loop():
