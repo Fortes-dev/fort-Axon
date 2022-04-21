@@ -240,19 +240,19 @@ class Game():
 
             # Si el enemigo se sale de la pantalla lo eliminamos
             for enemy in self.enemy_shooter_sprite_list:
-                if enemy.rect.x < -10:
+                if enemy.rect.x < -60:
                     self.enemy_shooter_sprite_list.remove(enemy)
                 else:
                     enemy.shoot_bullet(self.enemy_bullet_sprite_list)
 
             # Si el enemigo se sale de la pantalla lo eliminamos
             for enemy in self.enemy_follower_sprite_list:
-                if enemy.rect.x < -10:
+                if enemy.rect.x < -60:
                     self.enemy_follower_sprite_list.remove(enemy)
 
             # Si la bala se sale de la pantalla la eliminamos
             for bullet in self.enemy_bullet_sprite_list:
-                if bullet.rect.x < -10:
+                if bullet.rect.x < -20:
                     self.enemy_bullet_sprite_list.remove(bullet)
 
             # Si la bala se sale de la pantalla la eliminamos
@@ -262,7 +262,7 @@ class Game():
 
             # Si la bala se sale de la pantalla la eliminamos
             for bonus in self.bonus_sprite_list:
-                if bonus.rect.x < -10:
+                if bonus.rect.x < -20:
                     self.bonus_sprite_list.remove(bonus)
 
             enemy_shooter_hit_by_bullet = pygame.sprite.groupcollide(self.spaceship_bullet_sprite_list, self.enemy_shooter_sprite_list, False,
@@ -305,7 +305,7 @@ class Game():
                 explosion = Explosion(x, y, constants.EXPLOSION_SHOOTER_ZOOM)
                 self.explosion_sprite_list.add(explosion)
                 self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
-                if hit.type == 'player1_shot' or 'player2_shot':
+                if hit.type == 'player1_shot' or hit.type == 'player2_shot':
                     hit.kill()
 
 
@@ -319,7 +319,7 @@ class Game():
                 explosion = Explosion(x, y, constants.EXPLOSION_FOLLOWER_ZOOM)
                 self.explosion_sprite_list.add(explosion)
                 self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
-                if hit.type == 'player1_shot' or 'player2_shot':
+                if hit.type == 'player1_shot' or hit.type == 'player2_shot':
                     hit.kill()
 
             for player in player_hit_by_bullet:
@@ -380,9 +380,6 @@ class Game():
                     pygame.time.set_timer(self.spawn_enemy_follower, 0, False)
 
 
-
-
-
             if self.game_time.current_time() > 19 and self.game_time.current_time() < 19.5:
                 pygame.time.set_timer(self.spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
 
@@ -399,8 +396,8 @@ class Game():
             self.player_1.move_spaceship(key_pressed)
             self.player_1.shoot_bullet(key_pressed, self.spaceship_bullet_sprite_list)
             if self.multiplayer == True:
-                self.player_2.move_spaceship(key_pressed)
-                self.player_2.shoot_bullet(key_pressed, self.spaceship_bullet_sprite_list)
+                    self.player_2.move_spaceship(key_pressed)
+                    self.player_2.shoot_bullet(key_pressed, self.spaceship_bullet_sprite_list)
 
             # Actualizamos la ventana
             pygame.display.update()

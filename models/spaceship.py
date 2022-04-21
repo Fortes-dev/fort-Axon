@@ -82,6 +82,7 @@ class Spaceship(pygame.sprite.Sprite):
 
         if self.life == 0:
             self.is_alive = False
+            self.charged_shot_ammo = 0
             self.kill()
 
         if self.can_fire is False:
@@ -168,43 +169,45 @@ class Spaceship(pygame.sprite.Sprite):
     # Disparo de la nave
     def shoot_bullet(self, key_pressed, bullet_sprite_list):
         if self.player == 'player1':
-            if key_pressed[pygame.K_SPACE]:
-                if self.can_fire:
-                    self.can_fire = False
-                    bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_shot')
-                    bullet_sprite_list.add(bullet)
-                    shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
-                    shoot_sound.play()
-                    shoot_sound.set_volume(constants.MUSIC_VOLUME)
-
-            if key_pressed[pygame.K_LCTRL]:
-                if self.charged_shot_ammo > 0:
+            if self.is_alive:
+                if key_pressed[pygame.K_SPACE]:
                     if self.can_fire:
                         self.can_fire = False
-                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_chargedshot')
+                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_shot')
                         bullet_sprite_list.add(bullet)
-                        shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
+                        shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
                         shoot_sound.play()
                         shoot_sound.set_volume(constants.MUSIC_VOLUME)
-                        self.charged_shot_ammo -= 1
+
+                if key_pressed[pygame.K_LCTRL]:
+                    if self.charged_shot_ammo > 0:
+                        if self.can_fire:
+                            self.can_fire = False
+                            bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_chargedshot')
+                            bullet_sprite_list.add(bullet)
+                            shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
+                            shoot_sound.play()
+                            shoot_sound.set_volume(constants.MUSIC_VOLUME)
+                            self.charged_shot_ammo -= 1
 
         elif self.player == 'player2':
-            if key_pressed[pygame.K_RSHIFT]:
-                if self.can_fire:
-                    self.can_fire = False
-                    bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_shot')
-                    bullet_sprite_list.add(bullet)
-                    shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
-                    shoot_sound.play()
-                    shoot_sound.set_volume(constants.MUSIC_VOLUME)
-
-            if key_pressed[pygame.K_RCTRL]:
-                if self.charged_shot_ammo > 0:
+            if self.is_alive:
+                if key_pressed[pygame.K_RSHIFT]:
                     if self.can_fire:
                         self.can_fire = False
-                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_chargedshot')
+                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_shot')
                         bullet_sprite_list.add(bullet)
-                        shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
+                        shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
                         shoot_sound.play()
                         shoot_sound.set_volume(constants.MUSIC_VOLUME)
-                        self.charged_shot_ammo -= 1
+
+                if key_pressed[pygame.K_RCTRL]:
+                    if self.charged_shot_ammo > 0:
+                        if self.can_fire:
+                            self.can_fire = False
+                            bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_chargedshot')
+                            bullet_sprite_list.add(bullet)
+                            shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
+                            shoot_sound.play()
+                            shoot_sound.set_volume(constants.MUSIC_VOLUME)
+                            self.charged_shot_ammo -= 1
