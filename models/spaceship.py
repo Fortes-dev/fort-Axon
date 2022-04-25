@@ -8,13 +8,15 @@ from utils import constants
 class Spaceship(pygame.sprite.Sprite):
 
     # Constructor
-    def __init__(self, x, y, player):
+    def __init__(self, x, y, player, game):
         super().__init__()
 
         # Posiciones iniciales
         self.pos_x = x
         self.pos_y = y
         self.player = player
+
+        self.game = game
 
         self.score = 0
 
@@ -44,7 +46,6 @@ class Spaceship(pygame.sprite.Sprite):
         self.sprites.append(imagenUp)
         self.sprites.append(imagenDown)
         self.sprites.append(imagenBack)
-
 
         self.current_sprite = 0
 
@@ -77,8 +78,23 @@ class Spaceship(pygame.sprite.Sprite):
         # Cooldown para disparar (cuando llega a la cadencia de disparo)
         self.time_cd = 0
 
+        self.fire_rate = constants.SPACESHIP_FIRE_RATE
+
+        self.got_bonus = False
+        self.bonus_text = 'Speed up!'
+        self.bonus_text_cd = 0
+        self.bonus_text_cd_rate = constants.BONUS_TEXT_CD_RATE
+
     # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
+
+        if self.got_bonus is True:
+            self.game.draw_text(self.bonus_text, 14, self.rect.x + 35, self.rect.y - 15)
+            self.bonus_text_cd += 1
+            if self.bonus_text_cd == self.bonus_text_cd_rate:
+                self.bonus_text_cd = 0
+                self.got_bonus = False
+
 
         if self.life == 0:
             self.is_alive = False
@@ -86,7 +102,7 @@ class Spaceship(pygame.sprite.Sprite):
             self.kill()
 
         if self.can_fire is False:
-            if (self.time_cd == constants.SPACESHIP_FIRE_RATE):
+            if (self.time_cd == self.fire_rate):
                 self.can_fire = True
                 self.time_cd = 0
             self.time_cd += 1

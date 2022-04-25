@@ -109,8 +109,8 @@ class Game():
 
 
         # Inicializamos la nave del jugador
-        self.player_1 = Spaceship(30, constants.WIN_HEIGHT / 2, 'player1')
-        self.player_2 = Spaceship(30, self.player_1.rect.y + 80, 'player2')
+        self.player_1 = Spaceship(30, constants.WIN_HEIGHT / 2, 'player1', self)
+        self.player_2 = Spaceship(30, self.player_1.rect.y + 80, 'player2', self)
 
         # Evento de spawn de enemy follower
         self.spawn_enemy_follower = 0
@@ -154,11 +154,17 @@ class Game():
         enemy_explosion = pygame.USEREVENT + 4
         pygame.time.set_timer(enemy_explosion, constants.EXPLOSION_ANIMATION_RATE)
 
-        bonus_speed_spawn = pygame.USEREVENT + 5
+        animate_bonus = pygame.USEREVENT + 5
+        pygame.time.set_timer(animate_bonus, constants.BONUS_ANIMATE_RATE)
+
+        bonus_speed_spawn = pygame.USEREVENT + 6
         pygame.time.set_timer(bonus_speed_spawn, constants.BONUS_SPEED_SPAWN_RATE)
 
-        bonus_bullet_spawn = pygame.USEREVENT + 6
-        pygame.time.set_timer(bonus_bullet_spawn, constants.BONUS_BULLET_SPAWN_RATE)
+        bonus_charged_shot_spawn = pygame.USEREVENT + 7
+        pygame.time.set_timer(bonus_charged_shot_spawn, constants.BONUS_CHARGED_SHOT_SPAWN_RATE)
+
+        bonus_fire_rate_spawn = pygame.USEREVENT + 8
+        pygame.time.set_timer(bonus_fire_rate_spawn, constants.BONUS_FIRE_RATE_SPAWN_RATE, 3)
 
 
         while self.playing:
@@ -208,12 +214,20 @@ class Game():
                     for explosion in self.explosion_sprite_list:
                         explosion.current_sprite += 1
 
+                if event.type == animate_bonus:
+                    for bonus in self.bonus_sprite_list:
+                            bonus.current_sprite += 1
+
                 if event.type == bonus_speed_spawn:
                     bonus = Bonus(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'speed')
                     self.bonus_sprite_list.add(bonus)
 
-                if event.type == bonus_bullet_spawn:
+                if event.type == bonus_charged_shot_spawn:
                     bonus = Bonus(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'bullet')
+                    self.bonus_sprite_list.add(bonus)
+
+                if event.type == bonus_fire_rate_spawn:
+                    bonus = Bonus(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'firerate')
                     self.bonus_sprite_list.add(bonus)
 
 
@@ -283,16 +297,23 @@ class Game():
                                                               False)
 
 
-
             for bonus in player_collision_with_bonus:
                 self.play_sound(constants.BONUS_SOUND)
                 if bonus.type == 'speed':
                     for player in self.spaceship_sprite_list:
+                        player.got_bonus = True
                         player.speed += 1
+                        player.bonus_text = 'Speed UP'
                 elif bonus.type == 'bullet':
                     for player in self.spaceship_sprite_list:
+                        player.got_bonus = True
                         player.charged_shot_ammo = 20
-
+                        player.bonus_text = 'Charged Shot ammo UP'
+                elif bonus.type == 'firerate':
+                    for player in self.spaceship_sprite_list:
+                        player.got_bonus = True
+                        player.fire_rate -= 1
+                        player.bonus_text = 'Fire Rate UP'
 
             # cuando alcanzo al enemigo subo puntuación y animo muerte
             for hit in enemy_shooter_hit_by_bullet:
@@ -433,6 +454,7 @@ class Game():
         text_rect = text_surface.get_rect()
         text_rect.center = (x, y)
         self.display.blit(text_surface, text_rect)
+        self.window.blit(text_surface, text_rect)
 
     # Actualiza y dibuja en pantalla todos los sprites
     def update_and_draw_sprite_lists(self, delta_time):

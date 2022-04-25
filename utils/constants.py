@@ -91,12 +91,31 @@ EXPLOSION_FOLLOWER_ZOOM = 1.1
 EXPLOSION_ANIMATION_RATE = 125
 
 ## Bonus
-BONUS_SPEED_INCREASE = 'assets/powerups/bonus_speed.png'
-BONUS_BULLET = 'assets/powerups/bonus_bullet.png'
-BONUS_ZOOM = 1.3
-BONUS_SPEED = 7
-BONUS_SPEED_SPAWN_RATE = 35000
-BONUS_BULLET_SPAWN_RATE = 25000
+BONUS_SPEED_INCREASE_0 = 'assets/powerups/SpeedBonus0.png'
+BONUS_SPEED_INCREASE_1 = 'assets/powerups/SpeedBonus1.png'
+BONUS_SPEED_INCREASE_2 = 'assets/powerups/SpeedBonus2.png'
+BONUS_SPEED_INCREASE_3 = 'assets/powerups/SpeedBonus3.png'
+BONUS_SPEED_INCREASE_4 = 'assets/powerups/SpeedBonus4.png'
+
+BONUS_CHARGED_SHOT_0 = 'assets/powerups/ChargedShotBonus0.png'
+BONUS_CHARGED_SHOT_1 = 'assets/powerups/ChargedShotBonus1.png'
+BONUS_CHARGED_SHOT_2 = 'assets/powerups/ChargedShotBonus2.png'
+BONUS_CHARGED_SHOT_3 = 'assets/powerups/ChargedShotBonus3.png'
+BONUS_CHARGED_SHOT_4 = 'assets/powerups/ChargedShotBonus4.png'
+
+BONUS_FIRE_RATE_0 = 'assets/powerups/FireRateBonus0.png'
+BONUS_FIRE_RATE_1 = 'assets/powerups/FireRateBonus1.png'
+BONUS_FIRE_RATE_2 = 'assets/powerups/FireRateBonus2.png'
+BONUS_FIRE_RATE_3 = 'assets/powerups/FireRateBonus3.png'
+BONUS_FIRE_RATE_4 = 'assets/powerups/FireRateBonus4.png'
+
+BONUS_ZOOM = 1.5
+BONUS_SPEED = 5
+BONUS_TEXT_CD_RATE = 30
+BONUS_ANIMATE_RATE = 200
+BONUS_SPEED_SPAWN_RATE = 33500
+BONUS_CHARGED_SHOT_SPAWN_RATE = 22000
+BONUS_FIRE_RATE_SPAWN_RATE = 41250
 
 ## Scoreboard
 # Player1 Health bar
