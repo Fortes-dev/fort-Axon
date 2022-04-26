@@ -3,6 +3,7 @@ import sys
 import pygame
 from pygame import mixer
 
+from models.map_collision import Map
 from models.scoreboard import Scoreboard
 from models.bonus import Bonus
 from models.menu import MainMenu, OptionsMenu, CreditsMenu, PauseMenu, GameOverMenu, VolumenMenu, VideoMenu, \
@@ -102,10 +103,12 @@ class Game():
         # lista de bonus
         self.bonus_sprite_list = pygame.sprite.Group()
 
+        self.map_collision_list = pygame.sprite.Group()
+        self.set_map_collision()
+
         # Background del juego
         self.background = pygame.transform.scale(pygame.image.load(constants.BACKGROUND), (constants.WIN_WIDTH, constants.WIN_HEIGHT))
-        self.cueva = pygame.image.load("assets/cueva.png")
-        self.cueva_img = pygame.transform.scale(self.cueva, (self.cueva.get_width(), constants.WIN_HEIGHT))
+        self.cueva_img = pygame.image.load("assets/cueva_720.png")
 
 
         # Inicializamos la nave del jugador
@@ -117,13 +120,14 @@ class Game():
 
         self.scoreboard = Scoreboard(self)
 
-        self.cX = 0
+        self.map_can_move = True
 
 
         '''añadir todos los eventos como variables de clase game ^'''
 
     # Loop de juego
     def game_loop(self):
+
 
         self.player_1.is_alive = True
         if self.multiplayer == True:
@@ -139,6 +143,7 @@ class Game():
         # Posicion X de los dos backgrounds de estrellas
         bgX = 0
         bgX2 = self.background.get_width()
+        cX = 0
 
         spawn_enemy_shooter = pygame.USEREVENT
         pygame.time.set_timer(spawn_enemy_shooter, constants.ENEMY_SPAWN_RATE)
@@ -168,7 +173,6 @@ class Game():
 
 
         while self.playing:
-
 
             delta_time = clock.tick(constants.FPS) / 1000.0
 
@@ -219,38 +223,17 @@ class Game():
                             bonus.current_sprite += 1
 
                 if event.type == bonus_speed_spawn:
-                    bonus = Bonus(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'speed')
+                    bonus = Bonus(constants.WIN_WIDTH, randint(60, constants.WIN_HEIGHT - 40), 'speed')
                     self.bonus_sprite_list.add(bonus)
 
                 if event.type == bonus_charged_shot_spawn:
-                    bonus = Bonus(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'bullet')
+                    bonus = Bonus(constants.WIN_WIDTH, randint(60, constants.WIN_HEIGHT - 40), 'bullet')
                     self.bonus_sprite_list.add(bonus)
 
                 if event.type == bonus_fire_rate_spawn:
-                    bonus = Bonus(constants.WIN_WIDTH, randint(0, constants.WIN_HEIGHT), 'firerate')
+                    bonus = Bonus(constants.WIN_WIDTH, randint(60, constants.WIN_HEIGHT - 60), 'firerate')
                     self.bonus_sprite_list.add(bonus)
 
-
-            self.window.blit(self.background, (bgX, 0))  # Dibuja el primer background
-            self.window.blit(self.background, (bgX2, 0))  # Dibuja el segundo background
-
-            self.window.blit(self.cueva_img, (self.cX, 0))
-
-            #self.map.render_map(-10)
-            #self.map.render_map_scroll()
-            if self.game_time.current_time() < 178:
-                self.cX -= 2
-
-
-            # Movemos ambos backgrounds a la izquierda
-            bgX -= 1
-            bgX2 -= 1
-
-            # Cambiamos la posicion del background de la izq a la derecha
-            if bgX < self.background.get_width() * -1:
-                bgX = self.background.get_width()
-            if bgX2 < self.background.get_width() * -1:
-                bgX2 = self.background.get_width()
 
             # Si el enemigo se sale de la pantalla lo eliminamos
             for enemy in self.enemy_shooter_sprite_list:
@@ -312,7 +295,7 @@ class Game():
                 elif bonus.type == 'firerate':
                     for player in self.spaceship_sprite_list:
                         player.got_bonus = True
-                        player.fire_rate -= 1
+                        player.fire_rate -= 2
                         player.bonus_text = 'Fire Rate UP'
 
             # cuando alcanzo al enemigo subo puntuación y animo muerte
@@ -424,6 +407,42 @@ class Game():
             pygame.display.update()
             self.reset_keys()
 
+
+            self.window.blit(self.background, (bgX, 0))  # Dibuja el primer background
+            self.window.blit(self.background, (bgX2, 0))  # Dibuja el segundo background
+
+            self.window.blit(self.cueva_img, (cX, 0))
+
+
+            if cX >= constants.MAP_SIZE_DISPLACEMENT:
+                cX -= constants.MAP_MOVEMENT_RATE
+            else:
+                self.map_can_move = False
+
+
+            # Movemos ambos backgrounds a la izquierda
+            bgX -= 1
+            bgX2 -= 1
+
+            # Cambiamos la posicion del background de la izq a la derecha
+            if bgX < self.background.get_width() * -1:
+                bgX = self.background.get_width()
+            if bgX2 < self.background.get_width() * -1:
+                bgX2 = self.background.get_width()
+
+
+    def set_map_collision(self):
+        # Techo
+        self.map_collision_list.add(Map(7300, 0, pygame.Rect(0, 0, 14730, 75), self))
+        self.map_collision_list.add(Map(16000, 0, pygame.Rect(0, 0, 6030, 130), self))
+
+        # Suelo
+        self.map_collision_list.add(Map(7300, 645, pygame.Rect(0, 0, 5200, 75), self))
+        self.map_collision_list.add(Map(12500, 560, pygame.Rect(0, 0, 3540, 155), self))
+        self.map_collision_list.add(Map(16000, 605, pygame.Rect(0, 0, 6030, 115), self))
+        self.map_collision_list.add(Map(16810, 550, pygame.Rect(0, 0, 938, 170), self))
+
+
     # Eventos para el menu
     def check_events_menu(self):
         for event in pygame.event.get():
@@ -483,6 +502,9 @@ class Game():
         # Dibujamos y actualizamos explosión de naves enemigas
         self.explosion_sprite_list.update()
         self.explosion_sprite_list.draw(self.window)
+
+        self.map_collision_list.update()
+        self.map_collision_list.draw(self.window)
 
     def play_sound(self, sound_asset):
         sound = pygame.mixer.Sound(sound_asset)

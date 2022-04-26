@@ -10,10 +10,6 @@ class Bonus(pygame.sprite.Sprite):
     def __init__(self, x, y, type):
         super().__init__()
 
-        # Posiciones iniciales
-        self.pos_x = x
-        self.pos_y = y
-
         self.type = type
 
         self.speed = constants.BONUS_SPEED

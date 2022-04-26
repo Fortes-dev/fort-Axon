@@ -87,7 +87,7 @@ class Spaceship(pygame.sprite.Sprite):
 
     # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
-
+        self.life = 5
         if self.got_bonus is True:
             self.game.draw_text(self.bonus_text, 14, self.rect.x + 35, self.rect.y - 15)
             self.bonus_text_cd += 1
