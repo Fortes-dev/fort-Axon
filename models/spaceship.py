@@ -85,9 +85,11 @@ class Spaceship(pygame.sprite.Sprite):
         self.bonus_text_cd = 0
         self.bonus_text_cd_rate = constants.BONUS_TEXT_CD_RATE
 
+        self.can_move_down = True
+        self.can_move_up = True
+
     # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
-        self.life = 5
         if self.got_bonus is True:
             self.game.draw_text(self.bonus_text, 14, self.rect.x + 35, self.rect.y - 15)
             self.bonus_text_cd += 1
@@ -102,7 +104,7 @@ class Spaceship(pygame.sprite.Sprite):
             self.kill()
 
         if self.can_fire is False:
-            if (self.time_cd == self.fire_rate):
+            if (self.time_cd >= self.fire_rate):
                 self.can_fire = True
                 self.time_cd = 0
             self.time_cd += 1
@@ -115,7 +117,7 @@ class Spaceship(pygame.sprite.Sprite):
             self.current_sprite = 2
         elif self.rect.x > self.pos_x:
             self.current_sprite = 3
-        # Seteamos el sprite actual de la nave para simular animacion
+
 
         if self.hit_countdown == 0:
             self.image.set_alpha(255)
@@ -152,11 +154,13 @@ class Spaceship(pygame.sprite.Sprite):
 
             if key_pressed[pygame.K_w]:
                 if (self.rect.y > 0):
-                    y = -self.speed
+                    if self.can_move_up:
+                        y = -self.speed
 
             if key_pressed[pygame.K_s]:
-                if (self.rect.y < constants.WIN_HEIGHT-70):
-                    y = self.speed
+                if (self.rect.y < constants.WIN_HEIGHT - 40):
+                    if self.can_move_down:
+                        y = self.speed
         elif self.player == 'player2':
             if key_pressed[pygame.K_LEFT]:
                 if (self.rect.x > 0):
@@ -168,11 +172,13 @@ class Spaceship(pygame.sprite.Sprite):
 
             if key_pressed[pygame.K_UP]:
                 if (self.rect.y > 0):
-                    y = -self.speed
+                    if self.can_move_up:
+                        y = -self.speed
 
             if key_pressed[pygame.K_DOWN]:
-                if (self.rect.y < constants.WIN_HEIGHT - 70):
-                    y = self.speed
+                if (self.rect.y < constants.WIN_HEIGHT - 40):
+                    if self.can_move_down:
+                        y = self.speed
 
         # Normalizamos el movimiento diagonal
         if x != 0 and y != 0:
@@ -182,6 +188,11 @@ class Spaceship(pygame.sprite.Sprite):
         self.pos_x += x
         self.pos_y += y
 
+        self.can_move_up = True
+        self.can_move_down = True
+
+
+
     # Disparo de la nave
     def shoot_bullet(self, key_pressed, bullet_sprite_list):
         if self.player == 'player1':
@@ -189,7 +200,7 @@ class Spaceship(pygame.sprite.Sprite):
                 if key_pressed[pygame.K_SPACE]:
                     if self.can_fire:
                         self.can_fire = False
-                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_shot')
+                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_shot', None)
                         bullet_sprite_list.add(bullet)
                         shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
                         shoot_sound.play()
@@ -199,7 +210,7 @@ class Spaceship(pygame.sprite.Sprite):
                     if self.charged_shot_ammo > 0:
                         if self.can_fire:
                             self.can_fire = False
-                            bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_chargedshot')
+                            bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_chargedshot', None)
                             bullet_sprite_list.add(bullet)
                             shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
                             shoot_sound.play()
@@ -211,7 +222,7 @@ class Spaceship(pygame.sprite.Sprite):
                 if key_pressed[pygame.K_RSHIFT]:
                     if self.can_fire:
                         self.can_fire = False
-                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_shot')
+                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_shot', None)
                         bullet_sprite_list.add(bullet)
                         shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
                         shoot_sound.play()
@@ -221,7 +232,7 @@ class Spaceship(pygame.sprite.Sprite):
                     if self.charged_shot_ammo > 0:
                         if self.can_fire:
                             self.can_fire = False
-                            bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_chargedshot')
+                            bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_chargedshot', None)
                             bullet_sprite_list.add(bullet)
                             shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
                             shoot_sound.play()

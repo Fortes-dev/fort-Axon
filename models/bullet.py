@@ -1,3 +1,5 @@
+import math
+
 import pygame
 from utils import constants
 
@@ -5,13 +7,14 @@ from utils import constants
 class Bullet(pygame.sprite.Sprite):
 
     # Constructor
-    def __init__(self, x, y, type):
+    def __init__(self, x, y, type, player):
         super().__init__()
 
         # Cargamos la imagen del disparo y la escalamos dependiendo de si es enemigo o spaceship (0 = spaceship, 1 = enemigo)
         self.sprites = []
 
         self.type = type
+        self.target = player
 
         match self.type:
             case ('player1_shot'):
@@ -41,11 +44,18 @@ class Bullet(pygame.sprite.Sprite):
                 self.speed = constants.BULLET_PLAYER_SPEED
 
             case ('enemy_shot'):
-                imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_ENEMY), 0, constants.BULLET_SIZE)
-                self.sprites.append(imagen2)
+                imagen5 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_ENEMY), 0, constants.BULLET_SIZE)
+                self.sprites.append(imagen5)
 
                 # Velocidad de la bala del enemigo
                 self.speed = constants.BULLET_ENEMY_SPEED
+
+            case ('bomber_shot'):
+                imagen6 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_ENEMY), 0, constants.BULLET_SIZE)
+                self.sprites.append(imagen6)
+
+                # Velocidad de la bala del enemigo
+                self.speed = constants.BULLET_BOMBER_SPEED
 
 
         self.current_sprite = 0
@@ -56,6 +66,11 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+        if self.target:
+            self.x_diff = self.target.rect.x - self.rect.x
+            self.y_diff = self.target.rect.y - self.rect.y
+            self.angle = math.atan2(self.y_diff, self.x_diff)
+
 
     # Actualizamos la posicion del disparo
     def update(self):
@@ -63,3 +78,8 @@ class Bullet(pygame.sprite.Sprite):
                 self.rect.x += self.speed
             elif self.type == 'enemy_shot':
                 self.rect.x -= self.speed
+            elif self.type == 'bomber_shot':
+
+                self.rect.x += math.cos(self.angle) * self.speed
+                self.rect.y += math.sin(self.angle) * self.speed
+

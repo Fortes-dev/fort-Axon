@@ -19,8 +19,7 @@ class Map(pygame.sprite.Sprite):
         self.pos_x = x
 
         self.game = game
-        self.surface.fill(self.game.WHITE)
-        self.surface.set_alpha(50)
+
         self.image = self.surface
 
     def update(self):

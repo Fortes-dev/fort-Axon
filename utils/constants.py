@@ -15,6 +15,7 @@ WINDOW_MODE = 'windowed'
 # Map
 MAP_MOVEMENT_RATE = 1.7
 MAP_SIZE_DISPLACEMENT = -20900
+MAP = "assets/cueva_720.png"
 
 
 # Menu
@@ -26,16 +27,19 @@ MENU_MUSIC = 'assets/sounds/menu.mp3'
 STAGE1_MUSIC = 'assets/sounds/stage1.mp3'
 BULLET_SOUND = 'assets/sounds/shoot.wav'
 BULLET_CHARGED_SOUND = 'assets/sounds/bullet_big-shoot.wav'
-BOSS_MUSIC = 'assets/sounds/boss.mp3'
+BOSS_MUSIC = 'assets/sounds/boss.wav'
 HIT_SOUND = 'assets/sounds/hit.wav'
+BOSS_HIT_SOUND = 'assets/sounds/boss_hit.wav'
 GAME_OVER_MUSIC = 'assets/sounds/game_over.mp3'
 EXPLOSION_SOUND = 'assets/sounds/explosion.wav'
 MENU_MOVEMENT_SOUND = 'assets/sounds/menu_movement.wav'
 MENU_SELECTION_SOUND = 'assets/sounds/menu_selection.wav'
 MENU_BACK_SOUND = 'assets/sounds/menu_back_sound.wav'
 PAUSE_SOUND = 'assets/sounds/pause.wav'
-MUSIC_VOLUME = 0.15
+MUSIC_VOLUME = 0.08
 BONUS_SOUND = 'assets/sounds/upgrade.wav'
+END_GAME_MUSIC = 'assets/sounds/end_game.wav'
+
 
 ## Props constants
 # Spaceships
@@ -47,8 +51,8 @@ PLAYER2_SPACESHIP1 = 'assets/spaceships/Spaceship_player2.png'
 PLAYER2_SPACESHIP2 = 'assets/spaceships/Spaceship1_player2.png'
 PLAYER2_SPACESHIP3 = 'assets/spaceships/Spaceship2_player2.png'
 
-SPACESHIP_SPEED = 7
-SPACESHIP_FIRE_RATE = 15
+SPACESHIP_SPEED = 8
+SPACESHIP_FIRE_RATE = 13
 SPACESHIP_SIZE = 1.5
 
 ## Bullets
@@ -59,6 +63,7 @@ BULLET2 = 'assets/bullets/bala2.png'
 BULLET_ENEMY = 'assets/bullets/bullet_enemy.png'
 BULLET_PLAYER_SPEED = 20
 BULLET_ENEMY_SPEED = 11
+BULLET_BOMBER_SPEED = 6
 BULLET_SIZE = 1.3
 BULLET_CHARGED_SIZE = 3.1
 
@@ -68,7 +73,7 @@ ENEMY1 = 'assets/enemies/Enemy1.png'
 ENEMY2 = 'assets/enemies/Enemy2.png'
 ENEMY3 = 'assets/enemies/Enemy3.png'
 ENEMY_SPEED = 4
-ENEMY_FIRE_RATE = 1.2
+ENEMY_FIRE_RATE = 1
 ENEMY_SPAWN_RATE = 1600
 ENEMY_ANIMATION_RATE = 125
 ENEMY_SHOOTER_SIZE = 1.4
@@ -83,6 +88,25 @@ ENEMY_FOLLOWER_SPAWN_RATE = 2000
 ENEMY_FOLLOWER_ANIMATION_RATE = 100
 ENEMY_FOLLOWER_SIZE = 1.3
 
+# Bomber
+ENEMY_BOMBER1 = 'assets/enemies/Enemy_Bomber1.png'
+ENEMY_BOMBER2 = 'assets/enemies/Enemy_Bomber2.png'
+ENEMY_BOMBER3 = 'assets/enemies/Enemy_Bomber3.png'
+ENEMY_BOMBER_SPAWN_RATE = 3000
+ENEMY_BOMBER_SIZE = 1.5
+ENEMY_BOMBER_FIRE_RATE = 2.5
+ENEMY_BOMBER_SPAWN_ZONE_UP = 70
+ENEMY_BOMBER_SPAWN_ZONE_DOWN = 525
+
+# Boss Axon
+BOSS_AXON1 = 'assets/enemies/Boss_Axon1.png'
+BOSS_AXON2 = 'assets/enemies/Boss_Axon2.png'
+BOSS_AXON3 = 'assets/enemies/Boss_Axon3.png'
+BOSS_AXON_SIZE = 2.2
+BOSS_AXON_SPEED = 2
+BOSS_AXON_FIRE_RATE = 5
+BOSS_AXON_ATTACK_CD = 10000
+
 
 ## Explosion
 EXPLOSION1 = 'assets/explosion/explosion 1 1.png'
@@ -92,6 +116,7 @@ EXPLOSION4 = 'assets/explosion/explosion 1 4.png'
 EXPLOSION5 = 'assets/explosion/explosion 1 5.png'
 EXPLOSION_SHOOTER_ZOOM = 1.5
 EXPLOSION_FOLLOWER_ZOOM = 1.1
+EXPLOSION_BOSS_ZOOM = 6
 EXPLOSION_ANIMATION_RATE = 125
 
 ## Bonus
@@ -113,11 +138,11 @@ BONUS_FIRE_RATE_2 = 'assets/powerups/FireRateBonus2.png'
 BONUS_FIRE_RATE_3 = 'assets/powerups/FireRateBonus3.png'
 BONUS_FIRE_RATE_4 = 'assets/powerups/FireRateBonus4.png'
 
-BONUS_ZOOM = 1.5
-BONUS_SPEED = 5
-BONUS_TEXT_CD_RATE = 30
+BONUS_ZOOM = 1.6
+BONUS_SPEED = 1.7
+BONUS_TEXT_CD_RATE = 40
 BONUS_ANIMATE_RATE = 200
-BONUS_SPEED_SPAWN_RATE = 40500
+BONUS_SPEED_SPAWN_RATE = 32000
 BONUS_CHARGED_SHOT_SPAWN_RATE = 22000
 BONUS_FIRE_RATE_SPAWN_RATE = 54250
 

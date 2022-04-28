@@ -52,10 +52,10 @@ class MainMenu(Menu):
             self.check_input()
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('FORT AXON', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
-            self.game.draw_text("Jugar", 40, self.startx, self.starty)
-            self.game.draw_text("Opciones", 40, self.optionsx, self.optionsy)
-            self.game.draw_text("Creditos", 40, self.creditsx, self.creditsy)
-            self.game.draw_text("Salir", 40, self.exitx, self.exity)
+            self.game.draw_text("Play", 40, self.startx, self.starty)
+            self.game.draw_text("Options", 40, self.optionsx, self.optionsy)
+            self.game.draw_text("Controls", 40, self.creditsx, self.creditsy)
+            self.game.draw_text("Exit", 40, self.exitx, self.exity)
             self.draw_cursor()
             self.blit_screen()
 
@@ -70,8 +70,8 @@ class MainMenu(Menu):
                 self.state = 'Opciones'
             elif self.state == 'Opciones':
                 self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
-                self.state = 'Creditos'
-            elif self.state == 'Creditos':
+                self.state = 'Controls'
+            elif self.state == 'Controls':
                 self.cursor_rect.midtop = (self.exitx + self.offset, self.exity)
                 self.state = 'Salir'
             elif self.state == 'Salir':
@@ -84,8 +84,8 @@ class MainMenu(Menu):
                 self.state = 'Salir'
             elif self.state == 'Salir':
                 self.cursor_rect.midtop = (self.creditsx + self.offset, self.creditsy)
-                self.state = 'Creditos'
-            elif self.state == 'Creditos':
+                self.state = 'Controls'
+            elif self.state == 'Controls':
                 self.cursor_rect.midtop = (self.optionsx + self.offset, self.optionsy)
                 self.state = 'Opciones'
             elif self.state == 'Opciones':
@@ -100,8 +100,8 @@ class MainMenu(Menu):
                 self.game.curr_menu = self.game.play_menu
             elif self.state == 'Opciones':
                 self.game.curr_menu = self.game.options
-            elif self.state == 'Creditos':
-                self.game.curr_menu = self.game.credits
+            elif self.state == 'Controls':
+                self.game.curr_menu = self.game.controls_menu
             elif self.state == 'Salir':
                 self.running = False
                 self.playing = False
@@ -125,7 +125,7 @@ class PlayMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Jugar', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+            self.game.draw_text('Play', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("1 Player", 35, self.one_player_x, self.one_player_y)
             self.game.draw_text("2 Players", 35, self.two_player_x, self.two_player_y)
             self.draw_cursor()
@@ -138,19 +138,15 @@ class PlayMenu(Menu):
             self.game.curr_menu = self.game.main_menu
             self.run_display = False
         elif self.game.START_KEY:
+            self.game.menu_music.stop()
+            self.game.playing = True
+            self.game.game_time.reset_timer()
+            self.game.mixer.music.play(0, 0.0, 0)
             if self.state == '1Player':
-                self.game.menu_music.stop()
-                self.game.playing = True
-                self.game.game_time.reset_timer()
-                self.game.mixer.music.play(5, 0.0, 1000)
-                self.run_display = False
+                self.game.multiplayer = False
             elif self.state == '2Players':
-                self.game.menu_music.stop()
-                self.game.playing = True
-                self.game.game_time.reset_timer()
-                self.game.mixer.music.play(5, 0.0, 1000)
                 self.game.multiplayer = True
-                self.run_display = False
+            self.run_display = False
 
 
     def move_cursor(self):
@@ -169,8 +165,7 @@ class OptionsMenu(Menu):
         Menu.__init__(self, game)
         self.state = 'Volumen'
         self.volx, self.voly = self.mid_w, self.mid_h + 80
-        self.controlsx, self.controlsy = self.mid_w, self.mid_h + 180
-        self.videox, self.videoy = self.mid_w, self.mid_h + 280
+        self.videox, self.videoy = self.mid_w, self.mid_h + 180
         self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
 
 
@@ -180,10 +175,9 @@ class OptionsMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Opciones', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
-            self.game.draw_text("Volumen", 40, self.volx, self.voly)
-            self.game.draw_text("Controles", 40, self.controlsx, self.controlsy)
-            self.game.draw_text("Video", 40, self.videox, self.videoy)
+            self.game.draw_text('Options', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+            self.game.draw_text("Volume", 40, self.volx, self.voly)
+            self.game.draw_text("Graphics", 40, self.videox, self.videoy)
             self.draw_cursor()
             self.blit_screen()
 
@@ -198,34 +192,17 @@ class OptionsMenu(Menu):
             if self.state == 'Volumen':
                 self.game.curr_menu = self.game.volumen_menu
                 self.run_display = False
-            elif self.state == 'Controles':
-                self.game.curr_menu = self.game.controls_menu
-                self.run_display = False
             elif self.state == 'Video':
                 self.game.curr_menu = self.game.video_menu
                 self.run_display = False
 
     def move_cursor(self):
-        if self.game.DOWN_KEY:
-            self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
-            if self.state == 'Volumen':
-                self.cursor_rect.midtop = (self.controlsx + self.offset, self.controlsy)
-                self.state = 'Controles'
-            elif self.state == 'Controles':
-                self.cursor_rect.midtop = (self.videox + self.offset, self.videoy)
-                self.state = 'Video'
-            elif self.state == 'Video':
-                self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
-                self.state = 'Volumen'
-        elif self.game.UP_KEY:
+        if self.game.DOWN_KEY or self.game.UP_KEY:
             self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
             if self.state == 'Volumen':
                 self.cursor_rect.midtop = (self.videox + self.offset, self.videoy)
                 self.state = 'Video'
             elif self.state == 'Video':
-                self.cursor_rect.midtop = (self.controlsx + self.offset, self.controlsy)
-                self.state = 'Controles'
-            elif self.state == 'Controles':
                 self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
                 self.state = 'Volumen'
 
@@ -247,7 +224,7 @@ class VolumenMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Volumen', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+            self.game.draw_text('Volume', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("0", 40, self.volumen_0_x, self.volumen_0_y)
             self.game.draw_text("1", 40, self.volumen_1_x, self.volumen_1_y)
             self.game.draw_text("2", 40, self.volumen_2_x, self.volumen_2_y)
@@ -322,7 +299,7 @@ class VideoMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Video', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+            self.game.draw_text('Graphics', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("Windowed", 35, self.video_windowed_x, self.video_windowed_y)
             self.game.draw_text("Fullscreen", 35, self.video_fullscreen_x, self.video_fullscreen_y)
             self.draw_cursor()
@@ -373,7 +350,7 @@ class ControlsMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Controles', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+            self.game.draw_text('Controls', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("Player 1", 40, self.player1x, self.player1y)
             self.game.draw_text("Player 2", 40, self.player2x, self.player2y)
             self.draw_cursor()
@@ -420,17 +397,17 @@ class ControlsPlayer1Menu(Menu):
             self.check_input()
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Player 1', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
-            self.game.draw_text('Movimiento', 40, self.mid_w , self.mid_h - 100)
-            self.game.draw_text('W  *  Arriba', 20, self.mid_w - 150, self.mid_h - 20)
-            self.game.draw_text('A  *  Izquierda', 20, self.mid_w + 150, self.mid_h - 20)
-            self.game.draw_text('S  *  Abajo', 20, self.mid_w - 150, self.mid_h + 20)
-            self.game.draw_text('D  *  Derecha', 20, self.mid_w + 150, self.mid_h + 20)
-            self.game.draw_text('Disparo', 40, self.mid_w , self.mid_h + 100)
-            self.game.draw_text('Espacio  *  Disparo normal', 20, self.mid_w, self.mid_h + 160)
-            self.game.draw_text('Left CTRL  *  Disparo cargado', 20, self.mid_w, self.mid_h + 200)
+            self.game.draw_text('Movement', 40, self.mid_w , self.mid_h - 100)
+            self.game.draw_text('W  *  Up', 20, self.mid_w - 150, self.mid_h - 20)
+            self.game.draw_text('A  *  Left', 20, self.mid_w + 150, self.mid_h - 20)
+            self.game.draw_text('S  *  Down', 20, self.mid_w - 150, self.mid_h + 20)
+            self.game.draw_text('D  *  Right', 20, self.mid_w + 150, self.mid_h + 20)
+            self.game.draw_text('Shoot', 40, self.mid_w , self.mid_h + 100)
+            self.game.draw_text('Espace  *  Shoot', 20, self.mid_w, self.mid_h + 160)
+            self.game.draw_text('Left CTRL  *  Charged Shot', 20, self.mid_w, self.mid_h + 200)
             self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
-            self.game.draw_text('ESC  *  Pause y atras', 20, self.mid_w, self.mid_h + 320)
-            self.game.draw_text('Espacio y Enter  *  Seleccionar', 20, self.mid_w, self.mid_h + 360)
+            self.game.draw_text('ESC  *  Pause and back', 20, self.mid_w, self.mid_h + 320)
+            self.game.draw_text('Espace and Enter  *  Select', 20, self.mid_w, self.mid_h + 360)
             self.blit_screen()
 
     def check_input(self):
@@ -454,16 +431,16 @@ class ControlsPlayer2Menu(Menu):
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Player 2', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
             self.game.draw_text('Movimiento', 40, self.mid_w, self.mid_h - 100)
-            self.game.draw_text('Flecha Arriba  *  rriba', 20, self.mid_w - 250, self.mid_h - 20)
-            self.game.draw_text('Flecha Izquierda  *  Izquierda', 20, self.mid_w + 250, self.mid_h - 20)
-            self.game.draw_text('Flecha Abajo  *  Abajo', 20, self.mid_w - 250, self.mid_h + 20)
-            self.game.draw_text('Flecha derecha  *  Derecha', 20, self.mid_w + 250, self.mid_h + 20)
-            self.game.draw_text('Disparo', 40, self.mid_w, self.mid_h + 100)
-            self.game.draw_text('Right SHIFT  *  Disparo normal', 20, self.mid_w, self.mid_h + 160)
-            self.game.draw_text('Right CTRL  *  Disparo cargado', 20, self.mid_w, self.mid_h + 200)
+            self.game.draw_text('Arrow up  *  Up', 20, self.mid_w - 250, self.mid_h - 20)
+            self.game.draw_text('Arrow left  *  Left', 20, self.mid_w + 250, self.mid_h - 20)
+            self.game.draw_text('Arrow down  *  Down', 20, self.mid_w - 250, self.mid_h + 20)
+            self.game.draw_text('Arrow right  *  Right', 20, self.mid_w + 250, self.mid_h + 20)
+            self.game.draw_text('Shoot', 40, self.mid_w, self.mid_h + 100)
+            self.game.draw_text('Right SHIFT  *  Shoot', 20, self.mid_w, self.mid_h + 160)
+            self.game.draw_text('Right CTRL  *  Charged shot', 20, self.mid_w, self.mid_h + 200)
             self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
-            self.game.draw_text('ESC  *  Pause y atras', 20, self.mid_w, self.mid_h + 320)
-            self.game.draw_text('Espacio y Enter  *  Seleccionar', 20, self.mid_w, self.mid_h + 360)
+            self.game.draw_text('ESC  *  Pause and back', 20, self.mid_w, self.mid_h + 320)
+            self.game.draw_text('Espacio and Enter  *  Select', 20, self.mid_w, self.mid_h + 360)
             self.blit_screen()
 
     def check_input(self):
@@ -477,25 +454,30 @@ class ControlsPlayer2Menu(Menu):
 class CreditsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.namex, self.namey = self.mid_w, self.mid_h + 80
-        self.descx, self.descy = self.mid_w, self.mid_h + 180
+        self.namex, self.namey = self.mid_w, self.mid_h
+        self.descx, self.descy = self.mid_w, self.mid_h + 80
+        self.thax, self.thay = self.mid_w, self.mid_h + 180
+
 
     def display_menu(self):
+        self.game.mixer.music.stop()
+        self.game.end_game_music.play()
+        self.game.end_game_music.set_volume(constants.MUSIC_VOLUME)
         self.run_display = True
         while self.run_display:
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Creditos', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
-            self.game.draw_text('Carlos Fortes Medina', 40, self.namex, self.namey)
-            self.game.draw_text('Proyecto fin de Grado', 40, self.descx, self.descy)
+            self.game.draw_text('Credits', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 250)
+            self.game.draw_text('Carlos Fortes Medina', 30, self.namex, self.namey)
+            self.game.draw_text('Proyecto fin de Grado', 30, self.descx, self.descy)
+            self.game.draw_text('X  Thanks for playing  X', 40, self.thax, self.thay)
             self.blit_screen()
 
     def check_input(self):
-        if self.game.BACK_KEY:
-            self.game.play_sound(constants.MENU_BACK_SOUND)
-            self.game.curr_menu = self.game.main_menu
-            self.run_display = False
+        if self.game.BACK_KEY or self.game.START_KEY:
+            self.game.end_game_music.stop()
+            Loop().main()
 
 
 class GameOverMenu(Menu):
@@ -509,9 +491,17 @@ class GameOverMenu(Menu):
         game_over_music.play_sound(constants.GAME_OVER_MUSIC)
         self.game.game_time.reset_timer()
         self.game.display.fill(self.game.BLACK)
-        self.game.draw_text('GAME OVER', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 60)
-        self.game.draw_text('Presiona ENTER o ESPACIO para volver al menu', 24, self.game.DISPLAY_W / 2,
-                            self.game.DISPLAY_H / 2 + 120)
+        self.game.draw_text('GAME OVER', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+        self.game.draw_text('Presiona ENTER o ESPACIO para volver al menu', 22, self.game.DISPLAY_W / 2,
+                            self.game.DISPLAY_H / 2 + 250)
+        if self.game.multiplayer:
+            self.game.draw_text('Player 1 score  x  ' + str(self.game.player_1.score), 28, self.game.DISPLAY_W / 2,
+                                self.game.DISPLAY_H / 2 - 50)
+            self.game.draw_text('Player 2 score  x  ' + str(self.game.player_2.score), 28, self.game.DISPLAY_W / 2,
+                                self.game.DISPLAY_H / 2 + 50)
+        else:
+            self.game.draw_text('Player score  x  ' + str(self.game.player_1.score), 28, self.game.DISPLAY_W / 2,
+                                self.game.DISPLAY_H / 2)
         self.blit_screen()
         pygame.time.wait(2500)
 
@@ -563,6 +553,7 @@ class PauseMenu(Menu):
                 self.game.playing = True
                 self.game.mixer.music.unpause()
                 self.game.game_time.unpause_time()
+
             elif self.state == 'QuitGame':
                 pygame.time.delay(100)
                 pygame.time.set_timer(self.game.spawn_enemy_follower, 0, False)
