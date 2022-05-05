@@ -2,7 +2,7 @@ import sys
 
 import pygame
 from pygame import mixer
-
+import json
 from models.map_collision import Map
 from models.scoreboard import Scoreboard
 from models.bonus import Bonus
@@ -24,6 +24,7 @@ class Game:
 
         pygame.display.set_caption(constants.GAME_TITLE)
         pygame.display.set_icon(pygame.image.load(constants.GAME_ICON))
+        pygame.mouse.set_visible(False)
 
         # Variables de ejecución del juego
         self.running, self.playing = True, False
@@ -33,7 +34,7 @@ class Game:
         self.mixer = mixer
         self.mixer.init()
         self.mixer.music.load(constants.STAGE1_MUSIC)
-        self.mixer.music.queue(constants.BOSS_MUSIC)
+
         self.mixer.music.set_volume(constants.MUSIC_VOLUME)
 
         self.menu_music = pygame.mixer.Sound(constants.MENU_MUSIC)
@@ -54,7 +55,6 @@ class Game:
         self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
 
         self.font_name = constants.TEXT_FONT_MENU
-        self.font_name_game = constants.TEXT_FONT_GAME
 
         # Ventana del juego
         if constants.WINDOW_MODE == 'fullscreen':
@@ -215,7 +215,7 @@ class Game:
                 if event.type == self.spawn_enemy_bomber:
                     enemy = Enemy(constants.WIN_WIDTH, constants.ENEMY_BOMBER_SPAWN_ZONE_DOWN, 'bomber', self)
                     enemy.bomber_zone = 'down'
-                    enemy2 = Enemy(constants.WIN_WIDTH + 30, constants.ENEMY_BOMBER_SPAWN_ZONE_UP, 'bomber', self)
+                    enemy2 = Enemy(constants.WIN_WIDTH + 150, constants.ENEMY_BOMBER_SPAWN_ZONE_UP, 'bomber', self)
                     enemy2.bomber_zone = 'up'
                     self.enemy_bomber_sprite_list.add(enemy)
                     self.enemy_bomber_sprite_list.add(enemy2)
@@ -245,7 +245,6 @@ class Game:
                     self.boss_axon.current_sprite = 2
 
                 if event.type == self.boss_defeated_end_game:
-                    print('entered event')
                     self.curr_menu = self.credits
                     self.playing = False
 
@@ -320,24 +319,20 @@ class Game:
 
             for bonus in player_collision_with_bonus:
                 self.play_sound(constants.BONUS_SOUND)
-                if bonus.type == 'speed':
-                    for player in self.spaceship_sprite_list:
-                        player.got_bonus = True
-                        player.speed += 0.5
-                        player.bonus_text = 'Speed UP'
-                        player.life = 5
-                elif bonus.type == 'bullet':
-                    for player in self.spaceship_sprite_list:
-                        player.got_bonus = True
-                        player.charged_shot_ammo = 20
-                        player.bonus_text = 'Charged Shot ammo UP'
-                        player.life = 5
-                elif bonus.type == 'firerate':
-                    for player in self.spaceship_sprite_list:
-                        player.got_bonus = True
-                        player.fire_rate -= 1.5
-                        player.bonus_text = 'Fire Rate UP'
-                        player.life = 5
+                for player in self.spaceship_sprite_list:
+                    player.got_bonus = True
+                    if player.life < 5:
+                        player.life += 1
+                    if bonus.type == 'speed':
+                            player.speed += 0.5
+                            player.bonus_text = 'Speed UP'
+                    elif bonus.type == 'bullet':
+                            player.charged_shot_ammo = 20
+                            player.bonus_text = 'Charged Shot ammo UP'
+                    elif bonus.type == 'firerate':
+                            player.fire_rate -= 1.5
+                            player.bonus_text = 'Fire Rate UP'
+
 
             # cuando alcanzo al enemigo subo puntuación y animo muerte
             for hit in enemy_shooter_hit_by_bullet:
@@ -451,14 +446,18 @@ class Game:
                             self.boss_axon.boss_life -= 2
                         else:
                             self.boss_axon.boss_life -= 1
-                        print(self.boss_axon.boss_life)
                     hit.kill()
                 else:
-                    explosion = Explosion(self.boss_axon.rect.x - 400, self.boss_axon.rect.y - 400, constants.EXPLOSION_BOSS_ZOOM)
+                    explosion = Explosion(self.boss_axon.rect.x - 400, self.boss_axon.rect.y - 400,
+                                          constants.EXPLOSION_BOSS_ZOOM)
                     self.explosion_sprite_list.add(explosion)
                     self.explosion_sound.play_sound(constants.EXPLOSION_SOUND)
                     hit.kill()
                     self.boss_axon.kill()
+                    for player in self.spaceship_sprite_list:
+                        if player.is_alive:
+                            player.score += 2500
+
 
             for player in player_collision_with_map:
                 player.rect.x -= 60
@@ -543,33 +542,34 @@ class Game:
 
         if self.game_time.current_time() > 19 and self.game_time.current_time() < 19.5:
             pygame.time.set_timer(self.spawn_enemy_follower, constants.ENEMY_FOLLOWER_SPAWN_RATE)
-        if self.cX < -10950 and self.cX > -10960:
-            pygame.time.set_timer(self.spawn_enemy_bomber, constants.ENEMY_BOMBER_SPAWN_RATE, 11)
+        if self.cX < -11150 and self.cX > -11160:
+            pygame.time.set_timer(self.spawn_enemy_bomber, constants.ENEMY_BOMBER_SPAWN_RATE, 10)
             pygame.time.set_timer(self.spawn_enemy_shooter, 0)
         if self.cX < -14750 and self.cX > -14760:
             pygame.time.set_timer(self.spawn_enemy_shooter, constants.ENEMY_SPAWN_RATE)
-        if self.cX < -16800 and self.cX > -16810:
+        if self.cX < -16400 and self.cX > -16410:
             constants.ENEMY_BOMBER_SPAWN_RATE = 4000
             constants.ENEMY_BOMBER_SPAWN_ZONE_DOWN = 570
             constants.ENEMY_BOMBER_SPAWN_ZONE_UP = 114
-            pygame.time.set_timer(self.spawn_enemy_bomber, constants.ENEMY_BOMBER_SPAWN_RATE)
-        if self.cX < -20300 and self.cX > -20310:
+            pygame.time.set_timer(self.spawn_enemy_bomber, constants.ENEMY_BOMBER_SPAWN_RATE, 7)
+        if self.cX < -20200 and self.cX > -20210:
             pygame.time.set_timer(self.spawn_enemy_shooter, 0)
             pygame.time.set_timer(self.spawn_enemy_follower, 0)
             pygame.time.set_timer(self.spawn_enemy_bomber, 0)
 
         if self.map_can_move is False:
             if self.play_music_boss is False:
+                self.mixer.music.unload()
+                self.mixer.music.load(constants.BOSS_MUSIC)
+                self.mixer.music.play(2, 0, 0)
                 self.play_music_boss = True
                 pygame.time.set_timer(self.boss_axon_attack, constants.BOSS_AXON_ATTACK_CD)
                 self.boss_axon_list.add(self.boss_axon)
-        print(self.boss_axon.boss_life)
+
         if self.event_end_game is True:
             if self.boss_axon.boss_life <= 0:
                 self.event_end_game = False
-                print('event triggered')
                 pygame.time.set_timer(self.boss_defeated_end_game, 1000, 1)
-
 
     # Eventos para el menu
     def check_events_menu(self):
@@ -641,3 +641,16 @@ class Game:
         sound = pygame.mixer.Sound(sound_asset)
         sound.play()
         sound.set_volume(constants.MUSIC_VOLUME)
+
+    def save_highscore(self, score, data):
+        json_data = self.get_highscore()
+        if score > json_data[data]:
+            with open(constants.SCORE_FILE_NAME, 'w') as jsonfile:
+                json_data[data] = score
+                json.dump(json_data, jsonfile, indent=4)
+
+    def get_highscore(self):
+        with open(constants.SCORE_FILE_NAME, "r") as json_file:
+            json_data = json.load(json_file)
+        return json_data
+

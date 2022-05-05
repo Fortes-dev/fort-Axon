@@ -15,9 +15,6 @@ class Menu():
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
         self.offset = - 200
 
-
-
-
     def draw_cursor(self):
         self.game.draw_text('[', 40, self.cursor_rect.x, self.cursor_rect.y)
 
@@ -28,6 +25,7 @@ class Menu():
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
+
 
 class MainMenu(Menu):
     def __init__(self, game):
@@ -40,8 +38,6 @@ class MainMenu(Menu):
         self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
         self.game.menu_music.play()
         self.game.menu_music.set_volume(constants.MUSIC_VOLUME)
-
-
 
     def display_menu(self):
 
@@ -58,9 +54,6 @@ class MainMenu(Menu):
             self.game.draw_text("Exit", 40, self.exitx, self.exity)
             self.draw_cursor()
             self.blit_screen()
-
-
-
 
     def move_cursor(self):
         if self.game.DOWN_KEY:
@@ -141,13 +134,12 @@ class PlayMenu(Menu):
             self.game.menu_music.stop()
             self.game.playing = True
             self.game.game_time.reset_timer()
-            self.game.mixer.music.play(0, 0.0, 0)
+            self.game.mixer.music.play(0, 0, 0)
             if self.state == '1Player':
                 self.game.multiplayer = False
             elif self.state == '2Players':
                 self.game.multiplayer = True
             self.run_display = False
-
 
     def move_cursor(self):
         if self.game.DOWN_KEY or self.game.UP_KEY:
@@ -167,7 +159,6 @@ class OptionsMenu(Menu):
         self.volx, self.voly = self.mid_w, self.mid_h + 80
         self.videox, self.videoy = self.mid_w, self.mid_h + 180
         self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
-
 
     def display_menu(self):
         self.run_display = True
@@ -210,13 +201,13 @@ class OptionsMenu(Menu):
 class VolumenMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = 1
+        self.state = 2
         self.volumen_0_x, self.volumen_0_y = self.mid_w, self.mid_h + 80
         self.volumen_1_x, self.volumen_1_y = self.mid_w, self.mid_h + 180
         self.volumen_2_x, self.volumen_2_y = self.mid_w, self.mid_h + 280
         self.volumen_3_x, self.volumen_3_y = self.mid_w, self.mid_h + 380
 
-        self.cursor_rect.midtop = (self.volumen_1_x + self.offset, self.volumen_1_y)
+        self.cursor_rect.midtop = (self.volumen_2_x + self.offset, self.volumen_2_y)
 
     def display_menu(self):
         self.run_display = True
@@ -242,11 +233,11 @@ class VolumenMenu(Menu):
             if self.state == 0:
                 self.set_volume(0)
             elif self.state == 1:
-                self.set_volume(0.15)
+                self.set_volume(0.08)
             elif self.state == 2:
-                self.set_volume(0.45)
+                self.set_volume(0.18)
             elif self.state == 3:
-                self.set_volume(0.75)
+                self.set_volume(0.38)
             self.game.play_sound(constants.MENU_SELECTION_SOUND)
 
     def set_volume(self, value):
@@ -283,6 +274,7 @@ class VolumenMenu(Menu):
             elif self.state == 1:
                 self.cursor_rect.midtop = (self.volumen_0_x + self.offset, self.volumen_0_y)
                 self.state = 0
+
 
 class VideoMenu(Menu):
     def __init__(self, game):
@@ -323,7 +315,6 @@ class VideoMenu(Menu):
                 self.game.menu_music.stop()
                 Loop().main()
 
-
     def move_cursor(self):
         if self.game.DOWN_KEY or self.game.UP_KEY:
             self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
@@ -360,7 +351,7 @@ class ControlsMenu(Menu):
         self.move_cursor()
         if self.game.BACK_KEY:
             self.game.play_sound(constants.MENU_BACK_SOUND)
-            self.game.curr_menu = self.game.options
+            self.game.curr_menu = self.game.main_menu
             self.run_display = False
         elif self.game.START_KEY:
             if self.state == 'Player1':
@@ -370,7 +361,6 @@ class ControlsMenu(Menu):
                 self.game.curr_menu = self.game.controls_player2_menu
                 self.run_display = False
             self.game.play_sound(constants.MENU_SELECTION_SOUND)
-
 
     def move_cursor(self):
         if self.game.DOWN_KEY or self.game.UP_KEY:
@@ -397,17 +387,17 @@ class ControlsPlayer1Menu(Menu):
             self.check_input()
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Player 1', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
-            self.game.draw_text('Movement', 40, self.mid_w , self.mid_h - 100)
+            self.game.draw_text('Movement', 40, self.mid_w, self.mid_h - 100)
             self.game.draw_text('W  *  Up', 20, self.mid_w - 150, self.mid_h - 20)
             self.game.draw_text('A  *  Left', 20, self.mid_w + 150, self.mid_h - 20)
             self.game.draw_text('S  *  Down', 20, self.mid_w - 150, self.mid_h + 20)
             self.game.draw_text('D  *  Right', 20, self.mid_w + 150, self.mid_h + 20)
-            self.game.draw_text('Shoot', 40, self.mid_w , self.mid_h + 100)
+            self.game.draw_text('Shoot', 40, self.mid_w, self.mid_h + 100)
             self.game.draw_text('Espace  *  Shoot', 20, self.mid_w, self.mid_h + 160)
             self.game.draw_text('Left CTRL  *  Charged Shot', 20, self.mid_w, self.mid_h + 200)
             self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
             self.game.draw_text('ESC  *  Pause and back', 20, self.mid_w, self.mid_h + 320)
-            self.game.draw_text('Espace and Enter  *  Select', 20, self.mid_w, self.mid_h + 360)
+            self.game.draw_text('Space and Enter  *  Select', 20, self.mid_w, self.mid_h + 360)
             self.blit_screen()
 
     def check_input(self):
@@ -430,7 +420,7 @@ class ControlsPlayer2Menu(Menu):
             self.check_input()
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Player 2', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300)
-            self.game.draw_text('Movimiento', 40, self.mid_w, self.mid_h - 100)
+            self.game.draw_text('Movement', 40, self.mid_w, self.mid_h - 100)
             self.game.draw_text('Arrow up  *  Up', 20, self.mid_w - 250, self.mid_h - 20)
             self.game.draw_text('Arrow left  *  Left', 20, self.mid_w + 250, self.mid_h - 20)
             self.game.draw_text('Arrow down  *  Down', 20, self.mid_w - 250, self.mid_h + 20)
@@ -440,7 +430,7 @@ class ControlsPlayer2Menu(Menu):
             self.game.draw_text('Right CTRL  *  Charged shot', 20, self.mid_w, self.mid_h + 200)
             self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
             self.game.draw_text('ESC  *  Pause and back', 20, self.mid_w, self.mid_h + 320)
-            self.game.draw_text('Espacio and Enter  *  Select', 20, self.mid_w, self.mid_h + 360)
+            self.game.draw_text('Space and Enter  *  Select', 20, self.mid_w, self.mid_h + 360)
             self.blit_screen()
 
     def check_input(self):
@@ -450,14 +440,12 @@ class ControlsPlayer2Menu(Menu):
             self.run_display = False
 
 
-
 class CreditsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.namex, self.namey = self.mid_w, self.mid_h
         self.descx, self.descy = self.mid_w, self.mid_h + 80
         self.thax, self.thay = self.mid_w, self.mid_h + 180
-
 
     def display_menu(self):
         self.game.mixer.music.stop()
@@ -470,14 +458,15 @@ class CreditsMenu(Menu):
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Credits', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 250)
             self.game.draw_text('Carlos Fortes Medina', 30, self.namex, self.namey)
-            self.game.draw_text('Proyecto fin de Grado', 30, self.descx, self.descy)
+            self.game.draw_text('Final Degree Project', 30, self.descx, self.descy)
             self.game.draw_text('X  Thanks for playing  X', 40, self.thax, self.thay)
             self.blit_screen()
 
     def check_input(self):
         if self.game.BACK_KEY or self.game.START_KEY:
-            self.game.end_game_music.stop()
-            Loop().main()
+            self.game.play_sound(constants.MENU_SELECTION_SOUND)
+            self.game.curr_menu = self.game.game_over
+            self.run_display = False
 
 
 class GameOverMenu(Menu):
@@ -486,28 +475,42 @@ class GameOverMenu(Menu):
 
     def display_menu(self):
         self.run_display = True
+
         self.game.mixer.music.stop()
         game_over_music = Sound()
-        game_over_music.play_sound(constants.GAME_OVER_MUSIC)
+
         self.game.game_time.reset_timer()
         self.game.display.fill(self.game.BLACK)
         self.game.draw_text('GAME OVER', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
-        self.game.draw_text('Presiona ENTER o ESPACIO para volver al menu', 22, self.game.DISPLAY_W / 2,
+        self.game.draw_text('Press ENTER or ESPACE to return to main menu', 22, self.game.DISPLAY_W / 2,
                             self.game.DISPLAY_H / 2 + 250)
+
+        if self.game.boss_axon.boss_life > 0:
+            game_over_music.play_sound(constants.GAME_OVER_MUSIC)
         if self.game.multiplayer:
-            self.game.draw_text('Player 1 score  x  ' + str(self.game.player_1.score), 28, self.game.DISPLAY_W / 2,
+            self.game.save_highscore(self.game.player_1.score, constants.MULTI_SCORE_P1)
+            self.game.save_highscore(self.game.player_2.score, constants.MULTI_SCORE_P2)
+        else:
+            self.game.save_highscore(self.game.player_1.score, constants.SOLO_SCORE_DATA)
+
+        self.score_json_data = self.game.get_highscore()
+
+        if self.game.multiplayer:
+            self.game.draw_text('Player 1 score  x  ' + str(self.game.player_1.score) + '   BEST SCORE  x  ' + str(self.score_json_data[constants.MULTI_SCORE_P1]), 26, self.game.DISPLAY_W / 2,
                                 self.game.DISPLAY_H / 2 - 50)
-            self.game.draw_text('Player 2 score  x  ' + str(self.game.player_2.score), 28, self.game.DISPLAY_W / 2,
+            self.game.draw_text('Player 2 score  x  ' + str(self.game.player_2.score) + '   BEST SCORE  x  ' + str(self.score_json_data[constants.MULTI_SCORE_P2]), 26, self.game.DISPLAY_W / 2,
                                 self.game.DISPLAY_H / 2 + 50)
         else:
-            self.game.draw_text('Player score  x  ' + str(self.game.player_1.score), 28, self.game.DISPLAY_W / 2,
+            self.game.draw_text('Player score  x  ' + str(self.game.player_1.score) + '   BEST SCORE  x  ' + str(self.score_json_data[constants.SOLO_SCORE_DATA]), 26, self.game.DISPLAY_W / 2,
                                 self.game.DISPLAY_H / 2)
+
         self.blit_screen()
         pygame.time.wait(2500)
 
         while self.run_display:
             self.game.check_events_menu()
             if self.game.START_KEY:
+                self.game.end_game_music.stop()
                 self.game.play_sound(constants.MENU_SELECTION_SOUND)
                 Loop().main()
 
@@ -515,11 +518,10 @@ class GameOverMenu(Menu):
 class PauseMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = "Continuar"
+        self.state = "Continue"
         self.continuarx, self.continuary = self.mid_w, self.mid_h + 80
         self.quit_gamex, self.quit_gamey = self.mid_w, self.mid_h + 180
         self.cursor_rect.midtop = (self.continuarx + self.offset, self.continuary)
-
 
     def display_menu(self):
         self.run_display = True
@@ -528,27 +530,27 @@ class PauseMenu(Menu):
             self.game.check_events_menu()
             self.check_input()
             self.game.display.fill(self.game.BLACK)
-            self.game.draw_text('Pausa', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
-            self.game.draw_text("Continuar", 40, self.continuarx, self.continuary)
-            self.game.draw_text("Salir", 40, self.quit_gamex, self.quit_gamey)
+            self.game.draw_text('Pause', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
+            self.game.draw_text("Continue", 40, self.continuarx, self.continuary)
+            self.game.draw_text("Exit", 40, self.quit_gamex, self.quit_gamey)
             self.draw_cursor()
             self.blit_screen()
 
     def move_cursor(self):
         if self.game.UP_KEY or self.game.DOWN_KEY:
             self.game.play_sound(constants.MENU_MOVEMENT_SOUND)
-            if self.state == 'Continuar':
+            if self.state == 'Continue':
                 self.state = 'QuitGame'
                 self.cursor_rect.midtop = (self.quit_gamex + self.offset, self.quit_gamey)
             elif self.state == 'QuitGame':
-                self.state = 'Continuar'
+                self.state = 'Continue'
                 self.cursor_rect.midtop = (self.continuarx + self.offset, self.continuary)
 
     def check_input(self):
         self.move_cursor()
         if self.game.START_KEY:
             self.game.play_sound(constants.MENU_SELECTION_SOUND)
-            if self.state == 'Continuar':
+            if self.state == 'Continue':
                 pygame.time.delay(50)
                 self.game.playing = True
                 self.game.mixer.music.unpause()

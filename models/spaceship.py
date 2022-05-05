@@ -4,6 +4,7 @@ import pygame
 from models.bullet import Bullet
 from utils import constants
 
+
 # Modelo de la nave pj
 class Spaceship(pygame.sprite.Sprite):
 
@@ -19,7 +20,6 @@ class Spaceship(pygame.sprite.Sprite):
         self.game = game
 
         self.score = 0
-
 
         if self.player == 'player1':
             imagenBack = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP1), 0,
@@ -97,7 +97,6 @@ class Spaceship(pygame.sprite.Sprite):
                 self.bonus_text_cd = 0
                 self.got_bonus = False
 
-
         if self.life == 0:
             self.is_alive = False
             self.charged_shot_ammo = 0
@@ -113,11 +112,10 @@ class Spaceship(pygame.sprite.Sprite):
         # Cambiamos el sprite dependiendo de la direccion
         if self.rect.y > self.pos_y:
             self.current_sprite = 1
-        elif self.rect.y < self.pos_y-1:
+        elif self.rect.y < self.pos_y - 1:
             self.current_sprite = 2
         elif self.rect.x > self.pos_x:
             self.current_sprite = 3
-
 
         if self.hit_countdown == 0:
             self.image.set_alpha(255)
@@ -137,7 +135,6 @@ class Spaceship(pygame.sprite.Sprite):
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
 
-
     # Movemos la nave
     def move_spaceship(self, key_pressed):
 
@@ -145,11 +142,11 @@ class Spaceship(pygame.sprite.Sprite):
 
         if self.player == 'player1':
             if key_pressed[pygame.K_a]:
-                if(self.rect.x > 0):
+                if (self.rect.x > 0):
                     x = -self.speed
 
             if key_pressed[pygame.K_d]:
-                if (self.rect.x < constants.WIN_WIDTH-80):
+                if (self.rect.x < constants.WIN_WIDTH - 80):
                     x = self.speed
 
             if key_pressed[pygame.K_w]:
@@ -190,8 +187,6 @@ class Spaceship(pygame.sprite.Sprite):
 
         self.can_move_up = True
         self.can_move_down = True
-
-
 
     # Disparo de la nave
     def shoot_bullet(self, key_pressed, bullet_sprite_list):

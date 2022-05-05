@@ -10,12 +10,18 @@ BACKGROUND = 'assets/background/stars_background.png'
 TIME_LOOP = 0
 TEXT_FONT_MENU = 'assets/typography/8-BIT WONDER.TTF'
 TEXT_FONT_GAME = 'assets/typography/Pixellari.ttf'
-WINDOW_MODE = 'windowed'
+WINDOW_MODE = 'fullscreen'
 
 # Map
 MAP_MOVEMENT_RATE = 1.7
 MAP_SIZE_DISPLACEMENT = -20900
 MAP = "assets/cueva_720.png"
+
+# Score file
+SCORE_FILE_NAME = "assets/score.json"
+SOLO_SCORE_DATA = "score_single"
+MULTI_SCORE_P1 = "score_multi_p1"
+MULTI_SCORE_P2 = "score_multi_p2"
 
 
 # Menu
@@ -36,7 +42,7 @@ MENU_MOVEMENT_SOUND = 'assets/sounds/menu_movement.wav'
 MENU_SELECTION_SOUND = 'assets/sounds/menu_selection.wav'
 MENU_BACK_SOUND = 'assets/sounds/menu_back_sound.wav'
 PAUSE_SOUND = 'assets/sounds/pause.wav'
-MUSIC_VOLUME = 0.08
+MUSIC_VOLUME = 0.18
 BONUS_SOUND = 'assets/sounds/upgrade.wav'
 END_GAME_MUSIC = 'assets/sounds/end_game.wav'
 
@@ -102,10 +108,11 @@ ENEMY_BOMBER_SPAWN_ZONE_DOWN = 525
 BOSS_AXON1 = 'assets/enemies/Boss_Axon1.png'
 BOSS_AXON2 = 'assets/enemies/Boss_Axon2.png'
 BOSS_AXON3 = 'assets/enemies/Boss_Axon3.png'
-BOSS_AXON_SIZE = 2.2
+BOSS_AXON_SIZE = 2.8
 BOSS_AXON_SPEED = 2
 BOSS_AXON_FIRE_RATE = 5
-BOSS_AXON_ATTACK_CD = 10000
+BOSS_AXON_ATTACK_CD = 8000
+BOSS_AXON_LIFE = 325
 
 
 ## Explosion

@@ -1,5 +1,3 @@
-
-
 import pygame
 import math
 import random
@@ -19,8 +17,6 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
 
         self.bomber_zone = ''
-
-        self.boss_life = 50
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []
@@ -57,11 +53,11 @@ class Enemy(pygame.sprite.Sprite):
         elif self.type == 'bomber':
             # Cargamos las imágenes del enemy bomber y las escalamos
             enemy_bomber_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER1), 0,
-                                                               constants.ENEMY_BOMBER_SIZE)
+                                                             constants.ENEMY_BOMBER_SIZE)
             enemy_bomber_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER2), 0,
-                                                               constants.ENEMY_BOMBER_SIZE)
+                                                             constants.ENEMY_BOMBER_SIZE)
             enemy_bomber_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER3), 0,
-                                                               constants.ENEMY_BOMBER_SIZE)
+                                                             constants.ENEMY_BOMBER_SIZE)
             enemy_bomber_imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER1), 180,
                                                              constants.ENEMY_BOMBER_SIZE)
             enemy_bomber_imagen5 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER2), 180,
@@ -75,15 +71,14 @@ class Enemy(pygame.sprite.Sprite):
             self.sprites.append(enemy_bomber_imagen5)
             self.sprites.append(enemy_bomber_imagen6)
 
-
         elif self.type == 'axon':
             # Cargamos las imágenes del enemy follower y las escalamos
             enemy_axon_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.BOSS_AXON1), 0,
-                                                               constants.BOSS_AXON_SIZE)
+                                                           constants.BOSS_AXON_SIZE)
             enemy_axon_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BOSS_AXON2), 0,
-                                                               constants.BOSS_AXON_SIZE)
+                                                           constants.BOSS_AXON_SIZE)
             enemy_axon_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BOSS_AXON3), 0,
-                                                               constants.BOSS_AXON_SIZE)
+                                                           constants.BOSS_AXON_SIZE)
 
             self.sprites.append(enemy_axon_imagen1)
             self.sprites.append(enemy_axon_imagen2)
@@ -93,7 +88,7 @@ class Enemy(pygame.sprite.Sprite):
             self.boss_can_move_up = True
             self.boss_can_attack = False
             self.hit_countdown = 0
-
+            self.boss_life = constants.BOSS_AXON_LIFE
 
         self.current_sprite = 0
 
@@ -123,8 +118,6 @@ class Enemy(pygame.sprite.Sprite):
         self.turn_after = 100
         self.direction = random.randint(-1, 1)
 
-
-
         if self.game.multiplayer == False:
             self.enemy_target = self.game.player_1
         else:
@@ -139,7 +132,6 @@ class Enemy(pygame.sprite.Sprite):
                 else:
                     self.enemy_target = self.game.player_1
 
-
     def update(self, time_delta):
 
         # Seteamos el sprite actual de la nave para simular animacion
@@ -149,7 +141,7 @@ class Enemy(pygame.sprite.Sprite):
             self.pace_count += 1
             # Actualizamos la posicion del enemigo
             self.rect.x -= constants.ENEMY_SPEED
-            self.rect.y += (self.direction * constants.ENEMY_SPEED+1) * (math.sqrt(2) / 2)
+            self.rect.y += (self.direction * constants.ENEMY_SPEED + 1) * (math.sqrt(2) / 2)
 
             self.calc_fire_rate(time_delta)
 
@@ -207,16 +199,14 @@ class Enemy(pygame.sprite.Sprite):
                 self.image.set_alpha(255)
                 self.image = self.sprites[self.current_sprite]
             else:
-                self.original_image = self.image
                 if self.hit_countdown % 2:
                     self.image = self.sprites[1]
                     self.image.set_alpha(255)
                 else:
                     self.image = self.sprites[1]
-                    self.image.set_alpha(0)
+                    self.image.set_alpha(150)
                 self.hit_countdown -= 1
             super(Enemy, self).update(...)
-
 
     def calc_fire_rate(self, time_delta):
         if self.fire_rate_acc > self.fire_rate:
@@ -224,7 +214,6 @@ class Enemy(pygame.sprite.Sprite):
             self.can_fire = True
         else:
             self.fire_rate_acc += time_delta
-
 
     # Disparo de la nave enemiga
     def shoot_bullet(self, enemy_bullet_sprite_list):
@@ -256,25 +245,25 @@ class Enemy(pygame.sprite.Sprite):
     def move_boss_y(self):
         self.speed = constants.BOSS_AXON_SPEED
         if self.boss_can_move_up is True:
-            if self.rect.y > 120:
+            if self.rect.y > 90:
                 self.rect.y -= self.speed
-            if self.rect.y == 120:
+            if self.rect.y <= 90:
                 self.boss_can_move_up = False
         elif self.boss_can_move_up is False:
-            if self.rect.y < 380:
+            if self.rect.y < 330:
                 self.rect.y += self.speed
-            if self.rect.y == 380:
+            if self.rect.y >= 330:
                 self.boss_can_move_up = True
 
     def move_boss_x(self):
-        print(self.rect.x)
         if self.boss_can_attack is True:
-            self.speed = 14
+            self.speed = 17
             self.rect.x -= self.speed
-            if self.rect.x <= 50:
+            if self.rect.x <= 30:
                 self.boss_can_attack = False
         else:
             self.speed = constants.BOSS_AXON_SPEED + 4
             self.rect.x += self.speed
-            if self.rect.x == 800:
+            if self.rect.x >= 798:
+                self.rect.x = 800
                 self.current_sprite = 0

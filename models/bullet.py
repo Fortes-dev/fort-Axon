@@ -3,6 +3,7 @@ import math
 import pygame
 from utils import constants
 
+
 # Modelo de la nave pj
 class Bullet(pygame.sprite.Sprite):
 
@@ -31,7 +32,8 @@ class Bullet(pygame.sprite.Sprite):
                 self.speed = constants.BULLET_PLAYER_SPEED
 
             case ('player1_chargedshot'):
-                imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_CHARGED_1), 0, constants.BULLET_CHARGED_SIZE)
+                imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_CHARGED_1), 0,
+                                                    constants.BULLET_CHARGED_SIZE)
                 self.sprites.append(imagen3)
 
                 self.speed = constants.BULLET_PLAYER_SPEED
@@ -57,7 +59,6 @@ class Bullet(pygame.sprite.Sprite):
                 # Velocidad de la bala del enemigo
                 self.speed = constants.BULLET_BOMBER_SPEED
 
-
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
 
@@ -71,15 +72,13 @@ class Bullet(pygame.sprite.Sprite):
             self.y_diff = self.target.rect.y - self.rect.y
             self.angle = math.atan2(self.y_diff, self.x_diff)
 
-
     # Actualizamos la posicion del disparo
     def update(self):
-            if self.type == 'player1_shot' or self.type ==  'player2_shot' or self.type == 'player1_chargedshot' or self.type == 'player2_chargedshot':
-                self.rect.x += self.speed
-            elif self.type == 'enemy_shot':
-                self.rect.x -= self.speed
-            elif self.type == 'bomber_shot':
+        if self.type == 'player1_shot' or self.type == 'player2_shot' or self.type == 'player1_chargedshot' or self.type == 'player2_chargedshot':
+            self.rect.x += self.speed
+        elif self.type == 'enemy_shot':
+            self.rect.x -= self.speed
+        elif self.type == 'bomber_shot':
 
-                self.rect.x += math.cos(self.angle) * self.speed
-                self.rect.y += math.sin(self.angle) * self.speed
-
+            self.rect.x += math.cos(self.angle) * self.speed
+            self.rect.y += math.sin(self.angle) * self.speed

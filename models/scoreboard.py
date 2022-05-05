@@ -7,7 +7,6 @@ class Scoreboard():
 
     # Constructor
     def __init__(self, game):
-
         self.game = game
         self.font = pygame.font.Font(constants.TEXT_FONT_GAME, 28)
 
@@ -22,11 +21,10 @@ class Scoreboard():
 
         self.timer = Timer()
 
-
     def draw_scoreboard_player_1(self, life):
-
         self.game.window.blit(self.font.render("{0}".format(self.game.player_1.score), 1, self.game.WHITE), (275, 30))
-        self.game.window.blit(self.font.render(" x {0}".format(self.game.player_1.charged_shot_ammo), 1, self.game.WHITE), (545, 30))
+        self.game.window.blit(
+            self.font.render(" x {0}".format(self.game.player_1.charged_shot_ammo), 1, self.game.WHITE), (545, 30))
         self.game.window.blit(self.font.render("{0}".format(self.game.game_time.current_time()), 1, self.game.WHITE),
                               (self.game.DISPLAY_W - 130, 30))
 
@@ -37,9 +35,11 @@ class Scoreboard():
         self.game.window.blit(self.timer.get_timer(), (self.game.DISPLAY_W - 200, 15))
 
     def draw_scoreboard_player_2(self, life):
-
-        self.game.window.blit(self.font.render("{0}".format(self.game.player_2.score), 1, self.game.WHITE), (275, self.game.DISPLAY_H - 50))
-        self.game.window.blit(self.font.render(" x {0}".format(self.game.player_2.charged_shot_ammo), 1, self.game.WHITE), (545, self.game.DISPLAY_H - 50))
+        self.game.window.blit(self.font.render("{0}".format(self.game.player_2.score), 1, self.game.WHITE),
+                              (275, self.game.DISPLAY_H - 50))
+        self.game.window.blit(
+            self.font.render(" x {0}".format(self.game.player_2.charged_shot_ammo), 1, self.game.WHITE),
+            (545, self.game.DISPLAY_H - 50))
 
         self.game.window.blit(self.player2_life.sprites[life], (20, self.game.DISPLAY_H - 70))
         self.game.window.blit(self.player2_scoreboard.get_score(), (250, self.game.DISPLAY_H - 70))
@@ -67,7 +67,6 @@ class Life(pygame.sprite.Sprite):
             imagen_life_4 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_HEALTHBAR_4), 0, 0.3)
             imagen_life_5 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_HEALTHBAR_5), 0, 0.3)
 
-
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []
         self.sprites.append(imagen_life_0)
@@ -77,7 +76,6 @@ class Life(pygame.sprite.Sprite):
         self.sprites.append(imagen_life_4)
         self.sprites.append(imagen_life_5)
 
-
         self.current_sprite = 5
 
         # Seteamos la imagen actual del sprite
@@ -85,6 +83,7 @@ class Life(pygame.sprite.Sprite):
 
     def update(self):
         self.image = self.sprites[self.current_sprite]
+
 
 class Timer(pygame.sprite.Sprite):
 
@@ -129,17 +128,10 @@ class ChargedShot(pygame.sprite.Sprite):
         elif player == 'player2':
             img = self.set_charged_shot_img(constants.PLAYER2_CHARGEDSHOT_AMMO)
 
-        self.charged_shot =  img
+        self.charged_shot = img
 
     def get_charged_shot(self):
         return self.charged_shot
 
     def set_charged_shot_img(self, asset):
         return pygame.transform.rotozoom(pygame.image.load(asset), 0, 0.8)
-
-
-
-
-
-
-
