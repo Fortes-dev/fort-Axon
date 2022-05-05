@@ -293,7 +293,7 @@ class VideoMenu(Menu):
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Graphics', 80, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
             self.game.draw_text("Windowed", 35, self.video_windowed_x, self.video_windowed_y)
-            self.game.draw_text("Fullscreen", 35, self.video_fullscreen_x, self.video_fullscreen_y)
+            self.game.draw_text("Full screen", 35, self.video_fullscreen_x, self.video_fullscreen_y)
             self.draw_cursor()
             self.blit_screen()
 
@@ -393,7 +393,7 @@ class ControlsPlayer1Menu(Menu):
             self.game.draw_text('S  *  Down', 20, self.mid_w - 150, self.mid_h + 20)
             self.game.draw_text('D  *  Right', 20, self.mid_w + 150, self.mid_h + 20)
             self.game.draw_text('Shoot', 40, self.mid_w, self.mid_h + 100)
-            self.game.draw_text('Espace  *  Shoot', 20, self.mid_w, self.mid_h + 160)
+            self.game.draw_text('Space  *  Shoot', 20, self.mid_w, self.mid_h + 160)
             self.game.draw_text('Left CTRL  *  Charged Shot', 20, self.mid_w, self.mid_h + 200)
             self.game.draw_text('Menu', 40, self.mid_w, self.mid_h + 260)
             self.game.draw_text('ESC  *  Pause and back', 20, self.mid_w, self.mid_h + 320)
@@ -478,11 +478,11 @@ class GameOverMenu(Menu):
 
         self.game.mixer.music.stop()
         game_over_music = Sound()
-
+        self.game.events_init = True
         self.game.game_time.reset_timer()
         self.game.display.fill(self.game.BLACK)
         self.game.draw_text('GAME OVER', 60, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 200)
-        self.game.draw_text('Press ENTER or ESPACE to return to main menu', 22, self.game.DISPLAY_W / 2,
+        self.game.draw_text('Press ENTER or SPACE to return to main menu', 22, self.game.DISPLAY_W / 2,
                             self.game.DISPLAY_H / 2 + 250)
 
         if self.game.boss_axon.boss_life > 0:

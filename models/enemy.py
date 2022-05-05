@@ -16,7 +16,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.game = game
 
-        self.bomber_zone = ''
+
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []
@@ -33,6 +33,8 @@ class Enemy(pygame.sprite.Sprite):
             self.sprites.append(enemy_shooter_imagen2)
             self.sprites.append(enemy_shooter_imagen3)
             self.speed = constants.ENEMY_SPEED
+            self.bounce_up = False
+            self.bounce_down = False
 
         elif self.type == 'follower':
             # Cargamos las imágenes del enemy follower y las escalamos
@@ -70,6 +72,7 @@ class Enemy(pygame.sprite.Sprite):
             self.sprites.append(enemy_bomber_imagen4)
             self.sprites.append(enemy_bomber_imagen5)
             self.sprites.append(enemy_bomber_imagen6)
+            self.bomber_zone = ''
 
         elif self.type == 'axon':
             # Cargamos las imágenes del enemy follower y las escalamos
@@ -156,6 +159,15 @@ class Enemy(pygame.sprite.Sprite):
             elif (self.rect.y >= constants.WIN_HEIGHT - self.rect.width):
                 self.direction = -1
                 self.pace_count = 0
+
+            if self.bounce_up:
+                self.direction = 1  # turn
+                self.pace_count = 0
+                self.bounce_up = False
+            elif self.bounce_down:
+                self.direction = -1
+                self.pace_count = 0
+                self.bounce_down = False
 
 
         elif self.type == 'follower':
