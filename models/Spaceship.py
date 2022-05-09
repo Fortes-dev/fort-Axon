@@ -1,37 +1,44 @@
 import math
 import pygame
 
-from models.Bullet import Bullet
+from models.bullet import Bullet
 from utils import constants
+
 
 # Modelo de la nave pj
 class Spaceship(pygame.sprite.Sprite):
 
     # Constructor
-    def __init__(self, x, y):
+    def __init__(self, x, y, player, game):
         super().__init__()
 
         # Posiciones iniciales
         self.pos_x = x
         self.pos_y = y
+        self.player = player
 
-        # Cargamos las imagenes del Spaceship y la escalamos
-        imagen1 = pygame.image.load(constants.SPACESHIP1)
-        imagen2 = pygame.image.load(constants.SPACESHIP2)
-        imagen3 = pygame.image.load(constants.SPACESHIP3)
-        imagen4 = pygame.image.load(constants.SPACESHIP4)
-        imagen5 = pygame.image.load(constants.SPACESHIP5)
+        self.game = game
 
-        imagenBack = pygame.transform.rotozoom(imagen1, 0, 1.5)
-        imagenRecto = pygame.transform.rotozoom(imagen2, 0, 1.5)
-        imagenUp = pygame.transform.rotozoom(imagen3, 3, 1.5)
-        imagenDown = pygame.transform.rotozoom(imagen3, -3, 1.5)
-        imagenHit1Recto = pygame.transform.rotozoom(imagen4, 0, 1.5)
-        imagenHit1Up = pygame.transform.rotozoom(imagen4, 3, 1.5)
-        imagenHit1Down = pygame.transform.rotozoom(imagen4, -3, 1.5)
-        imagenHit2Recto = pygame.transform.rotozoom(imagen5, 0, 1.5)
-        imagenHit2Up = pygame.transform.rotozoom(imagen5, 3, 1.5)
-        imagenHit2Down = pygame.transform.rotozoom(imagen5, -3, 1.5)
+        self.score = 0
+
+        if self.player == 'player1':
+            imagenBack = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP1), 0,
+                                                   constants.SPACESHIP_SIZE)
+            imagenRecto = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP2), 0,
+                                                    constants.SPACESHIP_SIZE)
+            imagenUp = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP3), 3,
+                                                 constants.SPACESHIP_SIZE)
+            imagenDown = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP3), -3,
+                                                   constants.SPACESHIP_SIZE)
+        elif self.player == 'player2':
+            imagenBack = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_SPACESHIP1), 0,
+                                                   constants.SPACESHIP_SIZE)
+            imagenRecto = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_SPACESHIP2), 0,
+                                                    constants.SPACESHIP_SIZE)
+            imagenUp = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_SPACESHIP3), 3,
+                                                 constants.SPACESHIP_SIZE)
+            imagenDown = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_SPACESHIP3), -3,
+                                                   constants.SPACESHIP_SIZE)
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []
@@ -39,18 +46,13 @@ class Spaceship(pygame.sprite.Sprite):
         self.sprites.append(imagenUp)
         self.sprites.append(imagenDown)
         self.sprites.append(imagenBack)
-        self.sprites.append(imagenHit1Recto)
-        self.sprites.append(imagenHit1Up)
-        self.sprites.append(imagenHit1Down)
-        self.sprites.append(imagenHit2Recto)
-        self.sprites.append(imagenHit2Up)
-        self.sprites.append(imagenHit2Down)
-
 
         self.current_sprite = 0
 
         # Seteamos la imagen actual del sprite
         self.image = self.sprites[self.current_sprite]
+
+        self.charged_shot_ammo = 0
 
         # Inicializamos el rectángulo (hitbox)
         self.rect = self.image.get_rect()
@@ -61,10 +63,6 @@ class Spaceship(pygame.sprite.Sprite):
         # Velocidad de desplacamiento de la nave
         self.speed = constants.SPACESHIP_SPEED
 
-        # Cadencia de disparo
-        self.fire_rate = constants.SPACESHIP_FIRE_RATE
-        self.fire_rate_acc = 0.0
-
         # Check si puede disparar o no
         self.can_fire = True
 
@@ -72,63 +70,113 @@ class Spaceship(pygame.sprite.Sprite):
         self.life = 5
 
         # Checkea si recibió un disparo
-        self.got_hit = False
+        self.hit_countdown = 0
+
+        # Check si la nave sigue viva
+        self.is_alive = False
+
+        # Cooldown para disparar (cuando llega a la cadencia de disparo)
+        self.time_cd = 0
+
+        self.fire_rate = constants.SPACESHIP_FIRE_RATE
+
+        self.got_bonus = False
+        self.bonus_text = 'Speed up!'
+        self.bonus_text_cd = 0
+        self.bonus_text_cd_rate = constants.BONUS_TEXT_CD_RATE
+
+        self.can_move_down = True
+        self.can_move_up = True
 
     # Actualizamos la nave i.e posicion y sprite
     def update(self, time_delta):
-        
+
+        if self.got_bonus is True:
+            self.game.draw_text(self.bonus_text, 14, self.rect.x + 35, self.rect.y - 15)
+            self.bonus_text_cd += 1
+            if self.bonus_text_cd == self.bonus_text_cd_rate:
+                self.bonus_text_cd = 0
+                self.got_bonus = False
+
+        if self.life == 0:
+            self.is_alive = False
+            self.charged_shot_ammo = 0
+            self.kill()
+
+        if self.can_fire is False:
+            if (self.time_cd >= self.fire_rate):
+                self.can_fire = True
+                self.time_cd = 0
+            self.time_cd += 1
+
         self.current_sprite = 0
         # Cambiamos el sprite dependiendo de la direccion
         if self.rect.y > self.pos_y:
             self.current_sprite = 1
-        elif self.rect.y < self.pos_y-1:
+        elif self.rect.y < self.pos_y - 1:
             self.current_sprite = 2
         elif self.rect.x > self.pos_x:
             self.current_sprite = 3
 
-
-        # Seteamos el sprite actual de la nave para simular animacion
-        self.image = self.sprites[self.current_sprite]
+        if self.hit_countdown == 0:
+            self.image.set_alpha(255)
+            self.image = self.sprites[self.current_sprite]
+        else:
+            self.original_image = self.image
+            if self.hit_countdown % 2:
+                self.image = self.sprites[self.current_sprite]
+                self.image.set_alpha(255)
+            else:
+                self.image = self.sprites[self.current_sprite]
+                self.image.set_alpha(0)
+            self.hit_countdown -= 1
+        super(Spaceship, self).update(...)
 
         # Actualizamos la posicion de la nave
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
-
-
-        ## !!!FIX, utilizo el tiempo de ejecucion del juego, debería utilizar el tiempo del disparo anterior y añadirle los 0.2 secs
-        # Cadencia de disparo
-        if self.fire_rate_acc > self.fire_rate:
-            self.fire_rate_acc = 0.0
-            self.can_fire = True
-        else:
-            self.fire_rate_acc += time_delta
-
-        if self.life == 0:
-            pygame.quit()
-
-
-
 
     # Movemos la nave
     def move_spaceship(self, key_pressed):
 
         x, y = 0, 0
 
-        if key_pressed[pygame.K_a]:
-            if(self.rect.x > 0):
-                x = -self.speed
+        if self.player == 'player1':
+            if key_pressed[pygame.K_a]:
+                if (self.rect.x > 0):
+                    x = -self.speed
 
-        if key_pressed[pygame.K_d]:
-            if (self.rect.x < constants.WIN_WIDTH-80):
-                x = self.speed
+            if key_pressed[pygame.K_d]:
+                if (self.rect.x < constants.WIN_WIDTH - 80):
+                    x = self.speed
 
-        if key_pressed[pygame.K_w]:
-            if (self.rect.y > 0):
-                y = -self.speed
+            if key_pressed[pygame.K_w]:
+                if (self.rect.y > 0):
+                    if self.can_move_up:
+                        y = -self.speed
 
-        if key_pressed[pygame.K_s]:
-            if (self.rect.y < constants.WIN_HEIGHT-70):
-                y = self.speed
+            if key_pressed[pygame.K_s]:
+                if (self.rect.y < constants.WIN_HEIGHT - 40):
+                    if self.can_move_down:
+                        y = self.speed
+        elif self.player == 'player2':
+            if key_pressed[pygame.K_LEFT]:
+                if (self.rect.x > 0):
+                    x = -self.speed
+
+            if key_pressed[pygame.K_RIGHT]:
+                if (self.rect.x < constants.WIN_WIDTH - 80):
+                    x = self.speed
+
+            if key_pressed[pygame.K_UP]:
+                if (self.rect.y > 0):
+                    if self.can_move_up:
+                        y = -self.speed
+
+            if key_pressed[pygame.K_DOWN]:
+                if (self.rect.y < constants.WIN_HEIGHT - 40):
+                    if self.can_move_down:
+                        y = self.speed
 
         # Normalizamos el movimiento diagonal
         if x != 0 and y != 0:
@@ -138,10 +186,51 @@ class Spaceship(pygame.sprite.Sprite):
         self.pos_x += x
         self.pos_y += y
 
+        self.can_move_up = True
+        self.can_move_down = True
+
     # Disparo de la nave
     def shoot_bullet(self, key_pressed, bullet_sprite_list):
-        if key_pressed[pygame.K_SPACE]:
-            if self.can_fire:
-                self.can_fire = False
-                bullet = Bullet(self.pos_x + 50, self.pos_y + 20, 0)
-                bullet_sprite_list.add(bullet)
+        if self.player == 'player1':
+            if self.is_alive:
+                if key_pressed[pygame.K_SPACE]:
+                    if self.can_fire:
+                        self.can_fire = False
+                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_shot', None)
+                        bullet_sprite_list.add(bullet)
+                        shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
+                        shoot_sound.play()
+                        shoot_sound.set_volume(constants.MUSIC_VOLUME)
+
+                if key_pressed[pygame.K_LCTRL]:
+                    if self.charged_shot_ammo > 0:
+                        if self.can_fire:
+                            self.can_fire = False
+                            bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player1_chargedshot', None)
+                            bullet_sprite_list.add(bullet)
+                            shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
+                            shoot_sound.play()
+                            shoot_sound.set_volume(constants.MUSIC_VOLUME)
+                            self.charged_shot_ammo -= 1
+
+        elif self.player == 'player2':
+            if self.is_alive:
+                if key_pressed[pygame.K_RSHIFT]:
+                    if self.can_fire:
+                        self.can_fire = False
+                        bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_shot', None)
+                        bullet_sprite_list.add(bullet)
+                        shoot_sound = pygame.mixer.Sound(constants.BULLET_SOUND)
+                        shoot_sound.play()
+                        shoot_sound.set_volume(constants.MUSIC_VOLUME)
+
+                if key_pressed[pygame.K_RCTRL]:
+                    if self.charged_shot_ammo > 0:
+                        if self.can_fire:
+                            self.can_fire = False
+                            bullet = Bullet(self.pos_x + 80, self.pos_y + 15, 'player2_chargedshot', None)
+                            bullet_sprite_list.add(bullet)
+                            shoot_sound = pygame.mixer.Sound(constants.BULLET_CHARGED_SOUND)
+                            shoot_sound.play()
+                            shoot_sound.set_volume(constants.MUSIC_VOLUME)
+                            self.charged_shot_ammo -= 1
