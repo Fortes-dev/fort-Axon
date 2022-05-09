@@ -334,7 +334,7 @@ class Game:
                     if player.life < 5:
                         player.life += 1
                     if bonus.type == 'speed':
-                            player.speed += 0.5
+                            player.speed += 0.75
                             player.bonus_text = 'Speed UP'
                     elif bonus.type == 'bullet':
                             player.charged_shot_ammo = 20
