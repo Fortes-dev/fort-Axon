@@ -24,21 +24,36 @@ class Spaceship(pygame.sprite.Sprite):
         if self.player == 'player1':
             imagenBack = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP1), 0,
                                                    constants.SPACESHIP_SIZE)
+            imagenBack.convert()
+
             imagenRecto = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP2), 0,
                                                     constants.SPACESHIP_SIZE)
+            imagenRecto.convert()
+
             imagenUp = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP3), 3,
                                                  constants.SPACESHIP_SIZE)
+            imagenUp.convert()
+
             imagenDown = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_SPACESHIP3), -3,
                                                    constants.SPACESHIP_SIZE)
+            imagenDown.convert()
+
         elif self.player == 'player2':
             imagenBack = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_SPACESHIP1), 0,
                                                    constants.SPACESHIP_SIZE)
+            imagenBack.convert()
+
             imagenRecto = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_SPACESHIP2), 0,
                                                     constants.SPACESHIP_SIZE)
+            imagenRecto.convert()
+
             imagenUp = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_SPACESHIP3), 3,
                                                  constants.SPACESHIP_SIZE)
+            imagenUp.convert()
+
             imagenDown = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_SPACESHIP3), -3,
                                                    constants.SPACESHIP_SIZE)
+            imagenDown.convert()
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []

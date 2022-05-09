@@ -54,18 +54,41 @@ class Life(pygame.sprite.Sprite):
 
         if player == 'player1':
             imagen_life_0 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_HEALTHBAR_0), 0, 0.3)
+            imagen_life_0.convert()
+
             imagen_life_1 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_HEALTHBAR_1), 0, 0.3)
+            imagen_life_1.convert()
+
             imagen_life_2 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_HEALTHBAR_2), 0, 0.3)
+            imagen_life_2.convert()
+
             imagen_life_3 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_HEALTHBAR_3), 0, 0.3)
+            imagen_life_3.convert()
+
             imagen_life_4 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_HEALTHBAR_4), 0, 0.3)
+            imagen_life_4.convert()
+
             imagen_life_5 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER1_HEALTHBAR_5), 0, 0.3)
+            imagen_life_5.convert()
+
         elif player == 'player2':
             imagen_life_0 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_HEALTHBAR_0), 0, 0.3)
+            imagen_life_0.convert()
+
             imagen_life_1 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_HEALTHBAR_1), 0, 0.3)
+            imagen_life_1.convert()
+
             imagen_life_2 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_HEALTHBAR_2), 0, 0.3)
+            imagen_life_2.convert()
+
             imagen_life_3 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_HEALTHBAR_3), 0, 0.3)
+            imagen_life_3.convert()
+
             imagen_life_4 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_HEALTHBAR_4), 0, 0.3)
+            imagen_life_4.convert()
+
             imagen_life_5 = pygame.transform.rotozoom(pygame.image.load(constants.PLAYER2_HEALTHBAR_5), 0, 0.3)
+            imagen_life_5.convert()
 
         # Inicializamos array de sprites y añadimos todos
         self.sprites = []
@@ -92,6 +115,7 @@ class Timer(pygame.sprite.Sprite):
         super().__init__()
 
         self.timer = pygame.transform.rotozoom(pygame.image.load(constants.TIMER), 0, 0.26)
+        self.timer.convert()
 
     def get_timer(self):
         return self.timer
@@ -105,8 +129,10 @@ class Score(pygame.sprite.Sprite):
 
         if player == 'player1':
             img = self.set_score_img(constants.PLAYER1_SCOREBOARD)
+            img.convert()
         elif player == 'player2':
             img = self.set_score_img(constants.PLAYER2_SCOREBOARD)
+            img.convert()
 
         self.score = img
 
@@ -125,8 +151,10 @@ class ChargedShot(pygame.sprite.Sprite):
 
         if player == 'player1':
             img = self.set_charged_shot_img(constants.PLAYER1_CHARGEDSHOT_AMMO)
+            img.convert()
         elif player == 'player2':
             img = self.set_charged_shot_img(constants.PLAYER2_CHARGEDSHOT_AMMO)
+            img.convert()
 
         self.charged_shot = img
 
