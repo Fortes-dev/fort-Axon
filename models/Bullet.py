@@ -19,16 +19,16 @@ class Bullet(pygame.sprite.Sprite):
 
         match self.type:
             case ('player1_shot'):
-                imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET1), 0, constants.BULLET_SIZE)
-                imagen1.convert()
+                imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET1), 0, constants.BULLET_SIZE).convert_alpha()
+
 
                 self.sprites.append(imagen1)
 
                 # Velocidad de la bala
                 self.speed = constants.BULLET_PLAYER_SPEED
             case ('player2_shot'):
-                imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET2), 0, constants.BULLET_SIZE)
-                imagen2.convert()
+                imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET2), 0, constants.BULLET_SIZE).convert_alpha()
+
 
                 self.sprites.append(imagen2)
 
@@ -37,8 +37,8 @@ class Bullet(pygame.sprite.Sprite):
 
             case ('player1_chargedshot'):
                 imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_CHARGED_1), 0,
-                                                    constants.BULLET_CHARGED_SIZE)
-                imagen3.convert()
+                                                    constants.BULLET_CHARGED_SIZE).convert_alpha()
+
 
                 self.sprites.append(imagen3)
 
@@ -46,16 +46,16 @@ class Bullet(pygame.sprite.Sprite):
 
             case ('player2_chargedshot'):
                 imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_CHARGED_2), 0,
-                                                    constants.BULLET_CHARGED_SIZE)
-                imagen4.convert()
+                                                    constants.BULLET_CHARGED_SIZE).convert_alpha()
+
 
                 self.sprites.append(imagen4)
 
                 self.speed = constants.BULLET_PLAYER_SPEED
 
             case ('enemy_shot'):
-                imagen5 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_ENEMY), 0, constants.BULLET_SIZE)
-                imagen5.convert()
+                imagen5 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_ENEMY), 0, constants.BULLET_SIZE).convert_alpha()
+
 
                 self.sprites.append(imagen5)
 
@@ -63,8 +63,8 @@ class Bullet(pygame.sprite.Sprite):
                 self.speed = constants.BULLET_ENEMY_SPEED
 
             case ('bomber_shot'):
-                imagen6 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_ENEMY), 0, constants.BULLET_SIZE)
-                imagen6.convert()
+                imagen6 = pygame.transform.rotozoom(pygame.image.load(constants.BULLET_ENEMY), 0, constants.BULLET_SIZE).convert_alpha()
+
 
                 self.sprites.append(imagen6)
 

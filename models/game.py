@@ -115,10 +115,10 @@ class Game:
 
         # Background del juego
         self.background = pygame.transform.scale(pygame.image.load(constants.BACKGROUND),
-                                                 (constants.WIN_WIDTH, constants.WIN_HEIGHT))
-        self.background.convert()
-        self.cueva_img = pygame.image.load(constants.MAP)
-        self.cueva_img.convert()
+                                                 (constants.WIN_WIDTH, constants.WIN_HEIGHT)).convert_alpha()
+
+        self.cueva_img = pygame.image.load(constants.MAP).convert_alpha()
+
 
         # Inicializamos la nave del jugador
         self.player_1 = Spaceship(30, constants.WIN_HEIGHT / 2, 'player1', self)

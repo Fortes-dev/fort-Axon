@@ -24,17 +24,17 @@ class Enemy(pygame.sprite.Sprite):
         if self.type == 'shooter':
             # Cargamos las imagenes del enemy shooter y la escalamos
             enemy_shooter_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY1), 0,
-                                                              constants.ENEMY_SHOOTER_SIZE)
-            enemy_shooter_imagen1.convert()
+                                                              constants.ENEMY_SHOOTER_SIZE).convert_alpha()
+
 
             enemy_shooter_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY2), 0,
-                                                              constants.ENEMY_SHOOTER_SIZE)
-            enemy_shooter_imagen2.convert()
+                                                              constants.ENEMY_SHOOTER_SIZE).convert_alpha()
+
 
             enemy_shooter_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY3), 0,
-                                                              constants.ENEMY_SHOOTER_SIZE)
+                                                              constants.ENEMY_SHOOTER_SIZE).convert_alpha()
 
-            enemy_shooter_imagen3.convert()
+
             self.sprites.append(enemy_shooter_imagen1)
             self.sprites.append(enemy_shooter_imagen2)
             self.sprites.append(enemy_shooter_imagen3)
@@ -45,20 +45,20 @@ class Enemy(pygame.sprite.Sprite):
         elif self.type == 'follower':
             # Cargamos las imágenes del enemy follower y las escalamos
             enemy_follower_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER1), 0,
-                                                               constants.ENEMY_FOLLOWER_SIZE)
-            enemy_follower_imagen1.convert()
+                                                               constants.ENEMY_FOLLOWER_SIZE).convert_alpha()
+
 
             enemy_follower_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER2), 0,
-                                                               constants.ENEMY_FOLLOWER_SIZE)
-            enemy_follower_imagen2.convert()
+                                                               constants.ENEMY_FOLLOWER_SIZE).convert_alpha()
+
 
             enemy_follower_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER3), 0,
-                                                               constants.ENEMY_FOLLOWER_SIZE)
-            enemy_follower_imagen3.convert()
+                                                               constants.ENEMY_FOLLOWER_SIZE).convert_alpha()
+
 
             enemy_follower_imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_FOLLOWER4), 0,
-                                                               constants.ENEMY_FOLLOWER_SIZE)
-            enemy_follower_imagen4.convert()
+                                                               constants.ENEMY_FOLLOWER_SIZE).convert_alpha()
+
             self.sprites.append(enemy_follower_imagen1)
             self.sprites.append(enemy_follower_imagen2)
             self.sprites.append(enemy_follower_imagen3)
@@ -68,28 +68,28 @@ class Enemy(pygame.sprite.Sprite):
         elif self.type == 'bomber':
             # Cargamos las imágenes del enemy bomber y las escalamos
             enemy_bomber_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER1), 0,
-                                                             constants.ENEMY_BOMBER_SIZE)
+                                                             constants.ENEMY_BOMBER_SIZE).convert_alpha()
 
-            enemy_bomber_imagen1.convert()
+
             enemy_bomber_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER2), 0,
-                                                             constants.ENEMY_BOMBER_SIZE)
-            enemy_bomber_imagen2.convert()
+                                                             constants.ENEMY_BOMBER_SIZE).convert_alpha()
+
 
             enemy_bomber_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER3), 0,
-                                                             constants.ENEMY_BOMBER_SIZE)
-            enemy_bomber_imagen3.convert()
+                                                             constants.ENEMY_BOMBER_SIZE).convert_alpha()
+
 
             enemy_bomber_imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER1), 180,
-                                                             constants.ENEMY_BOMBER_SIZE)
-            enemy_bomber_imagen4.convert()
+                                                             constants.ENEMY_BOMBER_SIZE).convert_alpha()
+
 
             enemy_bomber_imagen5 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER2), 180,
-                                                             constants.ENEMY_BOMBER_SIZE)
-            enemy_bomber_imagen5.convert()
+                                                             constants.ENEMY_BOMBER_SIZE).convert_alpha()
+
 
             enemy_bomber_imagen6 = pygame.transform.rotozoom(pygame.image.load(constants.ENEMY_BOMBER3), 180,
-                                                             constants.ENEMY_BOMBER_SIZE)
-            enemy_bomber_imagen6.convert()
+                                                             constants.ENEMY_BOMBER_SIZE).convert_alpha()
+
 
             self.sprites.append(enemy_bomber_imagen1)
             self.sprites.append(enemy_bomber_imagen2)
@@ -102,16 +102,16 @@ class Enemy(pygame.sprite.Sprite):
         elif self.type == 'axon':
             # Cargamos las imágenes del enemy follower y las escalamos
             enemy_axon_imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.BOSS_AXON1), 0,
-                                                           constants.BOSS_AXON_SIZE)
-            enemy_axon_imagen1.convert()
+                                                           constants.BOSS_AXON_SIZE).convert_alpha()
+
 
             enemy_axon_imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BOSS_AXON2), 0,
-                                                           constants.BOSS_AXON_SIZE)
-            enemy_axon_imagen2.convert()
+                                                           constants.BOSS_AXON_SIZE).convert_alpha()
+
 
             enemy_axon_imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BOSS_AXON3), 0,
-                                                           constants.BOSS_AXON_SIZE)
-            enemy_axon_imagen3.convert()
+                                                           constants.BOSS_AXON_SIZE).convert_alpha()
+
 
             self.sprites.append(enemy_axon_imagen1)
             self.sprites.append(enemy_axon_imagen2)
@@ -182,7 +182,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.direction *= -1
                 self.pace_count = 0
 
-            # Cambiamos la dirección si se hostia con el borde de la pantalla
+            # Cambiamos la dirección si impacta con el borde de la pantalla
             if (self.rect.y <= 0):
                 self.direction = 1  # turn
                 self.pace_count = 0
@@ -267,22 +267,22 @@ class Enemy(pygame.sprite.Sprite):
                 bullet = Bullet(self.rect.x, self.rect.y, 'bomber_shot', self.enemy_target)
             enemy_bullet_sprite_list.add(bullet)
 
-    def direction_to(self, actor):
-        dx = actor.rect.x - self.rect.x
-        dy = self.rect.y - actor.rect.y
+    def direction_to(self, player):
+        distance_x = player.rect.x - self.rect.x
+        distance_y = self.rect.y - player.rect.y
 
-        angle = math.degrees(math.atan2(dy, dx))
+        angle = math.degrees(math.atan2(distance_y, distance_x))
         if angle > 0:
             return angle
 
         return 360 + angle
 
-    def move_towards(self, actor, dist):
+    def move_towards(self, player, dist):
 
-        if self.rect.x > actor.rect.x:
-            angle = math.radians(self.direction_to(actor))
-            dy = dist * math.sin(angle)
-            self.rect.y -= dy
+        if self.rect.x > player.rect.x:
+            angle = math.radians(self.direction_to(player))
+            direction_y = dist * math.sin(angle)
+            self.rect.y -= direction_y
 
     def move_boss_y(self):
         self.speed = constants.BOSS_AXON_SPEED

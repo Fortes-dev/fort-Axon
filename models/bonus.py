@@ -19,15 +19,15 @@ class Bonus(pygame.sprite.Sprite):
         match self.type:
             case ('speed'):
                 imagen = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_SPEED_INCREASE_0), 0,
-                                                   constants.BONUS_ZOOM)
+                                                   constants.BONUS_ZOOM).convert_alpha()
                 imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_SPEED_INCREASE_1), 0,
-                                                    constants.BONUS_ZOOM)
+                                                    constants.BONUS_ZOOM).convert_alpha()
                 imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_SPEED_INCREASE_2), 0,
-                                                    constants.BONUS_ZOOM)
+                                                    constants.BONUS_ZOOM).convert_alpha()
                 imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_SPEED_INCREASE_3), 0,
-                                                    constants.BONUS_ZOOM)
+                                                    constants.BONUS_ZOOM).convert_alpha()
                 imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_SPEED_INCREASE_4), 0,
-                                                    constants.BONUS_ZOOM)
+                                                    constants.BONUS_ZOOM).convert_alpha()
                 self.sprites.append(imagen)
                 self.sprites.append(imagen1)
                 self.sprites.append(imagen2)
@@ -36,25 +36,25 @@ class Bonus(pygame.sprite.Sprite):
 
             case ('bullet'):
                 imagen = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_CHARGED_SHOT_0), 0,
-                                                   constants.BONUS_ZOOM)
-                imagen.convert()
+                                                   constants.BONUS_ZOOM).convert_alpha()
+
 
                 imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_CHARGED_SHOT_1), 0,
-                                                    constants.BONUS_ZOOM)
-                imagen1.convert()
+                                                    constants.BONUS_ZOOM).convert_alpha()
+
 
                 imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_CHARGED_SHOT_2), 0,
-                                                    constants.BONUS_ZOOM)
-                imagen2.convert()
+                                                    constants.BONUS_ZOOM).convert_alpha()
+
 
                 imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_CHARGED_SHOT_3), 0,
-                                                    constants.BONUS_ZOOM)
-                imagen3.convert()
+                                                    constants.BONUS_ZOOM).convert_alpha()
+
 
                 imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_CHARGED_SHOT_4), 0,
-                                                    constants.BONUS_ZOOM)
+                                                    constants.BONUS_ZOOM).convert_alpha()
 
-                imagen4.convert()
+
                 self.sprites.append(imagen)
                 self.sprites.append(imagen1)
                 self.sprites.append(imagen2)
@@ -63,20 +63,20 @@ class Bonus(pygame.sprite.Sprite):
 
             case ('firerate'):
                 imagen = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_FIRE_RATE_0), 0,
-                                                   constants.BONUS_ZOOM)
-                imagen.convert()
+                                                   constants.BONUS_ZOOM).convert_alpha()
+
                 imagen1 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_FIRE_RATE_1), 0,
-                                                    constants.BONUS_ZOOM)
-                imagen1.convert()
+                                                    constants.BONUS_ZOOM).convert_alpha()
+
                 imagen2 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_FIRE_RATE_2), 0,
-                                                    constants.BONUS_ZOOM)
-                imagen2.convert()
+                                                    constants.BONUS_ZOOM).convert_alpha()
+
                 imagen3 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_FIRE_RATE_3), 0,
-                                                    constants.BONUS_ZOOM)
-                imagen3.convert()
+                                                    constants.BONUS_ZOOM).convert_alpha()
+
                 imagen4 = pygame.transform.rotozoom(pygame.image.load(constants.BONUS_FIRE_RATE_4), 0,
-                                                    constants.BONUS_ZOOM)
-                imagen4.convert()
+                                                    constants.BONUS_ZOOM).convert_alpha()
+
                 self.sprites.append(imagen)
                 self.sprites.append(imagen1)
                 self.sprites.append(imagen2)

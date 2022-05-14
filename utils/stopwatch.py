@@ -15,9 +15,6 @@ class Stopwatch():
         self.time_rightnow = round((time.time() - self.last_time), 2)
         return self.time_rightnow
 
-    def total_time(self):
-        return round((time.time() - self.total_time), 2)
-
     def pause_time(self):
         self.paused_time = self.time_rightnow
 
